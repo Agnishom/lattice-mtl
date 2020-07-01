@@ -1,0 +1,1801 @@
+timestamp = 1593549396. seconds after epoch
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.04215 sec
+throughput = 65742977 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.06143 sec
+throughput = 65328947 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.486905 sec
+throughput = 17411130 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.473531 sec
+throughput = 17431425 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.706605 sec
+throughput = 18680057 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.606742 sec
+throughput = 18855931 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.314126 sec
+throughput = 10355115 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.800247 sec
+throughput = 10100884 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.432507 sec
+throughput = 31092076 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.428374 sec
+throughput = 31112066 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.645728 sec
+throughput = 30094520 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.680543 sec
+throughput = 23040033 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.813255 sec
+throughput = 11227594 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 32.432145 sec
+throughput = 6166721 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 39.001869 sec
+throughput = 5127959 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.228626 sec
+throughput = 10971753 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.052487 sec
+throughput = 11078805 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.168977 sec
+throughput = 11648917 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.912142 sec
+throughput = 10044122 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.812393 sec
+throughput = 5152993 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.75452 sec
+throughput = 4019735 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.158929 sec
+throughput = 3217558 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.306869 sec
+throughput = 7065422 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 97.780627 sec
+throughput = 2045394 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.361842 sec
+throughput = 31437435 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.523439 sec
+throughput = 6149411 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.639308 sec
+throughput = 5945425 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.997363 sec
+throughput = 5128551 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.031564 sec
+throughput = 4079005 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 57.957089 sec
+throughput = 3450828 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.075211 sec
+throughput = 65036187 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.062907 sec
+throughput = 65297444 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.47426 sec
+throughput = 17430317 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.491151 sec
+throughput = 17404696 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.754786 sec
+throughput = 18596371 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.637671 sec
+throughput = 18801107 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.271734 sec
+throughput = 10377893 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.759878 sec
+throughput = 10121519 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.429041 sec
+throughput = 31108838 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.432719 sec
+throughput = 31091051 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.643038 sec
+throughput = 30106707 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.692244 sec
+throughput = 23009018 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.891833 sec
+throughput = 11178284 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.885828 sec
+throughput = 7438863 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.713918 sec
+throughput = 6306379 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.222653 sec
+throughput = 10975350 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.043426 sec
+throughput = 11084369 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.155883 sec
+throughput = 11657808 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.90218 sec
+throughput = 10049150 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.67702 sec
+throughput = 5171029 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.602912 sec
+throughput = 4032021 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.116905 sec
+throughput = 3219735 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.167113 sec
+throughput = 7100479 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 97.875152 sec
+throughput = 2043419 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.371407 sec
+throughput = 31390240 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.587076 sec
+throughput = 6137402 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.638308 sec
+throughput = 5945602 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.893957 sec
+throughput = 5142186 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.1086 sec
+throughput = 4072606 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 58.087961 sec
+throughput = 3443054 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.051035 sec
+throughput = 65551525 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.056116 sec
+throughput = 65442542 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.449715 sec
+throughput = 17467683 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.442854 sec
+throughput = 17478157 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.765909 sec
+throughput = 18577158 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.664706 sec
+throughput = 18753447 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.649258 sec
+throughput = 10178501 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 20.30214 sec
+throughput = 9851178 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.66024 sec
+throughput = 30028947 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.693539 sec
+throughput = 29879559 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.799317 sec
+throughput = 29414719 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.977615 sec
+throughput = 22277631 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 18.437095 sec
+throughput = 10847695 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 28.212038 sec
+throughput = 7089172 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 32.356412 sec
+throughput = 6181155 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.563938 sec
+throughput = 10773576 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.393319 sec
+throughput = 10873513 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.466828 sec
+throughput = 11450275 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 20.005399 sec
+throughput = 9997301 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 39.530511 sec
+throughput = 5059383 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 50.49512 sec
+throughput = 3960778 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 65.42543 sec
+throughput = 3056915 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.276424 sec
+throughput = 7073030 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 98.63231 sec
+throughput = 2027733 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.441766 sec
+throughput = 31047386 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.546293 sec
+throughput = 6145093 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.642801 sec
+throughput = 5944808 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.916033 sec
+throughput = 5139269 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 50.786739 sec
+throughput = 3938035 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 61.969853 sec
+throughput = 3227375 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.087521 sec
+throughput = 64776887 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.092807 sec
+throughput = 64666175 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.712071 sec
+throughput = 17076399 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.883299 sec
+throughput = 16830343 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.800922 sec
+throughput = 18516937 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.659367 sec
+throughput = 18762840 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.614137 sec
+throughput = 10196726 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.985231 sec
+throughput = 10007389 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.615356 sec
+throughput = 30232688 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.486719 sec
+throughput = 30832228 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.708849 sec
+throughput = 29811373 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.728595 sec
+throughput = 22913195 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 18.129382 sec
+throughput = 11031815 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 27.226345 sec
+throughput = 7345826 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.557335 sec
+throughput = 6337670 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.248229 sec
+throughput = 10959967 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.115865 sec
+throughput = 11040046 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.229142 sec
+throughput = 11608239 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.973553 sec
+throughput = 10013241 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.930231 sec
+throughput = 5137395 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.718952 sec
+throughput = 4022610 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.133847 sec
+throughput = 3218857 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.312457 sec
+throughput = 7064028 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 97.578855 sec
+throughput = 2049624 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.37221 sec
+throughput = 31386285 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.360239 sec
+throughput = 6180424 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.476555 sec
+throughput = 5974330 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.86084 sec
+throughput = 5146569 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.574572 sec
+throughput = 4034326 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 58.156473 sec
+throughput = 3438998 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.028435 sec
+throughput = 66040710 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.04179 sec
+throughput = 65750758 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.469764 sec
+throughput = 17437150 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.482824 sec
+throughput = 17417318 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.727557 sec
+throughput = 18643573 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.60695 sec
+throughput = 18855561 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.325979 sec
+throughput = 10348764 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.699635 sec
+throughput = 10152472 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.420683 sec
+throughput = 31149334 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.426963 sec
+throughput = 31118897 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.635664 sec
+throughput = 30140163 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.683975 sec
+throughput = 23030927 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.858928 sec
+throughput = 11198880 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.906873 sec
+throughput = 7433045 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.61614 sec
+throughput = 6325882 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.215529 sec
+throughput = 10979642 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.078252 sec
+throughput = 11063016 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.168238 sec
+throughput = 11649419 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.826537 sec
+throughput = 10087490 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.682561 sec
+throughput = 5170288 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.632611 sec
+throughput = 4029608 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 61.967643 sec
+throughput = 3227490 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.233903 sec
+throughput = 7083682 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 97.704702 sec
+throughput = 2046984 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.36953 sec
+throughput = 31399491 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.399378 sec
+throughput = 6172958 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.527489 sec
+throughput = 5965254 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.881899 sec
+throughput = 5143781 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.193443 sec
+throughput = 4065582 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 58.081646 sec
+throughput = 3443428 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.027228 sec
+throughput = 66067042 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.04433 sec
+throughput = 65695900 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.500918 sec
+throughput = 17389916 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.512151 sec
+throughput = 17372947 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.73497 sec
+throughput = 18630699 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.606099 sec
+throughput = 18857074 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.307068 sec
+throughput = 10358900 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.651004 sec
+throughput = 10177597 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.428594 sec
+throughput = 31111001 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.423942 sec
+throughput = 31133531 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.640868 sec
+throughput = 30116545 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.657404 sec
+throughput = 23101613 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.896306 sec
+throughput = 11175490 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 25.707676 sec
+throughput = 7779777 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.469622 sec
+throughput = 6355335 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.212061 sec
+throughput = 10981733 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.02881 sec
+throughput = 11093355 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.140944 sec
+throughput = 11667968 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.837166 sec
+throughput = 10082085 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.761429 sec
+throughput = 5159768 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.422373 sec
+throughput = 4046750 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 61.980929 sec
+throughput = 3226799 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.246958 sec
+throughput = 7080408 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 98.123492 sec
+throughput = 2038247 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.364353 sec
+throughput = 31425032 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.446344 sec
+throughput = 6164022 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.53676 sec
+throughput = 5963605 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.750885 sec
+throughput = 5161172 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.31483 sec
+throughput = 4055575 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 56.402272 sec
+throughput = 3545956 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.01429 sec
+throughput = 66350616 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.048768 sec
+throughput = 65600268 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.439137 sec
+throughput = 17483836 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.455442 sec
+throughput = 17458950 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.731884 sec
+throughput = 18636056 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.600029 sec
+throughput = 18867872 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.206655 sec
+throughput = 10413057 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.707064 sec
+throughput = 10148645 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.42785 sec
+throughput = 31114602 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.42746 sec
+throughput = 31116490 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.642557 sec
+throughput = 30108887 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.662232 sec
+throughput = 23088737 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.839471 sec
+throughput = 11211094 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.868783 sec
+throughput = 7443582 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.3467 sec
+throughput = 6380256 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.185466 sec
+throughput = 10997793 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.020991 sec
+throughput = 11098168 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.143866 sec
+throughput = 11665980 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.838284 sec
+throughput = 10081517 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.784073 sec
+throughput = 5156755 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.603633 sec
+throughput = 4031962 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.171716 sec
+throughput = 3216896 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.169091 sec
+throughput = 7099980 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 98.154161 sec
+throughput = 2037611 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.358538 sec
+throughput = 31453771 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.297293 sec
+throughput = 6192469 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.411567 sec
+throughput = 5985950 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.697841 sec
+throughput = 5168246 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 48.280987 sec
+throughput = 4142417 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 56.411602 sec
+throughput = 3545369 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.021758 sec
+throughput = 66186637 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.0452 sec
+throughput = 65677131 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.464306 sec
+throughput = 17445451 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.47695 sec
+throughput = 17426232 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.736202 sec
+throughput = 18628561 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.607243 sec
+throughput = 18855040 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.329698 sec
+throughput = 10346773 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.7055 sec
+throughput = 10149450 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.425087 sec
+throughput = 31127983 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.446036 sec
+throughput = 31026820 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.643636 sec
+throughput = 30103997 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.668518 sec
+throughput = 23071994 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.874096 sec
+throughput = 11189377 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.245163 sec
+throughput = 7620451 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.688615 sec
+throughput = 6311414 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.184518 sec
+throughput = 10998366 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.279096 sec
+throughput = 10941460 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.193874 sec
+throughput = 11632049 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.922836 sec
+throughput = 10038731 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.997318 sec
+throughput = 5128557 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.941971 sec
+throughput = 4004647 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.428396 sec
+throughput = 3203670 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.368849 sec
+throughput = 7049986 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 97.952217 sec
+throughput = 2041811 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.384871 sec
+throughput = 31324047 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.552941 sec
+throughput = 6143838 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.694852 sec
+throughput = 5935624 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 39.023743 sec
+throughput = 5125085 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.568831 sec
+throughput = 4034793 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 59.000953 sec
+throughput = 3389775 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.036122 sec
+throughput = 65873505 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.059625 sec
+throughput = 65367487 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.493564 sec
+throughput = 17401042 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.497937 sec
+throughput = 17394424 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.752908 sec
+throughput = 18599619 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.633686 sec
+throughput = 18808153 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.300638 sec
+throughput = 10362351 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.703527 sec
+throughput = 10150466 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.437762 sec
+throughput = 31066696 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.431707 sec
+throughput = 31095943 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.640999 sec
+throughput = 30115950 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.679616 sec
+throughput = 23042494 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.93057 sec
+throughput = 11154135 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.895754 sec
+throughput = 7436117 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 32.049148 sec
+throughput = 6240415 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.222872 sec
+throughput = 10975218 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.011896 sec
+throughput = 11103772 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.165873 sec
+throughput = 11651024 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 19.899807 sec
+throughput = 10050348 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 38.867574 sec
+throughput = 5145677 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 49.630012 sec
+throughput = 4029819 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.225575 sec
+throughput = 3214112 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.282051 sec
+throughput = 7071622 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 98.075746 sec
+throughput = 2039240 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.362845 sec
+throughput = 31432480 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.40353 sec
+throughput = 6172167 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.656768 sec
+throughput = 5942341 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 38.870637 sec
+throughput = 5145271 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 49.192621 sec
+throughput = 4065650 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 58.229943 sec
+throughput = 3434659 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5}
+stream length = 200000000
+duration = 3.026031 sec
+throughput = 66093176 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.25}
+stream length = 200000000
+duration = 3.059532 sec
+throughput = 65369474 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} and {x > 0.25}
+stream length = 200000000
+duration = 11.465041 sec
+throughput = 17444333 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} or {x > 0.25}
+stream length = 200000000
+duration = 11.492812 sec
+throughput = 17402181 items/sec
+-------------------------------------------
+tool = Our Tool
+once {x > 0.5}
+stream length = 200000000
+duration = 10.755287 sec
+throughput = 18595505 items/sec
+-------------------------------------------
+tool = Our Tool
+historically {x > 0.5}
+stream length = 200000000
+duration = 10.636521 sec
+throughput = 18803140 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since {x > 0.25}
+stream length = 200000000
+duration = 19.300862 sec
+throughput = 10362231 items/sec
+-------------------------------------------
+tool = Our Tool
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 200000000
+duration = 19.709515 sec
+throughput = 10147383 items/sec
+-------------------------------------------
+tool = Our Tool
+historically [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.43479 sec
+throughput = 31081045 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10:10] {x > 0.5}
+stream length = 200000000
+duration = 6.437729 sec
+throughput = 31066856 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100:100] {x > 0.5}
+stream length = 200000000
+duration = 6.649667 sec
+throughput = 30076694 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000:1000] {x > 0.5}
+stream length = 200000000
+duration = 8.689537 sec
+throughput = 23016186 items/sec
+-------------------------------------------
+tool = Our Tool
+once [10000:10000] {x > 0.5}
+stream length = 200000000
+duration = 17.904477 sec
+throughput = 11170390 items/sec
+-------------------------------------------
+tool = Our Tool
+once [100000:100000] {x > 0.5}
+stream length = 200000000
+duration = 26.957699 sec
+throughput = 7419030 items/sec
+-------------------------------------------
+tool = Our Tool
+once [1000000:1000000] {x > 0.5}
+stream length = 200000000
+duration = 31.693636 sec
+throughput = 6310415 items/sec
+-------------------------------------------
+tool = Our Tool
+historically[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.210809 sec
+throughput = 10982488 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10] {x > 0.5}
+stream length = 200000000
+duration = 18.062641 sec
+throughput = 11072577 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100] {x > 0.5}
+stream length = 200000000
+duration = 17.162546 sec
+throughput = 11653282 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000] {x > 0.5}
+stream length = 200000000
+duration = 20.20779 sec
+throughput = 9897173 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:10000] {x > 0.5}
+stream length = 200000000
+duration = 40.551665 sec
+throughput = 4931979 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:100000] {x > 0.5}
+stream length = 200000000
+duration = 52.069901 sec
+throughput = 3840990 items/sec
+-------------------------------------------
+tool = Our Tool
+once[:1000000] {x > 0.5}
+stream length = 200000000
+duration = 62.626043 sec
+throughput = 3193559 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 200000000
+duration = 28.409951 sec
+throughput = 7039786 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 200000000
+duration = 99.054361 sec
+throughput = 2019093 items/sec
+-------------------------------------------
+tool = Our Tool
+pre {x > 0.5}
+stream length = 200000000
+duration = 6.395976 sec
+throughput = 31269660 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 200000000
+duration = 32.556803 sec
+throughput = 6143109 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 200000000
+duration = 33.602805 sec
+throughput = 5951884 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 200000000
+duration = 39.14033 sec
+throughput = 5109818 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 200000000
+duration = 48.526868 sec
+throughput = 4121428 items/sec
+-------------------------------------------
+tool = Our Tool
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 200000000
+duration = 58.1886 sec
+throughput = 3437099 items/sec

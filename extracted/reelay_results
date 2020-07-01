@@ -1,0 +1,1741 @@
+timestamp = 1593559335 seconds after epoch
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.833249 sec
+throughput = 600060.967394 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.830173 sec
+throughput = 602283.820013 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.662029 sec
+throughput = 300837.182467 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.646559 sec
+throughput = 303663.503087 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.930237 sec
+throughput = 537497.221395 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.935696 sec
+throughput = 534361.457317 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.689137 sec
+throughput = 296009.181774 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.711872 sec
+throughput = 292077.980786 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.760797 sec
+throughput = 39182.504830 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.547194 sec
+throughput = 39849.548447 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.858851 sec
+throughput = 12867.081338 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 253.434049 sec
+throughput = 1972.899858 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 216.996410 sec
+throughput = 230.418559 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 623.333426 sec
+throughput = 80.213892 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 22.341960 sec
+throughput = 22379.414765 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 22.347809 sec
+throughput = 22373.557524 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 29.016071 sec
+throughput = 17231.829762 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 34.353555 sec
+throughput = 14554.534460 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 34.372203 sec
+throughput = 14546.637986 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 34.150152 sec
+throughput = 14641.223463 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 34.188728 sec
+throughput = 14624.703252 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.994461 sec
+throughput = 6410.711658 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 100.340789 sec
+throughput = 4983.018413 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.890650 sec
+throughput = 561387.795902 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 56.141150 sec
+throughput = 8906.123207 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 63.173505 sec
+throughput = 7914.710388 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 69.994545 sec
+throughput = 7143.413838 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 69.413898 sec
+throughput = 7203.168442 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 69.223009 sec
+throughput = 7223.031862 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.824698 sec
+throughput = 606282.771585 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.825700 sec
+throughput = 605547.039048 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.606565 sec
+throughput = 311223.011718 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.606247 sec
+throughput = 311284.671297 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.907032 sec
+throughput = 551248.656539 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.906502 sec
+throughput = 551570.735839 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.638175 sec
+throughput = 305217.726892 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.655648 sec
+throughput = 301996.648303 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.608706 sec
+throughput = 39655.139464 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.646297 sec
+throughput = 39537.265232 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 39.206390 sec
+throughput = 12753.023097 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 252.541830 sec
+throughput = 1979.870025 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 207.281426 sec
+throughput = 241.217946 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 573.884886 sec
+throughput = 87.125487 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.507215 sec
+throughput = 23248.011845 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.432271 sec
+throughput = 23329.306069 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 27.877842 sec
+throughput = 17935.391053 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.152741 sec
+throughput = 15081.709310 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.184226 sec
+throughput = 15067.399942 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 32.999778 sec
+throughput = 15151.616929 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.093764 sec
+throughput = 15108.586758 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 75.499146 sec
+throughput = 6622.591445 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 96.944860 sec
+throughput = 5157.571021 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.861915 sec
+throughput = 580103.650925 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 54.246514 sec
+throughput = 9217.182152 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 61.338546 sec
+throughput = 8151.481108 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 66.830547 sec
+throughput = 7481.608682 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 66.994512 sec
+throughput = 7463.297925 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 67.004350 sec
+throughput = 7462.202033 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.794973 sec
+throughput = 628952.099134 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.798892 sec
+throughput = 625867.043344 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.566118 sec
+throughput = 319260.698065 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.570599 sec
+throughput = 318349.961689 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.876725 sec
+throughput = 570304.111611 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.874509 sec
+throughput = 571749.380986 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.602006 sec
+throughput = 312108.617744 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.630542 sec
+throughput = 306646.505542 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.364973 sec
+throughput = 40436.805140 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.347906 sec
+throughput = 40492.695012 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 37.570599 sec
+throughput = 13308.278510 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 244.913845 sec
+throughput = 2041.534242 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 207.174314 sec
+throughput = 241.342659 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 573.168757 sec
+throughput = 87.234343 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.874390 sec
+throughput = 22857.780335 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 22.141942 sec
+throughput = 22581.578386 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.979301 sec
+throughput = 17253.694515 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 34.175178 sec
+throughput = 14630.501882 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 34.106208 sec
+throughput = 14660.087788 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.795732 sec
+throughput = 14794.767461 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 34.152038 sec
+throughput = 14640.414593 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 78.217502 sec
+throughput = 6392.431173 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 100.388321 sec
+throughput = 4980.659046 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.895274 sec
+throughput = 558488.503854 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 56.367835 sec
+throughput = 8870.307028 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 63.321209 sec
+throughput = 7896.248432 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 69.376049 sec
+throughput = 7207.098220 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.672960 sec
+throughput = 7280.886068 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 67.977478 sec
+throughput = 7355.377309 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.814757 sec
+throughput = 613679.775204 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.813704 sec
+throughput = 614474.254194 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.588574 sec
+throughput = 314747.627562 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.586947 sec
+throughput = 315070.445319 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.884928 sec
+throughput = 565017.697247 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.886300 sec
+throughput = 564143.382393 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.612241 sec
+throughput = 310127.239171 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.632736 sec
+throughput = 306234.465610 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.372668 sec
+throughput = 40411.657334 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.411058 sec
+throughput = 40286.653232 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.307843 sec
+throughput = 13052.157451 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 251.269328 sec
+throughput = 1989.896670 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 212.534158 sec
+throughput = 235.256302 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 590.703476 sec
+throughput = 84.644838 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.809145 sec
+throughput = 22926.162528 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.862576 sec
+throughput = 22870.132518 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.378751 sec
+throughput = 17618.816547 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.838053 sec
+throughput = 14776.263998 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.789173 sec
+throughput = 14797.639660 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.907336 sec
+throughput = 14746.071594 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.902610 sec
+throughput = 14748.126943 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.296676 sec
+throughput = 6468.583486 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.307654 sec
+throughput = 5034.858637 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.883463 sec
+throughput = 565954.520886 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.631669 sec
+throughput = 8987.686482 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.523186 sec
+throughput = 7997.033350 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.434389 sec
+throughput = 7306.268207 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.515174 sec
+throughput = 7297.653516 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.502575 sec
+throughput = 7298.995671 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.820082 sec
+throughput = 609694.952593 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.819072 sec
+throughput = 610447.005204 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.589510 sec
+throughput = 314562.272421 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.593598 sec
+throughput = 313755.405974 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.890722 sec
+throughput = 561342.321907 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.890604 sec
+throughput = 561417.043926 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.625740 sec
+throughput = 307552.227211 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.644011 sec
+throughput = 304134.168501 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.463357 sec
+throughput = 40117.603274 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.466217 sec
+throughput = 40108.398353 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.412444 sec
+throughput = 13016.615168 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 249.754857 sec
+throughput = 2001.963069 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 211.674231 sec
+throughput = 236.212031 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 589.497794 sec
+throughput = 84.817959 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.916906 sec
+throughput = 22813.438588 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 22.016699 sec
+throughput = 22710.034639 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.503139 sec
+throughput = 17541.927778 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.878878 sec
+throughput = 14758.457996 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.856692 sec
+throughput = 14768.129168 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.892801 sec
+throughput = 14752.395472 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.860946 sec
+throughput = 14766.273756 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.089060 sec
+throughput = 6486.004630 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.192039 sec
+throughput = 5040.727131 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.885803 sec
+throughput = 564459.672322 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.637545 sec
+throughput = 8986.737204 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.523220 sec
+throughput = 7997.028883 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.498393 sec
+throughput = 7299.441292 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.490898 sec
+throughput = 7300.240135 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.494366 sec
+throughput = 7299.870462 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.814032 sec
+throughput = 614226.725811 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.815044 sec
+throughput = 613463.841598 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.589822 sec
+throughput = 314500.689255 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.591281 sec
+throughput = 314212.179676 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.890756 sec
+throughput = 561320.672494 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.888637 sec
+throughput = 562659.356875 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.624957 sec
+throughput = 307700.506349 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.644217 sec
+throughput = 304096.079619 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.456889 sec
+throughput = 40138.432280 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.395126 sec
+throughput = 40338.434626 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.365571 sec
+throughput = 13032.518163 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 250.441384 sec
+throughput = 1996.475155 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 211.263315 sec
+throughput = 236.671473 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 588.846100 sec
+throughput = 84.911830 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.820954 sec
+throughput = 22913.754826 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.931209 sec
+throughput = 22798.560225 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.534567 sec
+throughput = 17522.606657 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.839626 sec
+throughput = 14775.576885 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.860871 sec
+throughput = 14766.306437 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.867034 sec
+throughput = 14763.619416 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.823349 sec
+throughput = 14782.687327 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.085876 sec
+throughput = 6486.272496 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.371259 sec
+throughput = 5031.635975 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.877868 sec
+throughput = 569561.538291 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.565266 sec
+throughput = 8998.427151 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.536175 sec
+throughput = 7995.372242 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.583717 sec
+throughput = 7290.360231 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.578500 sec
+throughput = 7290.914752 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.464253 sec
+throughput = 7303.081163 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.818486 sec
+throughput = 610884.262227 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.817787 sec
+throughput = 611406.369097 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.593030 sec
+throughput = 313867.231555 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.593680 sec
+throughput = 313739.199836 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.890694 sec
+throughput = 561360.176966 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.889977 sec
+throughput = 561812.120049 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.619379 sec
+throughput = 308760.364515 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.644157 sec
+throughput = 304107.164377 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.467387 sec
+throughput = 40104.635628 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.405517 sec
+throughput = 40304.649926 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.352070 sec
+throughput = 13037.105871 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 250.574838 sec
+throughput = 1995.411849 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 211.573020 sec
+throughput = 236.325029 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 589.708433 sec
+throughput = 84.787663 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.936781 sec
+throughput = 22792.769977 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.978644 sec
+throughput = 22749.355863 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.490696 sec
+throughput = 17549.588586 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.684493 sec
+throughput = 14843.625725 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.672536 sec
+throughput = 14848.896641 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.666127 sec
+throughput = 14851.723221 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.835415 sec
+throughput = 14777.415779 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 76.812441 sec
+throughput = 6509.362215 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.310946 sec
+throughput = 5034.691768 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.885362 sec
+throughput = 564740.632106 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.710964 sec
+throughput = 8974.894129 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.347846 sec
+throughput = 8019.523178 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.352357 sec
+throughput = 7315.036664 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.508530 sec
+throughput = 7298.361191 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.359383 sec
+throughput = 7314.284860 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.818791 sec
+throughput = 610656.325627 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.814563 sec
+throughput = 613825.980146 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.581324 sec
+throughput = 316190.670986 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.583337 sec
+throughput = 315788.723437 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.887862 sec
+throughput = 563150.523257 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.881556 sec
+throughput = 567179.195538 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.616676 sec
+throughput = 309276.658166 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.634795 sec
+throughput = 305848.677088 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.396742 sec
+throughput = 40333.177768 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.392737 sec
+throughput = 40346.210877 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.260232 sec
+throughput = 13068.399466 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 249.849209 sec
+throughput = 2001.207052 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 210.877001 sec
+throughput = 237.105041 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 589.931711 sec
+throughput = 84.755573 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.935030 sec
+throughput = 22794.589279 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.944867 sec
+throughput = 22784.371093 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.372466 sec
+throughput = 17622.719158 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.676958 sec
+throughput = 14846.946780 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.849196 sec
+throughput = 14771.399440 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.841397 sec
+throughput = 14774.803677 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.795695 sec
+throughput = 14794.783779 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.162535 sec
+throughput = 6479.828558 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 98.851731 sec
+throughput = 5058.080375 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.885278 sec
+throughput = 564794.337705 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.662086 sec
+throughput = 8982.775111 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.429378 sec
+throughput = 8009.049817 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.442062 sec
+throughput = 7305.449118 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.492530 sec
+throughput = 7300.066102 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.151142 sec
+throughput = 7336.634207 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.815238 sec
+throughput = 613318.056611 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.814344 sec
+throughput = 613991.022768 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.576812 sec
+throughput = 317095.491748 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.577193 sec
+throughput = 317018.931499 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.888436 sec
+throughput = 562786.509899 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.883161 sec
+throughput = 566147.979816 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.612658 sec
+throughput = 310047.052666 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.631873 sec
+throughput = 306396.396121 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.464543 sec
+throughput = 40113.786233 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.463998 sec
+throughput = 40115.540114 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.210751 sec
+throughput = 13085.322573 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 250.327511 sec
+throughput = 1997.383337 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 211.921229 sec
+throughput = 235.936722 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 590.376436 sec
+throughput = 84.691727 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.998532 sec
+throughput = 22728.789038 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 21.996326 sec
+throughput = 22731.068943 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.500048 sec
+throughput = 17543.830174 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.896643 sec
+throughput = 14750.723408 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.901491 sec
+throughput = 14748.614049 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.883037 sec
+throughput = 14756.646538 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.858051 sec
+throughput = 14767.536174 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.141480 sec
+throughput = 6481.597187 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.298408 sec
+throughput = 5035.327447 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.878304 sec
+throughput = 569278.902725 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.667482 sec
+throughput = 8981.904337 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.747180 sec
+throughput = 7968.485628 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.523614 sec
+throughput = 7296.754685 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.524713 sec
+throughput = 7296.637683 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.313815 sec
+throughput = 7319.163769 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5}
+stream length = 500000
+duration = 0.812548 sec
+throughput = 615348.077720 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.25}
+stream length = 500000
+duration = 0.812453 sec
+throughput = 615420.074943 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} and {x > 0.25}
+stream length = 500000
+duration = 1.572623 sec
+throughput = 317940.084203 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} or {x > 0.25}
+stream length = 500000
+duration = 1.574227 sec
+throughput = 317616.204905 items/sec
+----------------------------------------------
+tool = Reelay
+once {x > 0.5}
+stream length = 500000
+duration = 0.881581 sec
+throughput = 567162.800645 items/sec
+----------------------------------------------
+tool = Reelay
+historically {x > 0.5}
+stream length = 500000
+duration = 0.884851 sec
+throughput = 565066.841627 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since {x > 0.25}
+stream length = 500000
+duration = 1.618207 sec
+throughput = 308984.005726 items/sec
+----------------------------------------------
+tool = Reelay
+not ({x <= 0.5} since {x <= 0.25})
+stream length = 500000
+duration = 1.640567 sec
+throughput = 304772.630344 items/sec
+----------------------------------------------
+tool = Reelay
+historically [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.446819 sec
+throughput = 40170.906350 items/sec
+----------------------------------------------
+tool = Reelay
+once [10:10] {x > 0.5}
+stream length = 500000
+duration = 12.436895 sec
+throughput = 40202.961157 items/sec
+----------------------------------------------
+tool = Reelay
+once [100:100] {x > 0.5}
+stream length = 500000
+duration = 38.315549 sec
+throughput = 13049.532289 items/sec
+----------------------------------------------
+tool = Reelay
+once [1000:1000] {x > 0.5}
+stream length = 500000
+duration = 250.398117 sec
+throughput = 1996.820129 items/sec
+----------------------------------------------
+tool = Reelay
+once [10000:10000] {x > 0.5}
+stream length = 50000
+duration = 211.672540 sec
+throughput = 236.213918 items/sec
+----------------------------------------------
+tool = Reelay
+once [100000:100000] {x > 0.5}
+stream length = 50000
+duration = 589.234678 sec
+throughput = 84.855834 items/sec
+----------------------------------------------
+tool = Reelay
+historically[:10] {x > 0.5}
+stream length = 500000
+duration = 21.954420 sec
+throughput = 22774.457062 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10] {x > 0.5}
+stream length = 500000
+duration = 22.013586 sec
+throughput = 22713.246434 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100] {x > 0.5}
+stream length = 500000
+duration = 28.500108 sec
+throughput = 17543.793294 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000] {x > 0.5}
+stream length = 500000
+duration = 33.878044 sec
+throughput = 14758.821319 items/sec
+----------------------------------------------
+tool = Reelay
+once[:10000] {x > 0.5}
+stream length = 500000
+duration = 33.908538 sec
+throughput = 14745.548891 items/sec
+----------------------------------------------
+tool = Reelay
+once[:100000] {x > 0.5}
+stream length = 500000
+duration = 33.877969 sec
+throughput = 14758.853844 items/sec
+----------------------------------------------
+tool = Reelay
+once[:1000000] {x > 0.5}
+stream length = 500000
+duration = 33.887790 sec
+throughput = 14754.576631 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:] {x > 0.25}
+stream length = 500000
+duration = 77.250032 sec
+throughput = 6472.489263 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[1000:2000] {x > 0.25}
+stream length = 500000
+duration = 99.339704 sec
+throughput = 5033.234247 items/sec
+----------------------------------------------
+tool = Reelay
+pre {x > 0.5}
+stream length = 500000
+duration = 0.885871 sec
+throughput = 564416.057337 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10] {x > 0.25}
+stream length = 500000
+duration = 55.723292 sec
+throughput = 8972.908553 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100] {x > 0.25}
+stream length = 500000
+duration = 62.739074 sec
+throughput = 7969.515154 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:1000] {x > 0.25}
+stream length = 500000
+duration = 68.454119 sec
+throughput = 7304.162334 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:10000] {x > 0.25}
+stream length = 500000
+duration = 68.365011 sec
+throughput = 7313.682721 items/sec
+----------------------------------------------
+tool = Reelay
+{x > 0.5} since[:100000] {x > 0.25}
+stream length = 500000
+duration = 68.480741 sec
+throughput = 7301.322814 items/sec

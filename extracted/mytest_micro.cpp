@@ -36,10 +36,11 @@ const int item_num = 2000000;
 std::default_random_engine generator;
 std::uniform_real_distribution<float> distribution(0.0,1.0);
 
-std::vector<input_t> sequence = std::vector<input_t>();
+std::vector<input_t> sequence;
 
-void measure(std::string formula){
+void measure(int item_num, std::string formula){
   std::cout << "----------------------------------------------" << std::endl;
+  std::cout << "tool = Reelay" << std::endl;
   std::cout << formula << std::endl;
   std::cout << "stream length = " << item_num << std::endl;
   auto net1 =
@@ -57,42 +58,53 @@ void measure(std::string formula){
   std::cout << std::fixed << "throughput = " << item_num / duration.count() << " items/sec" << std::endl;
 }
 
-
+void suite(){
+  measure(500000, "{x > 0.5}");
+  measure(500000, "{x > 0.25}");
+  measure(500000, "{x > 0.5} and {x > 0.25}");
+  measure(500000, "{x > 0.5} or {x > 0.25}");
+  measure(500000, "once {x > 0.5}");
+  measure(500000, "historically {x > 0.5}");
+  measure(500000, "{x > 0.5} since {x > 0.25}");
+  measure(500000, "not ({x <= 0.5} since {x <= 0.25})");
+  measure(500000, "historically [10:10] {x > 0.5}");
+  measure(500000, "once [10:10] {x > 0.5}");
+  measure(500000, "once [100:100] {x > 0.5}");
+  measure(500000, "once [1000:1000] {x > 0.5}");
+  measure(50000, "once [10000:10000] {x > 0.5}");
+  measure(50000, "once [100000:100000] {x > 0.5}");
+  measure(500000, "historically[:10] {x > 0.5}");
+  measure(500000, "once[:10] {x > 0.5}");
+  measure(500000, "once[:100] {x > 0.5}");
+  measure(500000, "once[:1000] {x > 0.5}");
+  measure(500000, "once[:10000] {x > 0.5}");
+  measure(500000, "once[:100000] {x > 0.5}");
+  measure(500000, "once[:1000000] {x > 0.5}");
+  measure(500000, "{x > 0.5} since[1000:] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[1000:2000] {x > 0.25}");
+  measure(500000, "pre {x > 0.5}");
+  measure(500000, "{x > 0.5} since[:10] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[:100] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[:1000] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[:10000] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[:100000] {x > 0.25}");
+}
 
 TEST_CASE("Blah") {
 
   SECTION("Bleh") {
+   std::chrono::system_clock::time_point tp = std::chrono::system_clock::now();
+   std::chrono::system_clock::duration dtn = tp.time_since_epoch();
+   std::cout << "timestamp = " << dtn.count() * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den
+            << " seconds after epoch" << std::endl;
+   sequence = std::vector<input_t>();
    for (int i = 0; i < 1000; i++) {
       sequence.push_back(input_t{{"x", distribution(generator)},
                                  {"y", distribution(generator)},
                                  {"z", distribution(generator)}});
     }
-   measure("{x > 0.5}");
-   measure("{x > 0.25}");
-   measure("{x > 0.5} and {x > 0.25}");
-   measure("{x > 0.5} or {x > 0.25}");
-   measure("once {x > 0.5}");
-   measure("historically {x > 0.5}");
-   measure("{x > 0.5} since {x > 0.25}");
-   measure("pre {x > 0.5}");
-   measure("once [10:10] {x > 0.5}");
-   measure("once [20:20] {x > 0.5}");
-   measure("historically[:10] {x > 0.5}");
-   measure("once[:10] {x > 0.5}");
-   measure("once[:20] {x > 0.5}");
-   measure("once[:40] {x > 0.5}");
-   measure("once[10:20] {x > 0.5}");
-   measure("once[10:30] {x > 0.5}");
-   measure("once[60:60] {x > 0.5}");
-   measure("{x > 0.5} since[10:] {x > 0.25}");
-   measure("{x > 0.5} since[20:] {x > 0.25}");
-   measure("{x > 0.5} since[40:] {x > 0.25}");
-   measure("{x > 0.5} since[:5] {x > 0.25}");
-   measure("{x > 0.5} since[:10] {x > 0.25}");
-   measure("{x > 0.5} since[:15] {x > 0.25}");
-   measure("{x > 0.5} since[1:5] {x > 0.25}");
-   measure("{x > 0.5} since[5:10] {x > 0.25}");
-   measure("{x > 0.5} since[15:20] {x > 0.25}");
+   for (int i = 0; i < 10; i++)
+    suite();
   }
 }
 
