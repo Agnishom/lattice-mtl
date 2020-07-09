@@ -1,6 +1,7 @@
 Require Import Monoid.
 Require Import MTLTactics.
 
+Require Import Lia.
 Require Import Setoid.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
@@ -189,6 +190,207 @@ Instance meetMonoid {A : Type} `{Lattice A} `{BoundedLattice A} : Monoid A :=
   op_assoc := ltac:(intros; now rewrite meet_assoc);
   }.
 
+Definition join_i {A : Type} `{Lattice A} `{BoundedLattice A} : nat -> nat -> (nat -> A) -> A
+  := (@op_i A joinMonoid ).
+
+Definition meet_i {A : Type} `{Lattice A} `{BoundedLattice A} : nat -> nat -> (nat -> A) -> A
+  := (@op_i A meetMonoid ).
+
+Definition join_b {A : Type} `{Lattice A} `{BoundedLattice A} : nat -> nat -> (nat -> A) -> A
+  := (@op_b A joinMonoid ).
+
+Definition meet_b {A : Type} `{Lattice A} `{BoundedLattice A} : nat -> nat -> (nat -> A) -> A
+  := (@op_b A meetMonoid ).
+
+Lemma join_i_ext {A : Type} `{Lattice A} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+    : (forall a, f a = g a) -> join_i start length f = join_i start length g.
+Proof.
+    intros. unfold join_i. erewrite op_i_ext; easy.
+Qed.
+
+Lemma join_i_ext_in {A : Type} `{Lattice A} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a <= start + length -> f a = g a)
+      -> join_i start length f = join_i start length g.
+Proof.
+  intros. unfold join_i. erewrite op_i_ext_in; easy.
+Qed.
+
+Lemma meet_i_ext {A : Type} `{Lattice A} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+    : (forall a, f a = g a) -> meet_i start length f = meet_i start length g.
+Proof.
+    intros. unfold meet_i. erewrite op_i_ext; easy.
+Qed.
+
+Lemma meet_i_ext_in {A : Type} `{Lattice A} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a <= start + length -> f a = g a)
+      -> meet_i start length f = meet_i start length g.
+Proof.
+  intros. unfold meet_i. erewrite op_i_ext_in; easy.
+Qed.
+
+Lemma join_b_ext {A : Type} `{Lattice A} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+    : (forall a, f a = g a) -> join_b lo hi f = join_b lo hi g.
+Proof.
+    intros. unfold join_b. erewrite op_b_ext; easy.
+Qed.
+
+Lemma join_b_ext_in {A : Type} `{Lattice A} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a = g a)
+      -> join_b lo hi f = join_b lo hi g.
+Proof.
+  intros. unfold join_b. erewrite op_b_ext_in; easy.
+Qed.
+
+Lemma meet_b_ext {A : Type} `{Lattice A} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+    : (forall a, f a = g a) -> meet_b lo hi f = meet_b lo hi g.
+Proof.
+    intros. unfold meet_b. erewrite op_b_ext; easy.
+Qed.
+
+Lemma meet_b_ext_in {A : Type} `{Lattice A} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a = g a)
+      -> meet_b lo hi f = meet_b lo hi g.
+Proof.
+  intros. unfold meet_b. erewrite op_b_ext_in; easy.
+Qed.
+
+Lemma join_i_distr_ext {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (start length : nat) (f g : nat -> A) (v : A)
+  : (forall a, f a = (g a ⊓ v))
+    -> length > 0
+    -> join_i start length f = ((join_i start length g) ⊓ v).
+Proof.
+  induction length.
+  - intros. lia.
+  - clear IHlength. intros. clear H0.
+    induction length.
+    + unfold join_i. unfold op_i. simpl. rewrite H.
+      unfold finite_op. simpl. now repeat rewrite join_bottom_l.
+    + unfold join_i in *. unfold op_i in *.
+      remember (S length) as n.
+      replace (S n) with (n + 1) by lia.
+      rewrite seq_app. repeat rewrite map_app.
+      repeat rewrite <- finite_op_app.
+      rewrite IHlength. simpl. rewrite H.
+      unfold finite_op at 2 4. simpl. repeat rewrite join_bottom_l.
+      rewrite <- meet_comm at 1. rewrite <- meet_comm with (x := v).
+      rewrite <- meet_distr with (x := v) (z := (g (start + n))) (y := finite_op A (map g (seq start n))).
+      now rewrite meet_comm.
+Qed.
+
+Lemma join_i_distr_ext_in
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (start length : nat) (f g : nat -> A) (v : A)
+  : (forall a, start <= a -> a <= start + length -> f a = (g a ⊓ v))
+    -> length > 0
+    -> join_i start length f = ((join_i start length g) ⊓ v).
+Proof.
+  intros. unfold join_i.
+  rewrite op_i_ext_in with (g := fun a => g a ⊓ v) by auto.
+  replace (op_i A start length (fun a : nat => g a ⊓ v))
+    with (join_i start length (fun a : nat => g a ⊓ v) ) by auto.
+  replace ((op_i A start length g ⊓ v))
+          with ((join_i start length g ⊓ v)) by auto.
+  now rewrite join_i_distr_ext with (g0 := g) (v0 := v).
+Qed.
+
+Lemma join_b_distr_ext
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (lo hi : nat) (f g : nat -> A) (v : A)
+  : (forall a, f a = (g a ⊓ v))
+    -> lo < hi
+    -> join_b lo hi f = ((join_b lo hi g) ⊓ v).
+Proof.
+  intros. unfold join_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f) with (join_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g) with (join_i lo (S hi - lo) g) by auto.
+  rewrite join_i_distr_ext with (g0 := g) (v0 := v); auto. lia.
+Qed.
+
+Lemma join_b_distr_ext_in
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (lo hi : nat) (f g : nat -> A) (v : A)
+  : (forall a, lo <= a -> a <= hi -> f a = (g a ⊓ v))
+    -> lo < hi
+    -> join_b lo hi f = ((join_b lo hi g) ⊓ v).
+Proof.
+  intros. unfold join_b.
+  rewrite op_b_ext_in with (g := fun a => g a ⊓ v) by auto.
+  replace (op_b A lo hi (fun a : nat => g a ⊓ v))
+    with (join_b lo hi (fun a : nat => g a ⊓ v) ) by auto.
+  replace ((op_b A _ _ g ⊓ v))
+          with ((join_b lo hi g ⊓ v)) by auto.
+  now rewrite join_b_distr_ext with (g0 := g) (v0 := v).
+Qed.
+
+Lemma meet_i_distr_ext {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (start length : nat) (f g : nat -> A) (v : A)
+  : (forall a, f a = (g a ⊔ v))
+    -> length > 0
+    -> meet_i start length f = ((meet_i start length g) ⊔ v).
+Proof.
+  induction length.
+  - intros. lia.
+  - clear IHlength. intros. clear H0.
+    induction length.
+    + unfold meet_i. unfold op_i. simpl. rewrite H.
+      unfold finite_op. simpl. now repeat rewrite meet_top_l.
+    + unfold meet_i in *. unfold op_i in *.
+      remember (S length) as n.
+      replace (S n) with (n + 1) by lia.
+      rewrite seq_app. repeat rewrite map_app.
+      repeat rewrite <- finite_op_app.
+      rewrite IHlength. simpl. rewrite H.
+      unfold finite_op at 2 4. simpl. repeat rewrite meet_top_l.
+      rewrite <- join_comm at 1. rewrite <- join_comm with (x := v).
+      rewrite <- join_distr with (x := v) (z := (g (start + n))) (y := finite_op A (map g (seq start n))).
+      now rewrite join_comm.
+Qed.
+
+Lemma meet_i_distr_ext_in
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (start length : nat) (f g : nat -> A) (v : A)
+  : (forall a, start <= a -> a <= start + length -> f a = (g a ⊔ v))
+    -> length > 0
+    -> meet_i start length f = ((meet_i start length g) ⊔ v).
+Proof.
+  intros. unfold meet_i.
+  rewrite op_i_ext_in with (g := fun a => g a ⊔ v) by auto.
+  replace (op_i A start length (fun a : nat => g a ⊔ v))
+    with (meet_i start length (fun a : nat => g a ⊔ v) ) by auto.
+  replace ((op_i A start length g ⊔ v))
+          with ((meet_i start length g ⊔ v)) by auto.
+  now rewrite meet_i_distr_ext with (g0 := g) (v0 := v).
+Qed.
+
+Lemma meet_b_distr_ext
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (lo hi : nat) (f g : nat -> A) (v : A)
+  : (forall a, f a = (g a ⊔ v))
+    -> lo < hi
+    -> meet_b lo hi f = ((meet_b lo hi g) ⊔ v).
+Proof.
+  intros. unfold meet_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f) with (meet_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g) with (meet_i lo (S hi - lo) g) by auto.
+  rewrite meet_i_distr_ext with (g0 := g) (v0 := v); auto. lia.
+Qed.
+
+Lemma meet_b_distr_ext_in
+      {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
+      (lo hi : nat) (f g : nat -> A) (v : A)
+  : (forall a, lo <= a -> a <= hi -> f a = (g a ⊔ v))
+    -> lo < hi
+    -> meet_b lo hi f = ((meet_b lo hi g) ⊔ v).
+Proof.
+  intros. unfold meet_b.
+  rewrite op_b_ext_in with (g := fun a => g a ⊔ v) by auto.
+  replace (op_b A lo hi (fun a : nat => g a ⊔ v))
+    with (meet_b lo hi (fun a : nat => g a ⊔ v) ) by auto.
+  replace ((op_b A _ _ g ⊔ v))
+          with ((meet_b lo hi g ⊔ v)) by auto.
+  now rewrite meet_b_distr_ext with (g0 := g) (v0 := v).
+Qed.
 
 Instance boolLattice : Lattice bool :=
   {
