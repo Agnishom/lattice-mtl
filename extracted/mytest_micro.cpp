@@ -60,13 +60,13 @@ void measure(int item_num, std::string formula){
 
 void suite(){
   measure(500000, "{x > 0.5}");
-  measure(500000, "{x > 0.25}");
-  measure(500000, "{x > 0.5} and {x > 0.25}");
-  measure(500000, "{x > 0.5} or {x > 0.25}");
+  measure(500000, "{y > 0.25}");
+  measure(500000, "{x > 0.5} and {y > 0.25}");
+  measure(500000, "{x > 0.5} or {y > 0.25}");
   measure(500000, "once {x > 0.5}");
   measure(500000, "historically {x > 0.5}");
-  measure(500000, "{x > 0.5} since {x > 0.25}");
-  measure(500000, "not ({x <= 0.5} since {x <= 0.25})");
+  measure(500000, "{x > 0.5} since {y > 0.25}");
+  measure(500000, "not ({x <= 0.5} since {y <= 0.25})");
   measure(500000, "historically [10:10] {x > 0.5}");
   measure(500000, "once [10:10] {x > 0.5}");
   measure(500000, "once [100:100] {x > 0.5}");
@@ -80,14 +80,24 @@ void suite(){
   measure(500000, "once[:10000] {x > 0.5}");
   measure(500000, "once[:100000] {x > 0.5}");
   measure(500000, "once[:1000000] {x > 0.5}");
-  measure(500000, "{x > 0.5} since[1000:] {x > 0.25}");
-  measure(500000, "{x > 0.5} since[1000:2000] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[1000:] {y > 0.25}");
+  measure(500000, "{x > 0.5} since[1000:2000] {y > 0.25}");
   measure(500000, "pre {x > 0.5}");
-  measure(500000, "{x > 0.5} since[:10] {x > 0.25}");
-  measure(500000, "{x > 0.5} since[:100] {x > 0.25}");
-  measure(500000, "{x > 0.5} since[:1000] {x > 0.25}");
-  measure(500000, "{x > 0.5} since[:10000] {x > 0.25}");
-  measure(500000, "{x > 0.5} since[:100000] {x > 0.25}");
+  measure(500000, "{x > 0.5} since[:10] {y > 0.25}");
+  measure(500000, "{x > 0.5} since[:100] {y > 0.25}");
+  measure(500000, "{x > 0.5} since[:1000] {y > 0.25}");
+  measure(500000, "{x > 0.5} since[:10000] {y > 0.25}");
+  measure(500000, "{x > 0.5} since[:100000] {y > 0.25}");
+  measure(500000, "historically((once[:1000]({y > 0.25})) -> ((not {x > 0.5}) since {y > 0.25}))");
+  measure(500000, "historically({z > 0.3} -> (historically[:1000](not {x > 0.5})))");
+  measure(500000, "historically({z > 0.3} && !{y > 0.25} && once {y > 0.25} ) -> ((not {x > 0.5}) since[1000:2000] {y > 0.25})");
+  measure(500000, "historically((once[:1000]({y > 0.25})) -> ({x > 0.5} since {y > 0.25}))");
+  measure(500000, "historically({z > 0.3} -> (historically[:1000]({x > 0.5})))");
+  measure(500000, "historically(({z > 0.3} && !{y > 0.25} && once {y > 0.25}) -> ({x > 0.5} since[1000:2000] {y > 0.25}))");
+  measure(500000, "historically(once[:1000]({x > 0.5}))");
+  measure(500000, "historically(({z > 0.3} && !{y > 0.25} && once {y > 0.25}) -> ((once[:1000]({x > 0.5} or {y > 0.25})) since {y > 0.25}))");
+  measure(500000, "historically(({z > 0.6} -> once[1000:2000] {x > 0.5}) and not( not({z > 0.6}) since[1000:] {x > 0.5}))");
+  measure(500000, "historically(({z > 0.3} && !{y > 0.25} && once {y > 0.25}) -> ( (({z > 0.6} -> once[1000:2000] {x > 0.5}) and not( not({z > 0.6}) since[1000:] {x > 0.5})) since {y > 0.25}))");
 }
 
 TEST_CASE("Blah") {
