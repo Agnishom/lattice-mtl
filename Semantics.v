@@ -484,3 +484,237 @@ Proof.
   assert (S a <= i) by lia. rewrite <-Nat.leb_le in H1. rewrite H1. clear H1.
   auto.
 Qed.
+
+Lemma since_always_unbounded {A : Type} :
+  forall (ϕ ψ : @Formula A) τ a i,
+    a < i ->
+    robustness (FSinceUnbounded (S a) ϕ ψ) τ i
+    = robustness (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+Proof.
+  intros. simpl robustness at 1.
+  unfold join_b.
+  replace (S a) with (1 + a) at 1 by lia.
+  replace i with ((i - a) + a) at 1 by lia.
+  rewrite <- op_b_shift_ext_in with
+      (lo := 1)
+      (hi := i - a)
+      (g := (fun j : nat => robustness ψ τ (i - a - j) ⊓ meet_i 0 (j + a) (fun k : nat => robustness ϕ τ (i - k)))) by now intros; f_equal; f_equal; lia.
+  under op_b_ext_in => j.
+  intros.
+  unfold meet_i.
+  replace (j + a) with (S a + (j - 1)) by lia.
+  rewrite -> op_i_app with
+      (l1 := S a)
+      (l2 := (j - 1)).
+  simpl.
+  rewrite ->meet_comm with (x := (op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)))).
+  rewrite <-meet_assoc.
+  replace ( op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)) )
+    with
+      (robustness (FAlways 0 a ϕ) τ i)
+    by now simpl; unfold meet_b; unfold op_b; f_equal; lia.
+  over.
+  replace (op_b Val 1 (i - a)
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+       ⊓ robustness (FAlways 0 a ϕ) τ i))
+    with
+   (join_b 1 (i - a)
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+     ⊓ robustness (FAlways 0 a ϕ) τ i)) by auto.
+  rewrite ->join_b_distr_ext_in
+  with (g := (fun j : nat =>
+                (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))))
+       (v := (robustness (FAlways 0 a ϕ) τ i)) by now intros; auto; lia.
+  under join_b_ext_in => j.
+  intros.
+  replace (S a) with (0 + S a) by lia.
+  rewrite <- op_i_shift_ext_in with
+      (f := (fun k : nat => robustness ϕ τ (i - k)))
+      (g := (fun k : nat => robustness ϕ τ (i - (S a) - k)) )
+  by now intros; f_equal; lia.
+  over.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (i - a) with ((i - S a) + 1) by lia.
+  unfold join_b.
+  rewrite <- op_b_shift_ext_in with
+      (g := (fun j : nat =>
+               robustness ψ τ (i - (S a) - j) ⊓ op_i Val 0 j (fun k : nat => robustness ϕ τ (i - S a - k))))
+    by now intros; f_equal; f_equal; lia.
+  change (robustness (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)) τ i)
+    with (robustness (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) τ i ⊓ robustness (FAlways 0 a ϕ) τ i).
+  f_equal.
+  rewrite fdelay_correctness.
+  assert (S a <= i) by lia. rewrite <-Nat.leb_le in H0. rewrite H0. clear H0.
+  auto.
+Qed.
+
+Lemma sinceDual_sometime_unbounded {A : Type} :
+  forall (ϕ ψ : @Formula A) τ a i,
+    a < i ->
+    robustness (FSinceDualUnbounded (S a) ϕ ψ) τ i
+    = robustness (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)) τ i.
+Proof.
+  intros. simpl robustness at 1.
+  unfold meet_b.
+  replace (S a) with (1 + a) at 1 by lia.
+  replace i with ((i - a) + a) at 1 by lia.
+  rewrite <- op_b_shift_ext_in with
+      (lo := 1)
+      (hi := (i - a))
+      (g := (fun j : nat => robustness ψ τ (i - a - j) ⊔ join_i 0 (j + a) (fun k : nat => robustness ϕ τ (i - k)))) by now intros; f_equal; f_equal; lia.
+  under op_b_ext_in => j.
+  intros.
+  unfold join_i.
+  replace (j + a) with (S a + (j - 1)) by lia.
+  rewrite -> op_i_app with
+      (l1 := S a)
+      (l2 := (j - 1)).
+  simpl.
+  rewrite ->join_comm with (x := (op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)))).
+  rewrite <-join_assoc.
+  replace ( op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)) )
+    with
+      (robustness (FSometime 0 a ϕ) τ i)
+    by now simpl; unfold join_b; unfold op_b; f_equal; lia.
+  over.
+  replace (op_b Val 1 (i - a)
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+       ⊔ robustness (FSometime 0 a ϕ) τ i))
+    with
+      (meet_b 1 (i - a)
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+     ⊔ robustness (FSometime 0 a ϕ) τ i)) by auto.
+  rewrite ->meet_b_distr_ext_in
+  with (g := (fun j : nat =>
+                (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))))
+       (v := (robustness (FSometime 0 a ϕ) τ i)) by now intros; auto; lia.
+  under meet_b_ext_in => j.
+  intros.
+  replace (S a) with (0 + S a) by lia.
+  rewrite <- op_i_shift_ext_in with
+      (f := (fun k : nat => robustness ϕ τ (i - k)))
+      (g := (fun k : nat => robustness ϕ τ (i - (S a) - k)) )
+  by now intros; f_equal; lia.
+  over.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (i - a) with ((i - S a) + 1) by lia.
+  unfold meet_b.
+  rewrite <- op_b_shift_ext_in with
+      (g := (fun j : nat =>
+               robustness ψ τ (i - (S a) - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val) 0 j (fun k : nat => robustness ϕ τ (i - S a - k))))
+    by now intros; f_equal; f_equal; lia.
+  change (robustness (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)) τ i)
+    with (robustness (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) τ i ⊔ robustness (FSometime 0 a ϕ) τ i).
+  f_equal.
+  rewrite fdelayDual_correctness.
+  assert (S a <= i) by lia. rewrite <-Nat.leb_le in H0. rewrite H0. clear H0.
+  auto.
+Qed.
+
+Lemma since_incremental {A : Type} :
+  forall (ϕ ψ : @Formula A) τ i,
+    robustness (FSinceUnbounded 0 ϕ ψ) τ (S i)
+    = ((robustness ψ τ (S i))
+        ⊔ (robustness (FSinceUnbounded 0 ϕ ψ) τ i
+          ⊓ robustness ϕ τ (S i))).
+Proof.
+  intros. remember (S i) as i0. simpl robustness at 1.
+  unfold join_b. rewrite Heqi0.
+  replace (S i) with (1 + i) at 1 by lia.
+  rewrite ->op_b_app with (hi1 := 0) by lia.
+  unfold op_b at 1. unfold op_i at 1.
+  unfold meet_i at 1. unfold op_i.
+  simpl finite_op.
+  unfold finite_op at 1 2. simpl List.fold_left.
+  rewrite join_bottom_l. rewrite meet_top_r.
+  f_equal.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (1 + i) with (i + 1) by lia.
+  rewrite <-op_b_shift_ext_in
+    with
+      (g := (fun j : nat => robustness ψ τ (i - j) ⊓ meet_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k))))
+      (h := 1)
+    by now intros; f_equal; f_equal; lia.
+  replace ( (op_b Val 0 i
+                  (fun j : nat => robustness ψ τ (i - j) ⊓ meet_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k)))) )
+    with ( (join_b 0 i
+                   (fun j : nat => robustness ψ τ (i - j) ⊓ meet_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k)))) ) by auto.
+  under join_b_ext_in => j.
+  intros.
+  replace (S j) with (1 + j) at 1 by lia.
+  unfold meet_i.
+  rewrite ->op_i_app with (l1 := 1).
+  unfold op_i at 1. simpl finite_op.
+  unfold finite_op. simpl List.fold_left.
+  rewrite meet_top_l.
+  rewrite <-op_i_shift_ext with
+      (g :=(fun k : nat => robustness ϕ τ (i - k)))
+    by now intros; f_equal; lia.
+  replace (op (robustness ϕ τ (S i)) (op_i Val 0 j (fun k : nat => robustness ϕ τ (i - k))) )
+    with
+      ((op_i Val 0 j (fun k : nat => robustness ϕ τ (i - k))) ⊓ (robustness ϕ τ (S i)))
+    by now simpl; rewrite meet_comm.
+  rewrite <- meet_assoc.
+  over.
+  rewrite ->join_b_distr_ext_in with
+  (g := (fun j : nat =>
+           (robustness ψ τ (i - j) ⊓ op_i Val 0 j (fun k : nat => robustness ϕ τ (i - k)))))
+  (v := robustness ϕ τ (S i)) by now auto; lia.
+  auto.
+Qed.
+
+Lemma sinceDual_incremental {A : Type} :
+  forall (ϕ ψ : @Formula A) τ i,
+    robustness (FSinceDualUnbounded 0 ϕ ψ) τ (S i)
+    = ((robustness ψ τ (S i))
+        ⊓ (robustness (FSinceDualUnbounded 0 ϕ ψ) τ i
+          ⊔ robustness ϕ τ (S i))).
+Proof.
+  intros. remember (S i) as i0. simpl robustness at 1.
+  unfold meet_b. rewrite Heqi0.
+  replace (S i) with (1 + i) at 1 by lia.
+  rewrite ->op_b_app with (hi1 := 0) by lia.
+  unfold op_b at 1. unfold op_i at 1.
+  unfold join_i at 1. unfold op_i.
+  simpl finite_op.
+  unfold finite_op at 1 2. simpl List.fold_left.
+  rewrite meet_top_l. rewrite join_bottom_r.
+  f_equal.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (1 + i) with (i + 1) by lia.
+  rewrite <-op_b_shift_ext_in
+    with
+      (g := (fun j : nat => robustness ψ τ (i - j) ⊔ join_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k))))
+      (h := 1)
+    by now intros; f_equal; f_equal; lia.
+  replace ( (op_b Val 0 i
+                  (fun j : nat => robustness ψ τ (i - j) ⊔ join_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k)))) )
+    with ( (meet_b 0 i
+                   (fun j : nat => robustness ψ τ (i - j) ⊔ join_i 0 (S j) (fun k : nat => robustness ϕ τ (S i - k)))) ) by auto.
+  under meet_b_ext_in => j.
+  intros.
+  replace (S j) with (1 + j) at 1 by lia.
+  unfold join_i.
+  rewrite ->op_i_app with (l1 := 1).
+  unfold op_i at 1. simpl finite_op.
+  unfold finite_op. simpl List.fold_left.
+  rewrite join_bottom_l.
+  rewrite <-op_i_shift_ext with
+      (g :=(fun k : nat => robustness ϕ τ (i - k)))
+    by now intros; f_equal; lia.
+  replace (op (robustness ϕ τ (S i)) (op_i Val 0 j (fun k : nat => robustness ϕ τ (i - k))) )
+    with
+      ((@op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  0 j (fun k : nat => robustness ϕ τ (i - k))) ⊔ (robustness ϕ τ (S i)))
+    by now simpl; rewrite join_comm.
+  rewrite <- join_assoc.
+  over.
+  rewrite ->meet_b_distr_ext_in with
+  (g := (fun j : nat =>
+           (robustness ψ τ (i - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  0 j (fun k : nat => robustness ϕ τ (i - k)))))
+  (v := robustness ϕ τ (S i)) by now auto; lia.
+  auto.
+Qed.
