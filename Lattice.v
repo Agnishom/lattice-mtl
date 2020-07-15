@@ -298,7 +298,7 @@ Lemma join_b_distr_ext
       {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
       (lo hi : nat) (f g : nat -> A) (v : A)
   : (forall a, f a = (g a ⊓ v))
-    -> lo < hi
+    -> lo <= hi
     -> join_b lo hi f = ((join_b lo hi g) ⊓ v).
 Proof.
   intros. unfold join_b. unfold op_b.
@@ -311,7 +311,7 @@ Lemma join_b_distr_ext_in
       {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
       (lo hi : nat) (f g : nat -> A) (v : A)
   : (forall a, lo <= a -> a <= hi -> f a = (g a ⊓ v))
-    -> lo < hi
+    -> lo <= hi
     -> join_b lo hi f = ((join_b lo hi g) ⊓ v).
 Proof.
   intros. unfold join_b.
@@ -367,7 +367,7 @@ Lemma meet_b_distr_ext
       {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
       (lo hi : nat) (f g : nat -> A) (v : A)
   : (forall a, f a = (g a ⊔ v))
-    -> lo < hi
+    -> lo <= hi
     -> meet_b lo hi f = ((meet_b lo hi g) ⊔ v).
 Proof.
   intros. unfold meet_b. unfold op_b.
@@ -380,7 +380,7 @@ Lemma meet_b_distr_ext_in
       {A : Type} {X1 : Lattice A} {X2 : BoundedLattice A} {X3 :DistributiveLattice A}
       (lo hi : nat) (f g : nat -> A) (v : A)
   : (forall a, lo <= a -> a <= hi -> f a = (g a ⊔ v))
-    -> lo < hi
+    -> lo <= hi
     -> meet_b lo hi f = ((meet_b lo hi g) ⊔ v).
 Proof.
   intros. unfold meet_b.

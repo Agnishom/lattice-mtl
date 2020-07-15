@@ -19,6 +19,8 @@ Definition Trace (A : Type) := nat -> A.
 
 Inductive Formula {A : Type} : Type :=
 | FAtomic : (A -> Val) -> Formula
+| FAnd : Formula -> Formula -> Formula
+| FOr : Formula -> Formula -> Formula
 | FSometime : nat -> nat -> Formula -> Formula
 | FAlways : nat -> nat -> Formula -> Formula
 | FSometimeUnbounded : nat -> Formula -> Formula
@@ -32,6 +34,8 @@ Inductive Formula {A : Type} : Type :=
 Fixpoint robustness {A : Type} (ϕ : @Formula A) (τ : Trace A) (i : nat): Val :=
   match ϕ with
   | FAtomic f => f (τ i)
+  | FAnd ϕ ψ => (robustness ϕ τ i) ⊓ (robustness ψ τ i)
+  | FOr ϕ ψ => (robustness ϕ τ i) ⊔ (robustness ψ τ i)
   | FSometime lo hi ψ =>
     join_b lo (min i hi) (fun j => robustness ψ τ (i - j))
   | FAlways lo hi ψ =>
@@ -42,16 +46,16 @@ Fixpoint robustness {A : Type} (ϕ : @Formula A) (τ : Trace A) (i : nat): Val :
     meet_b lo i (fun j => robustness ψ τ (i - j))
   | FSince lo hi ϕ ψ =>
     join_b lo (min i hi) (fun j => robustness ψ τ (i - j)
-                                 ⊓ meet_i 0 j (fun k => robustness ψ τ (i - k)))
+                                 ⊓ meet_i 0 j (fun k => robustness ϕ τ (i - k)))
   | FSinceDual lo hi ϕ ψ =>
     meet_b lo (min i hi) (fun j => robustness ψ τ (i - j)
-                                 ⊔ join_i 0 j (fun k => robustness ψ τ (i - k)))
+                                 ⊔ join_i 0 j (fun k => robustness ϕ τ (i - k)))
   | FSinceUnbounded lo ϕ ψ =>
     join_b lo i (fun j => robustness ψ τ (i - j)
-                                 ⊓ meet_i 0 j (fun k => robustness ψ τ (i - k)))
+                                 ⊓ meet_i 0 j (fun k => robustness ϕ τ (i - k)))
   | FSinceDualUnbounded lo ϕ ψ =>
     meet_b lo i (fun j => robustness ψ τ (i - j)
-                                 ⊔ join_i 0 j (fun k => robustness ψ τ (i - k)))
+                                 ⊔ join_i 0 j (fun k => robustness ϕ τ (i - k)))
   end.
 
 Definition FDelay {A : Type} (i : nat) (ϕ : @Formula A) :=
@@ -349,3 +353,134 @@ Proof.
     rewrite <- Nat.leb_gt in H. intros. now rewrite H.
 Qed.
 
+Lemma since_always_bounded {A : Type} :
+  forall (ϕ ψ : @Formula A) τ a b i,
+    a < b ->
+    a < i ->
+    robustness (FSince (S a) b ϕ ψ) τ i
+    = robustness (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+Proof.
+  intros. simpl robustness at 1.
+  unfold join_b.
+  replace (S a) with (1 + a) at 1 by lia.
+  replace (min i b) with ((min (i - a) (b - a)) + a) by lia.
+  rewrite <- op_b_shift_ext_in with
+      (lo := 1)
+      (hi := min (i - a) (b - a))
+      (g := (fun j : nat => robustness ψ τ (i - a - j) ⊓ meet_i 0 (j + a) (fun k : nat => robustness ϕ τ (i - k)))) by now intros; f_equal; f_equal; lia.
+  under op_b_ext_in => j.
+  intros.
+  unfold meet_i.
+  replace (j + a) with (S a + (j - 1)) by lia.
+  rewrite -> op_i_app with
+      (l1 := S a)
+      (l2 := (j - 1)).
+  simpl.
+  rewrite ->meet_comm with (x := (op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)))).
+  rewrite <-meet_assoc.
+  replace ( op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)) )
+    with
+      (robustness (FAlways 0 a ϕ) τ i)
+    by now simpl; unfold meet_b; unfold op_b; f_equal; lia.
+  over.
+  replace (op_b Val 1 (Init.Nat.min (i - a) (b - a))
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+       ⊓ robustness (FAlways 0 a ϕ) τ i))
+    with
+      (join_b 1 (Init.Nat.min (i - a) (b - a))
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+     ⊓ robustness (FAlways 0 a ϕ) τ i)) by auto.
+  rewrite ->join_b_distr_ext_in
+  with (g := (fun j : nat =>
+                (robustness ψ τ (i - a - j) ⊓ op_i Val (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))))
+       (v := (robustness (FAlways 0 a ϕ) τ i)) by now intros; auto; lia.
+  under join_b_ext_in => j.
+  intros.
+  replace (S a) with (0 + S a) by lia.
+  rewrite <- op_i_shift_ext_in with
+      (f := (fun k : nat => robustness ϕ τ (i - k)))
+      (g := (fun k : nat => robustness ϕ τ (i - (S a) - k)) )
+  by now intros; f_equal; lia.
+  over.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (min (i - a) (b - a)) with (min (i - S a) (b - S a) + 1) by lia.
+  unfold join_b.
+  rewrite <- op_b_shift_ext_in with
+      (g := (fun j : nat =>
+               robustness ψ τ (i - (S a) - j) ⊓ op_i Val 0 j (fun k : nat => robustness ϕ τ (i - S a - k))))
+    by now intros; f_equal; f_equal; lia.
+  change (robustness (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)) τ i)
+    with (robustness (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) τ i ⊓ robustness (FAlways 0 a ϕ) τ i).
+  f_equal.
+  rewrite fdelay_correctness.
+  assert (S a <= i) by lia. rewrite <-Nat.leb_le in H1. rewrite H1. clear H1.
+  auto.
+Qed.
+
+Lemma sinceDual_sometime_bounded {A : Type} :
+  forall (ϕ ψ : @Formula A) τ a b i,
+    a < b ->
+    a < i ->
+    robustness (FSinceDual (S a) b ϕ ψ) τ i
+    = robustness (FOr (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) (FSometime 0 a ϕ)) τ i.
+Proof.
+  intros. simpl robustness at 1.
+  unfold meet_b.
+  replace (S a) with (1 + a) at 1 by lia.
+  replace (min i b) with ((min (i - a) (b - a)) + a) by lia.
+  rewrite <- op_b_shift_ext_in with
+      (lo := 1)
+      (hi := min (i - a) (b - a))
+      (g := (fun j : nat => robustness ψ τ (i - a - j) ⊔ join_i 0 (j + a) (fun k : nat => robustness ϕ τ (i - k)))) by now intros; f_equal; f_equal; lia.
+  under op_b_ext_in => j.
+  intros.
+  unfold join_i.
+  replace (j + a) with (S a + (j - 1)) by lia.
+  rewrite -> op_i_app with
+      (l1 := S a)
+      (l2 := (j - 1)).
+  simpl.
+  rewrite ->join_comm with (x := (op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)))).
+  rewrite <-join_assoc.
+  replace ( op_i Val 0 (S a) (fun k : nat => robustness ϕ τ (i - k)) )
+    with
+      (robustness (FSometime 0 a ϕ) τ i)
+    by now simpl; unfold join_b; unfold op_b; f_equal; lia.
+  over.
+  replace (op_b Val 1 (Init.Nat.min (i - a) (b - a))
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+       ⊔ robustness (FSometime 0 a ϕ) τ i))
+    with
+      (meet_b 1 (Init.Nat.min (i - a) (b - a))
+    (fun j : nat =>
+     (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))
+     ⊔ robustness (FSometime 0 a ϕ) τ i)) by auto.
+  rewrite ->meet_b_distr_ext_in
+  with (g := (fun j : nat =>
+                (robustness ψ τ (i - a - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val)  (S a) (j - 1) (fun k : nat => robustness ϕ τ (i - k)))))
+       (v := (robustness (FSometime 0 a ϕ) τ i)) by now intros; auto; lia.
+  under meet_b_ext_in => j.
+  intros.
+  replace (S a) with (0 + S a) by lia.
+  rewrite <- op_i_shift_ext_in with
+      (f := (fun k : nat => robustness ϕ τ (i - k)))
+      (g := (fun k : nat => robustness ϕ τ (i - (S a) - k)) )
+  by now intros; f_equal; lia.
+  over.
+  replace 1 with (0 + 1) at 1 by lia.
+  replace (min (i - a) (b - a)) with (min (i - S a) (b - S a) + 1) by lia.
+  unfold meet_b.
+  rewrite <- op_b_shift_ext_in with
+      (g := (fun j : nat =>
+               robustness ψ τ (i - (S a) - j) ⊔ @op_i Val (@joinMonoid Val lattice_val lattice_val boundedLattice_val) 0 j (fun k : nat => robustness ϕ τ (i - S a - k))))
+    by now intros; f_equal; f_equal; lia.
+  change (robustness (FOr (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) (FSometime 0 a ϕ)) τ i)
+    with (robustness (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) τ i ⊔ robustness (FSometime 0 a ϕ) τ i).
+  f_equal.
+  rewrite fdelayDual_correctness.
+  assert (S a <= i) by lia. rewrite <-Nat.leb_le in H1. rewrite H1. clear H1.
+  auto.
+Qed.
