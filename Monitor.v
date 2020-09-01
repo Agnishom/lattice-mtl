@@ -167,31 +167,31 @@ Qed.
 (* Sometime and Always *)
 
 Definition mSometime {A : Type} (m : Monitor A) : Monitor A :=
-  @mFold Val joinMonoid A m.
+  mFoldAux join m bottom.
 
 Lemma sometime_correctness {A : Type} (m : Monitor A) (f : Formula) :
   implements m f
   -> implements (mSometime m) (FSometime Val f).
 Proof.
   unfold mSometime. unfold implements. intros.
-  rewrite mFold_final.
+  rewrite mFoldAux_final.
   simpl robustness. unfold finite_join.
   rewrite gCollect_prefixes. rewrite map_ext with (f := (gFinal m)) (g := (robustness f)).
-  auto. auto.
+  rewrite tl_map; auto. auto.
 Qed.
 
 Definition mAlways {A : Type} (m : Monitor A) : Monitor A :=
-  @mFold Val meetMonoid A m.
+  mFoldAux meet m top.
 
 Lemma always_correctness {A : Type} (m : Monitor A) (f : Formula) :
   implements m f
   -> implements (mAlways m) (FAlways Val f).
 Proof.
   unfold mAlways. unfold implements. intros.
-  rewrite mFold_final.
+  rewrite mFoldAux_final.
   simpl robustness. unfold finite_join.
   rewrite gCollect_prefixes. rewrite map_ext with (f := (gFinal m)) (g := (robustness f)).
-  auto. auto.
+  rewrite tl_map; auto. auto.
 Qed.
 
 (* Since *)

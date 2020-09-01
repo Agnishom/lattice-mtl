@@ -112,6 +112,15 @@ Proof.
   - rewrite gCollect_last. rewrite app_length. Reconstr.scrush.
 Qed.
 
+Lemma gCollect_nonempty {A B : Type} (m : Moore A B) (xs : list A) :
+  gCollect m xs <> [].
+Proof.
+  unfold not. intros.
+  eapply f_equal in H.
+  rewrite gCollect_length in H.
+  simpl in H. lia.
+Qed.
+
 Lemma gCollect_last2 {A B : Type} (m : Moore A B) (xs : list A) :
   forall d, last (gCollect m xs) d = gFinal m xs.
 Proof.
@@ -408,39 +417,40 @@ Proof.
   pose proof (@mBinOp_state A B C D). unfold gFinal. Reconstr.scrush.
 Qed.
 
+CoFixpoint mFoldAux {A B : Type} (op : B -> B -> B) (m : Moore A B)
+           (st : B) : Moore A B :=
+  {| mOut := st;
+     mNext (a : A) := mFoldAux op (mNext m a) (op st (mNextOut m a))
+  |}.
+
+Lemma mFoldAux_state {A B : Type} (m : Moore A B)
+      (xs : list A) (op : B -> B -> B) (st : B) :
+    gNext (mFoldAux op m st) xs = mFoldAux op (gNext m xs) (fold_left op (tl (gCollect m xs)) st).
+  Proof.
+   induction xs using list_r_ind.
+    - Reconstr.scrush.
+    - rewrite gNext_app. rewrite IHxs.
+      rewrite gNext_app. simpl.
+      rewrite gCollect_last.
+      unfold gFinal. rewrite gNext_app. simpl.
+      rewrite tl_app by apply gCollect_nonempty.
+      rewrite fold_left_app. simpl. now unfold mNextOut.
+  Qed.
+
+  Lemma mFoldAux_final {A B : Type} (m : Moore A B)
+        (xs : list A) (op : B -> B -> B) (st : B):
+    gFinal (mFoldAux op m st) xs = fold_left op (tl (gCollect m xs)) st.
+  Proof.
+    unfold gFinal. rewrite mFoldAux_state. auto.
+  Qed.
+
+
 (* Running Aggregates *)
 
 Section mFold.
 
   Variable (B : Type).
   Context {monoid_B : Monoid B}.
-
-
-  CoFixpoint mFoldAux {A : Type} (m : Moore A B) (st : B) : Moore A B :=
-  {| mOut := st;
-     mNext (a : A) := mFoldAux (mNext m a) (op st (mNextOut m a))
-  |}.
-
-  Definition mFold {A : Type} (m : Moore A B) :=
-    mFoldAux m (mOut m).
-
-  Lemma mFold_state {A : Type} (m : Moore A B) (xs : list A) :
-    gNext (mFold m) xs = mFoldAux (gNext m xs) (fold_left op (gCollect m xs) unit).
-  Proof.
-    unfold mFold. induction xs using list_r_ind.
-    - Reconstr.scrush.
-    - rewrite gNext_app. rewrite IHxs.
-      rewrite gNext_app. simpl.
-      rewrite gCollect_last. rewrite fold_left_app.
-      unfold gFinal. rewrite gNext_app. simpl.
-      now unfold mNextOut.
-  Qed.
-
-  Lemma mFold_final {A : Type} (m : Moore A B) (xs : list A) :
-    gFinal (mFold m) xs = fold_left op (gCollect m xs) unit.
-  Proof.
-    unfold gFinal. rewrite mFold_state. auto.
-  Qed.
 
   (* sliding window aggregate *)
 
