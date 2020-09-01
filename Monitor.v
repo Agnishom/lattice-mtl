@@ -288,8 +288,9 @@ Lemma mAlwaysWithin_correctness {A : Type} (m : Monitor A) (hi : nat) (f : Formu
 Proof.
   unfold implements. intros.
   unfold mAlwaysWithin. rewrite mWinFold_final.
-  simpl robustness. rewrite gCollect_prefixes_lastn.
-  unfold finite_op. unfold finite_meet. f_equal. now apply map_ext.
+  simpl robustness. rewrite gCollect_prefixes.
+  unfold finite_op. unfold finite_meet. f_equal.
+  rewrite <- tl_map. rewrite map_lastn. now apply map_ext.
 Qed.
 
 Definition mSometimeWithin {A : Type} (hi : nat) (m : Monitor A) : Monitor A :=
@@ -301,8 +302,9 @@ Lemma mSometimeWithin_correctness {A : Type} (m : Monitor A) (hi : nat) (f : For
 Proof.
   unfold implements. intros.
   unfold mSometimeWithin. rewrite mWinFold_final.
-  simpl robustness. rewrite gCollect_prefixes_lastn.
-  unfold finite_op. unfold finite_join. f_equal. now apply map_ext.
+  simpl robustness. rewrite gCollect_prefixes.
+  unfold finite_op. unfold finite_join. f_equal.
+  rewrite <- tl_map. rewrite map_lastn. now apply map_ext.
 Qed.
 
 

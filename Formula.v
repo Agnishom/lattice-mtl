@@ -70,8 +70,8 @@ Fixpoint robustness {A : Type} (ϕ : @Formula A) (l : list A) : Val :=
                           )
                    )
                    (seq 0 (S (length l))))
-  | FSometimeWithin hi f => finite_join (map (robustness f) (lastn (S (S hi)) (prefixes l)))
-  | FAlwaysWithin hi f => finite_meet (map (robustness f) (lastn (S (S hi)) (prefixes l)))
+  | FSometimeWithin hi f => finite_join (map (robustness f) (lastn (S hi) (tl (prefixes l))))
+  | FAlwaysWithin hi f => finite_meet (map (robustness f) (lastn (S hi) (tl (prefixes l))))
   end
 .
 
