@@ -112,6 +112,15 @@ Proof.
   - rewrite gCollect_last. rewrite app_length. Reconstr.scrush.
 Qed.
 
+Lemma gCollect_nonempty {A B : Type} (m : Moore A B) (xs : list A) :
+  gCollect m xs <> [].
+Proof.
+  unfold not. intros.
+  eapply f_equal in H.
+  rewrite gCollect_length in H.
+  simpl in H. lia.
+Qed.
+
 Lemma gCollect_last2 {A B : Type} (m : Moore A B) (xs : list A) :
   forall d, last (gCollect m xs) d = gFinal m xs.
 Proof.
@@ -408,39 +417,40 @@ Proof.
   pose proof (@mBinOp_state A B C D). unfold gFinal. Reconstr.scrush.
 Qed.
 
+CoFixpoint mFoldAux {A B : Type} (op : B -> B -> B) (m : Moore A B)
+           (st : B) : Moore A B :=
+  {| mOut := st;
+     mNext (a : A) := mFoldAux op (mNext m a) (op st (mNextOut m a))
+  |}.
+
+Lemma mFoldAux_state {A B : Type} (m : Moore A B)
+      (xs : list A) (op : B -> B -> B) (st : B) :
+    gNext (mFoldAux op m st) xs = mFoldAux op (gNext m xs) (fold_left op (tl (gCollect m xs)) st).
+  Proof.
+   induction xs using list_r_ind.
+    - Reconstr.scrush.
+    - rewrite gNext_app. rewrite IHxs.
+      rewrite gNext_app. simpl.
+      rewrite gCollect_last.
+      unfold gFinal. rewrite gNext_app. simpl.
+      rewrite tl_app by apply gCollect_nonempty.
+      rewrite fold_left_app. simpl. now unfold mNextOut.
+  Qed.
+
+  Lemma mFoldAux_final {A B : Type} (m : Moore A B)
+        (xs : list A) (op : B -> B -> B) (st : B):
+    gFinal (mFoldAux op m st) xs = fold_left op (tl (gCollect m xs)) st.
+  Proof.
+    unfold gFinal. rewrite mFoldAux_state. auto.
+  Qed.
+
+
 (* Running Aggregates *)
 
 Section mFold.
 
   Variable (B : Type).
   Context {monoid_B : Monoid B}.
-
-
-  CoFixpoint mFoldAux {A : Type} (m : Moore A B) (st : B) : Moore A B :=
-  {| mOut := st;
-     mNext (a : A) := mFoldAux (mNext m a) (op st (mNextOut m a))
-  |}.
-
-  Definition mFold {A : Type} (m : Moore A B) :=
-    mFoldAux m (mOut m).
-
-  Lemma mFold_state {A : Type} (m : Moore A B) (xs : list A) :
-    gNext (mFold m) xs = mFoldAux (gNext m xs) (fold_left op (gCollect m xs) unit).
-  Proof.
-    unfold mFold. induction xs using list_r_ind.
-    - Reconstr.scrush.
-    - rewrite gNext_app. rewrite IHxs.
-      rewrite gNext_app. simpl.
-      rewrite gCollect_last. rewrite fold_left_app.
-      unfold gFinal. rewrite gNext_app. simpl.
-      now unfold mNextOut.
-  Qed.
-
-  Lemma mFold_final {A : Type} (m : Moore A B) (xs : list A) :
-    gFinal (mFold m) xs = fold_left op (gCollect m xs) unit.
-  Proof.
-    unfold gFinal. rewrite mFold_state. auto.
-  Qed.
 
   (* sliding window aggregate *)
 
@@ -845,8 +855,8 @@ Section mFold.
 
   CoFixpoint mWinFoldAux {A : Type} (qq : aggQueue) (m : Moore A B) : Moore A B :=
     {|
-    mOut := op (aggOut qq) (mOut m);
-    mNext (a : A) := mWinFoldAux (aggCycle (mOut m) qq) (mNext m a);
+    mOut := (aggOut qq);
+    mNext (a : A) := mWinFoldAux (aggCycle (mNextOut m a) qq) (mNext m a);
     |}.
 
   Definition mWinFold {A : Type} (m : Moore A B) (n : nat) : Moore A B :=
@@ -854,16 +864,17 @@ Section mFold.
 
   Lemma mWinFold_state {A : Type} (m : Moore A B) (n : nat) (xs : list A) (x : A) :
     exists qq, gNext (mWinFold m n) (xs ++ [x]) = mWinFoldAux qq (gNext m (xs ++ [x]))
-          /\ contentsQ qq = lastn (S n) (repeat unit (S n) ++ gCollect m xs)
+          /\ contentsQ qq = lastn (S n) (repeat unit (S n) ++ tl (gCollect m (xs ++ [x])))
           /\ aggsffInv qq
           /\ aggsrrInv qq.
   Proof.
     generalize dependent x. induction xs using list_r_ind.
-    - intros. simpl. exists ((aggCycle (mOut m) (initAggQ n))).
-      split. auto.
-      rewrite aggCycle_contentsQ. simpl. unfold initAggQ at 1.
+    - intros. simpl. exists (aggCycle (mNextOut m x)(initAggQ n)).
+      split.
+      + auto.
+      + rewrite aggCycle_contentsQ. simpl. unfold initAggQ at 1.
       rewrite repeat_repeat'. simpl. rewrite unzip_snd_repeat.
-      rewrite app_nil_r. unfold gCollect. simpl.
+      rewrite app_nil_r. unfold mNextOut.
       rewrite <- lastn_tail. simpl. rewrite lastn_all2. split. reflexivity.
       split. apply aggCycle_aggsffInv. apply initAggQ_aggsffInv.
       apply aggCycle_aggsrrInv. apply initAggQ_aggsrrInv.
@@ -871,25 +882,39 @@ Section mFold.
       simpl. rewrite app_length. rewrite repeat_length. simpl. lia.
     - intros. specialize (IHxs x). destruct IHxs as [qq0]. destruct H as [H1 [H2 [H3 H4]]].
       remember (xs ++ [x]) as xs0.
-      exists (aggCycle (gFinal m xs0) qq0).
+      exists (aggCycle (mNextOut (gNext m xs0) x0)  qq0).
       rewrite gNext_app. rewrite H1. simpl.
       unfold gFinal. rewrite gNext_app. simpl.
       split. auto. split.
       rewrite aggCycle_contentsQ. rewrite H2.
       rewrite Heqxs0. rewrite gCollect_last. unfold gFinal.
-      assert (unit :: repeat unit n ++ gCollect m xs ++ [mOut (gNext m (xs ++ [x]))]
-              = (unit :: repeat unit n ++ gCollect m xs) ++ [mOut (gNext m (xs ++ [x]))])
-        by Reconstr.scrush.
-      rewrite H. clear H.
-      replace (unit :: repeat unit n ++ gCollect m xs) with
-          (repeat unit (S n) ++ gCollect m xs) by auto.
-      remember (repeat unit (S n) ++ gCollect m xs).
-      rewrite lastn_app. simpl.
-      rewrite tl_app. rewrite tail_lastn.
-      Reconstr.rsimple Reconstr.Empty Reconstr.Empty.
-      rewrite Heql. rewrite app_length. rewrite repeat_length. lia.
-      rewrite Heql. unfold not. intros. eapply f_equal in H. rewrite lastn_length in H.
-      rewrite app_length in H. rewrite repeat_length in H. simpl in H. lia.
+      rewrite tl_app. rewrite tl_app by apply gCollect_nonempty.
+      rewrite gCollect_last. rewrite gCollect_last.
+      repeat rewrite tl_app. simpl.
+      rewrite tail_lastn. simpl.
+      repeat rewrite gFinal_app. unfold mNextOut.
+      unfold gFinal.
+      assert (
+    (unit
+     :: repeat unit n ++
+        (tl (gCollect m xs) ++ [mOut (gNext (gNext m xs) [x])]) ++
+        [mOut (gNext (gNext m (xs ++ [x])) [x0])])
+     = (unit
+     :: repeat unit n ++
+        (tl (gCollect m xs) ++ [mOut (gNext (gNext m xs) [x])])) ++
+                                                                 [mOut (gNext (gNext m (xs ++ [x])) [x0])]      ) by Reconstr.scrush.
+      rewrite H. rewrite lastn_app. simpl.
+      replace (n - 0) with n by lia.
+      rewrite lastn_all2 with (n0 := S n).
+      now rewrite gNext_app.
+      simpl; lia.
+      simpl. rewrite app_length. rewrite repeat_length. lia.
+      apply gCollect_nonempty.
+      unfold not. intros. eapply f_equal in H. rewrite app_length in H.
+      simpl in *; lia. 
+      unfold not. intros. eapply f_equal in H. rewrite lastn_length in H.
+      simpl in H. rewrite app_length in H. rewrite repeat_length in H.
+      lia.
       split.
       now apply aggCycle_aggsffInv.
       now apply aggCycle_aggsrrInv.
@@ -897,40 +922,42 @@ Section mFold.
 
   Lemma mWinFold_final1 {A : Type} (m : Moore A B) (n : nat) (xs : list A) (x : A) :
     length xs < (S n)
-    -> gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (gCollect m (xs ++ [x])).
+    -> gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (tl (gCollect m (xs ++ [x]))).
   Proof.
     intros. unfold gFinal. pose proof (mWinFold_state m n xs x). destruct H0 as [qq].
     destruct H0 as [H1 [H2 [H3 H4]]].
     rewrite H1. pose proof (aggInv_aggsrrInv_aggsffInv qq H3 H4).
     unfold aggInv in H0. simpl. rewrite H0. rewrite H2.
-    rewrite lastn_app. rewrite gCollect_length.
+    rewrite lastn_app. rewrite tl_length. rewrite gCollect_length.
     rewrite lastn_repeat. rewrite <- finite_op_app.
-    rewrite lastn_all2 by now rewrite gCollect_length; lia.
+    rewrite lastn_all2 by
+        now rewrite tl_length; rewrite gCollect_length;
+      rewrite app_length; simpl; lia.
     rewrite finite_op_repeat_unit. rewrite op_unit_l.
-    rewrite gCollect_last. rewrite <- finite_op_app.
-    unfold gFinal. now rewrite finite_op_singleton.
+    rewrite gCollect_last. reflexivity.
   Qed.
 
   Lemma mWinFold_final2 {A : Type} (m : Moore A B) (n : nat) (xs : list A) (x : A) :
     length xs >= (S n)
-    -> gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (lastn (S (S n)) (gCollect m (xs ++ [x]))).
+    -> gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (lastn (S n) (tl (gCollect m (xs ++ [x])))).
   Proof.
     intros. unfold gFinal. pose proof (mWinFold_state m n xs x). destruct H0 as [qq].
     destruct H0 as [H1 [H2 [H3 H4]]].
     rewrite H1. pose proof (aggInv_aggsrrInv_aggsffInv qq H3 H4).
     unfold aggInv in H0. simpl. rewrite H0. rewrite H2.
-    rewrite lastn_app. rewrite gCollect_length.
-    replace (S n - S (length xs)) with 0 by lia. simpl.
-    rewrite gCollect_last. rewrite lastn_app. simpl.
-    rewrite <- finite_op_app. sauto.
+    rewrite lastn_app. rewrite tl_length. rewrite gCollect_length.
+    rewrite app_length. simpl length. simpl pred.
+    replace (S n - (length xs + 1)) with 0 by lia.
+    simpl. reflexivity.
   Qed.
 
   Lemma mWinFold_final3  {A : Type} (m : Moore A B) (n : nat) (xs : list A) (x : A) :
-    gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (lastn (S (S n)) (gCollect m (xs ++ [x]))).
+    gFinal (mWinFold m n) (xs ++ [x]) = finite_op B (lastn (S n) (tl (gCollect m (xs ++ [x])))).
   Proof.
     destruct (PeanoNat.Nat.lt_ge_cases (length xs) (S n)).
     - rewrite mWinFold_final1 by assumption.
-      now rewrite lastn_all2 by now rewrite gCollect_length; rewrite app_length; simpl; lia.
+      now rewrite lastn_all2
+          by now rewrite tl_length; rewrite gCollect_length; rewrite app_length; simpl; lia.
     - Reconstr.reasy (@mFold.mWinFold_final2) (@Coq.Init.Peano.ge).
   Qed.
 
@@ -943,11 +970,11 @@ Section mFold.
   Qed.
 
   Lemma mWinFold_final  {A : Type} (m : Moore A B) (n : nat) (xs : list A) :
-    gFinal (mWinFold m n) xs = finite_op B (lastn (S (S n)) (gCollect m xs)).
+    gFinal (mWinFold m n) xs = finite_op B (lastn (S n) (tl (gCollect m xs))).
   Proof.
     destruct xs using list_r_ind.
-    - unfold gFinal. unfold gCollect. unfold lastn. simpl. rewrite finite_op_singleton.
-      rewrite aggOut_initAggQ. now rewrite op_unit_l.
+    - unfold gFinal. unfold gCollect. unfold lastn. simpl.
+      unfold finite_op. simpl. now rewrite aggOut_initAggQ.
     - apply mWinFold_final3.
   Qed.
 

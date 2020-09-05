@@ -681,3 +681,9 @@ Lemma repeat_repeat' {A : Type} (x : A) (n : nat) :
 Proof.
   unfold repeat'. sauto using (@repeatAux_correctness A).
 Qed.
+
+Lemma tl_map :
+  forall {A B : Type} (f : A -> B) xs, map f (tl xs) = tl (map f xs).
+Proof.
+  destruct xs; auto.
+Qed.

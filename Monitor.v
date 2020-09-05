@@ -167,31 +167,31 @@ Qed.
 (* Sometime and Always *)
 
 Definition mSometime {A : Type} (m : Monitor A) : Monitor A :=
-  @mFold Val joinMonoid A m.
+  mFoldAux join m bottom.
 
 Lemma sometime_correctness {A : Type} (m : Monitor A) (f : Formula) :
   implements m f
   -> implements (mSometime m) (FSometime Val f).
 Proof.
   unfold mSometime. unfold implements. intros.
-  rewrite mFold_final.
+  rewrite mFoldAux_final.
   simpl robustness. unfold finite_join.
   rewrite gCollect_prefixes. rewrite map_ext with (f := (gFinal m)) (g := (robustness f)).
-  auto. auto.
+  rewrite tl_map; auto. auto.
 Qed.
 
 Definition mAlways {A : Type} (m : Monitor A) : Monitor A :=
-  @mFold Val meetMonoid A m.
+  mFoldAux meet m top.
 
 Lemma always_correctness {A : Type} (m : Monitor A) (f : Formula) :
   implements m f
   -> implements (mAlways m) (FAlways Val f).
 Proof.
   unfold mAlways. unfold implements. intros.
-  rewrite mFold_final.
+  rewrite mFoldAux_final.
   simpl robustness. unfold finite_join.
   rewrite gCollect_prefixes. rewrite map_ext with (f := (gFinal m)) (g := (robustness f)).
-  auto. auto.
+  rewrite tl_map; auto. auto.
 Qed.
 
 (* Since *)
@@ -288,8 +288,9 @@ Lemma mAlwaysWithin_correctness {A : Type} (m : Monitor A) (hi : nat) (f : Formu
 Proof.
   unfold implements. intros.
   unfold mAlwaysWithin. rewrite mWinFold_final.
-  simpl robustness. rewrite gCollect_prefixes_lastn.
-  unfold finite_op. unfold finite_meet. f_equal. now apply map_ext.
+  simpl robustness. rewrite gCollect_prefixes.
+  unfold finite_op. unfold finite_meet. f_equal.
+  rewrite <- tl_map. rewrite map_lastn. now apply map_ext.
 Qed.
 
 Definition mSometimeWithin {A : Type} (hi : nat) (m : Monitor A) : Monitor A :=
@@ -301,8 +302,9 @@ Lemma mSometimeWithin_correctness {A : Type} (m : Monitor A) (hi : nat) (f : For
 Proof.
   unfold implements. intros.
   unfold mSometimeWithin. rewrite mWinFold_final.
-  simpl robustness. rewrite gCollect_prefixes_lastn.
-  unfold finite_op. unfold finite_join. f_equal. now apply map_ext.
+  simpl robustness. rewrite gCollect_prefixes.
+  unfold finite_op. unfold finite_join. f_equal.
+  rewrite <- tl_map. rewrite map_lastn. now apply map_ext.
 Qed.
 
 

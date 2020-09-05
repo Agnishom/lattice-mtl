@@ -48,8 +48,8 @@ Fixpoint robustness {A : Type} (ϕ : @Formula A) (l : list A) : Val :=
                    end
   | FAnd f g => (robustness f l) ⊓ (robustness g l)
   | FOr f g => (robustness f l) ⊔ (robustness g l)
-  | FSometime f => finite_join (map (robustness f) (prefixes l))
-  | FAlways f => finite_meet (map (robustness f) (prefixes l))
+  | FSometime f => finite_join (map (robustness f) (tl (prefixes l)))
+  | FAlways f => finite_meet (map (robustness f) (tl (prefixes l)))
   | FSince f g => finite_join (map
                    (fun i =>
                       (robustness g (firstn i l))
@@ -70,8 +70,8 @@ Fixpoint robustness {A : Type} (ϕ : @Formula A) (l : list A) : Val :=
                           )
                    )
                    (seq 0 (S (length l))))
-  | FSometimeWithin hi f => finite_join (map (robustness f) (lastn (S (S hi)) (prefixes l)))
-  | FAlwaysWithin hi f => finite_meet (map (robustness f) (lastn (S (S hi)) (prefixes l)))
+  | FSometimeWithin hi f => finite_join (map (robustness f) (lastn (S hi) (tl (prefixes l))))
+  | FAlwaysWithin hi f => finite_meet (map (robustness f) (lastn (S hi) (tl (prefixes l))))
   end
 .
 
