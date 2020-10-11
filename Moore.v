@@ -54,13 +54,14 @@ Definition gCollect {A B : Type} (m : Moore A B) (l : list A) : list B :=
 Lemma gNext_app {A B : Type} (m : Moore A B) (l1 l2 : list A) :
   gNext m (l1 ++ l2) = gNext (gNext m l1) l2.
 Proof.
-  pose proof fold_left_app. Reconstr.scrush.
+  pose proof fold_left_app. scrush.
 Qed.
 
 Lemma gFinal_app {A B : Type} (m : Moore A B) (l1 l2 : list A) :
   gFinal m (l1 ++ l2) = gFinal (gNext m l1) l2.
 Proof.
-  pose proof (gNext_app m). Reconstr.reasy Reconstr.Empty (@mOut, @gFinal).
+  pose proof (gNext_app m).
+	scongruence use: app_nil_r, app_inv_tail, app_nil_l unfold: mOut, gFinal inv: Moore.
 Qed.
 
 Lemma gCollectNext_last {A B : Type} (m : Moore A B) (xs: list A) (x : A):
@@ -81,7 +82,7 @@ Lemma gCollect_last {A B : Type} (m : Moore A B) (xs : list A) (x : A):
   gCollect m (xs ++ [x]) = ((gCollect m xs) ++ [gFinal m (xs ++ [x])]).
 Proof.
   pose proof (@gCollectNext_last A B).
-  unfold gCollect at 1. Reconstr.scrush.
+  unfold gCollect at 1. scrush.
 Qed.
 
 
@@ -101,7 +102,8 @@ Lemma gCollect_app {A B : Type} (m : Moore A B) (xs ys : list A) (y : A) :
   gCollect m ((xs ++ [y]) ++ ys) = ((gCollect m xs) ++ (gCollect (gNext m (xs ++ [y])) ys)).
 Proof.
   pose proof (@gCollectNext_app A B).
-  unfold gCollect at 1. Reconstr.scrush.
+  unfold gCollect at 1.
+  hauto lq: on drew: off unfold: collectMooreAux, gCollectNext, mOut.
 Qed.
 
 Lemma gCollect_length {A B : Type} (m : Moore A B) (xs : list A) :
@@ -109,7 +111,8 @@ Lemma gCollect_length {A B : Type} (m : Moore A B) (xs : list A) :
 Proof.
   induction xs using list_r_ind.
   - auto.
-  - rewrite gCollect_last. rewrite app_length. Reconstr.scrush.
+  - rewrite gCollect_last. rewrite app_length.
+    hauto use: last_length, app_length unfold: gFinal.
 Qed.
 
 Lemma gCollect_nonempty {A B : Type} (m : Moore A B) (xs : list A) :
@@ -141,7 +144,7 @@ Proof.
     assert ((S n) = (length (gCollect m (firstn n xs)))).
     { rewrite gCollect_length.
       pose proof (skipn_nonempty n xs).
-      specialize (H ltac:(Reconstr.scrush)).
+      specialize (H ltac:(scrush)).
       rewrite firstn_length.
       rewrite PeanoNat.Nat.min_l by lia. auto.
     }
@@ -155,7 +158,7 @@ Lemma gCollect_firstn_last {A B : Type} (m : Moore A B) (xs : list A) (n : nat) 
 Proof.
   pose proof (@gCollect_firstn A B).
   pose proof (@gCollect_last2 A B).
-  Reconstr.scrush.
+  hauto lq: on.
 Qed.
 
 Lemma gCollect_prefixes {A B : Type} (m : Moore A B) (xs : list A) :
@@ -193,7 +196,7 @@ Proof.
   intros.
   rewrite gNext_app. generalize dependent x. induction xs using list_r_ind.
   - auto.
-  - rewrite gNext_app. Reconstr.scrush.
+  - rewrite gNext_app. scrush.
 Qed.
 
 Lemma mLift_correctness_final {A B : Type}: forall (xs : list A) (x : A) (f : A -> B) (init : B),
@@ -301,7 +304,7 @@ Proof.
   - intros. simpl. destruct inf eqn:Einf.
     + destruct inb eqn:Einb.
       * unfold gCollect in H1. subst. simpl in *.
-        exists [], [], (mOut m). split; try split; Reconstr.scrush.
+        exists [], [], (mOut m). split; try split; scrush.
       * unfold gCollect in H1. simpl in *. rewrite rev'_rev.
         destruct (rev (b :: l)) eqn:E.
         eapply f_equal in E. rewrite rev_length in E. simpl in E. discriminate.
@@ -353,7 +356,8 @@ Proof.
         simpl in H0. lia. simpl in H2.
         replace (k - 0) with k in H2 by lia.
         rewrite <- tail_lastn in H2. rewrite <- H3 in H2. simpl in H2.
-        subst lastSeg. split. Reconstr.scrush.
+        subst lastSeg. split.
+        destruct k; scrush.
         split; auto.
         replace (b0 :: l0 ++ lastn (S k) [gFinal m xs0])
           with ((b0::l0) ++ lastn (S k) [gFinal m xs0]) by auto.
@@ -391,7 +395,7 @@ Proof.
   pose (lastSeg := lastn k str).
   specialize (H initSeg eq_refl k eq_refl str eq_refl lastSeg eq_refl).
   destruct H as [fr [ba [ii]]]. destruct H. destruct H0.
-  unfold gFinal. Reconstr.scrush.
+  unfold gFinal. scrush.
 Qed.
 
 
@@ -408,13 +412,13 @@ Lemma mBinOp_state {A B C D: Type} (op : B -> C -> D) (m1: Moore A B) (m2 : Moor
 Proof.
   induction xs using list_r_ind.
   - auto.
-  - repeat rewrite gNext_app. rewrite IHxs. Reconstr.scrush.
+  - repeat rewrite gNext_app. rewrite IHxs. scrush.
 Qed.
 
 Lemma mBinOp_final {A B C D: Type} (op : B -> C -> D) (m1: Moore A B) (m2 : Moore A C) (xs : list A) :
   gFinal (mBinOp op m1 m2) xs = op (gFinal m1 xs) (gFinal m2 xs).
 Proof.
-  pose proof (@mBinOp_state A B C D). unfold gFinal. Reconstr.scrush.
+  pose proof (@mBinOp_state A B C D). unfold gFinal. scrush.
 Qed.
 
 CoFixpoint mFoldAux {A B : Type} (op : B -> B -> B) (m : Moore A B)
@@ -428,7 +432,7 @@ Lemma mFoldAux_state {A B : Type} (m : Moore A B)
     gNext (mFoldAux op m st) xs = mFoldAux op (gNext m xs) (fold_left op (tl (gCollect m xs)) st).
   Proof.
    induction xs using list_r_ind.
-    - Reconstr.scrush.
+    - scrush.
     - rewrite gNext_app. rewrite IHxs.
       rewrite gNext_app. simpl.
       rewrite gCollect_last.
@@ -483,7 +487,7 @@ Section mFold.
   Lemma aggrr_alternate :
     forall q, aggrr q = hd unit (aggsrr q).
   Proof.
-    destruct q; Reconstr.scrush.
+    destruct q. unfold aggrr. simpl. destruct rr0; sauto. 
   Qed.
 
 
@@ -498,7 +502,7 @@ Section mFold.
   Lemma aggff_alternate :
     forall q, aggff q = hd unit (aggsff q).
   Proof.
-    destruct q; Reconstr.scrush.
+    destruct q. unfold aggff. simpl. destruct ff0; scrush.
   Qed.
 
 
@@ -547,7 +551,7 @@ Section mFold.
     | (r :: rs) =>
       aggFlip (aggStep qq)
     end.
-  unfold aggStep. Reconstr.scrush.
+  unfold aggStep. scrush.
   Defined.
 
   Lemma aggFlip_length :
@@ -558,8 +562,8 @@ Section mFold.
     - intros. rewrite aggFlip_equation. now rewrite H.
     - intros. rewrite aggFlip_equation. rewrite H. rewrite IHl.
       now rewrite aggStep_length. unfold aggStep. rewrite H.
-      Reconstr.scrush.
-    - Reconstr.scrush.
+      scrush.
+    - scrush.
   Qed.
 
   Lemma aggFlip_rr_empty :
@@ -569,8 +573,8 @@ Section mFold.
     induction l.
     - intros. rewrite aggFlip_equation. now rewrite H.
     - intros. rewrite aggFlip_equation. rewrite H. rewrite IHl.
-      reflexivity. unfold aggStep. rewrite H. Reconstr.scrush.
-    - Reconstr.scrush.
+      reflexivity. unfold aggStep. rewrite H. scrush.
+    - scrush.
   Qed.
 
   Lemma aggFlip_ff_nonEmpty :
@@ -583,8 +587,9 @@ Section mFold.
     - intros. eapply f_equal in H1. rewrite H1 in H. simpl in H.
       assert (length (ff q) = 0) by lia.
       assert (length (rr q) = 0) by lia.
-      Reconstr.scrush.
-    - intros []. Reconstr.scrush.
+      scrush.
+    - intros [].
+      hauto lq: on use: aggFlip_equation inv: list.
   Qed.
 
   Lemma aggFlip_contentsrr_contentsff :
@@ -595,8 +600,9 @@ Section mFold.
     - intros. rewrite aggFlip_equation. rewrite H. unfold contentsrr. rewrite H. reflexivity.
     - intros. rewrite aggFlip_equation. rewrite H. unfold aggStep. rewrite H.
       destruct a. rewrite IHl by auto. simpl. unfold contentsff. unfold contentsrr.
-      simpl. rewrite H. simpl. Reconstr.scrush.
-    - Reconstr.scrush.
+      simpl. rewrite H. simpl.
+      rewrite <- app_assoc. simpl. auto.
+    - scrush.
   Qed.
 
   Definition aggEnQ (new : B) (q : aggQueue) : aggQueue :=
@@ -609,7 +615,7 @@ Section mFold.
     forall x q, contentsQ (aggEnQ x q) = contentsQ q ++ [x].
   Proof.
     intros. unfold aggEnQ. unfold contentsQ.
-    Reconstr.scrush.
+    simpl. rewrite app_assoc. auto.
   Qed.
 
   Lemma aggEnQ_length :
@@ -636,14 +642,15 @@ Section mFold.
     destruct (ff q) eqn:E.
     - destruct (ff (aggFlip q)) eqn:F.
       + rewrite aggFlip_ff_nonEmpty in F.
-        Reconstr.ryelles4 Reconstr.Empty Reconstr.Empty.
+        sauto.
       + pose proof (aggFlip_contentsrr_contentsff q).
         unfold contentsff in *. unfold contentsrr in *. unfold contentsQ.
         simpl. rewrite E in *. rewrite F in *. simpl in *.
         rewrite app_nil_r in H. rewrite <- H. simpl.
-        rewrite aggFlip_rr_empty. Reconstr.scrush.
+        rewrite aggFlip_rr_empty. 
+        srun eauto use: @unzip_snd_length, length_zero_iff_nil, app_nil_r, rev_length unfold: ff.
     - unfold contentsQ. now rewrite E.
-  Qed.
+      Qed.
 
   Lemma aggDQ_length :
     forall q, lenQ (aggDQ q) = pred (lenQ q).
@@ -651,10 +658,11 @@ Section mFold.
     intros. destruct (ff q) eqn:E; unfold aggDQ; rewrite E.
     - destruct (ff (aggFlip q)) eqn:F.
       + rewrite aggFlip_ff_nonEmpty in F.
-        Reconstr.ryelles4 Reconstr.Empty Reconstr.Empty.
+        simpl. sauto.
       + pose proof (aggFlip_length q). unfold lenQ in H.
-        unfold lenQ. Reconstr.rsimple Reconstr.Empty Reconstr.Empty.
-    - unfold lenQ. Reconstr.scrush.
+        unfold lenQ.
+	hauto lq: on use: Minus.minus_plus, Nat.add_comm, app_nil_r, app_cons_not_nil, aggFlip_rr_empty, Nat.add_0_r, length_zero_iff_nil, app_length, Nat.pred_succ unfold: aggFlip, rr, length, Init.Nat.add, ff.
+    - unfold lenQ. scrush.
   Qed.
 
   Lemma aggEnQ_aggsrrInv (q : aggQueue) :
@@ -682,7 +690,7 @@ Section mFold.
   Lemma aggEnQ_aggsffInv (q : aggQueue) :
     forall x, aggsffInv q -> aggsffInv (aggEnQ x q).
   Proof.
-    Reconstr.scrush.
+    scrush.
   Qed.
 
   Lemma aggDQ_aggsrrInv (q : aggQueue) :
@@ -693,10 +701,11 @@ Section mFold.
     - unfold aggDQ. rewrite E. remember (aggFlip q).
       destruct (ff a) eqn:F.
       + rewrite Heqa in F. rewrite aggFlip_ff_nonEmpty in F. destruct F.
-        rewrite aggFlip_equation in Heqa. rewrite H1 in Heqa. Reconstr.scrush.
+        rewrite aggFlip_equation in Heqa. rewrite H1 in Heqa. scrush.
       + unfold aggsrr in *. unfold contentsrr in *. simpl.
-        rewrite Heqa. rewrite aggFlip_rr_empty. Reconstr.scrush.
-    - unfold aggDQ. rewrite E. Reconstr.scrush.
+        rewrite Heqa. rewrite aggFlip_rr_empty.
+        hauto use: Znat.Nat2Z.is_nonneg, Znat.Nat2Z.inj_le, @lastn_all2, @unzip_fst_length, @unzip_fst_snd_length, length_zero_iff_nil, aggff_alternate unfold: finite_op, rev, ge, fold_left, BinIntDef.Z.of_nat, contentsff, aggsff, ff, aggff.
+    - unfold aggDQ. rewrite E. scrush.
   Qed.
 
   Lemma aggStep_aggsffInv (q : aggQueue) :
@@ -707,7 +716,7 @@ Section mFold.
     assert (length l1 = length l2).
     { rewrite Heql1. rewrite Heql2. now rewrite unzip_fst_snd_length. }
     intros. destruct (rr q) eqn:E.
-    - unfold aggStep. rewrite E. Reconstr.scrush.
+    - unfold aggStep. rewrite E. scrush.
     - unfold aggStep. destruct p eqn:F. rewrite E. simpl.
       destruct (PeanoNat.Nat.le_gt_cases i (length l1)).
       +  rewrite <- Heql1.
@@ -732,11 +741,11 @@ Section mFold.
   Proof.
     assert (forall l, (forall q, rr q = l -> aggsffInv q -> aggsffInv (aggFlip q))).
     induction l.
-    - intros. Reconstr.ryelles4 Reconstr.Empty Reconstr.Empty.
+    - intros. sauto.
     - intros. rewrite aggFlip_equation. rewrite H. apply IHl.
-      Reconstr.ryelles4 Reconstr.Empty Reconstr.Empty.
+      sauto.
       now apply aggStep_aggsffInv.
-    - Reconstr.scrush.
+    - scrush.
   Qed.
 
   Lemma aggDQ_aggsffInv (q : aggQueue) :
@@ -751,7 +760,7 @@ Section mFold.
     - destruct (ff (aggFlip q)) eqn:F.
       + rewrite aggFlip_ff_nonEmpty in F. destruct F.
         intros. rewrite aggFlip_equation. rewrite H1. rewrite E.
-        Reconstr.scrush.
+        scrush.
       + intros. simpl. apply aggFlip_aggsffInv in XX.
         unfold aggsffInv in XX. unfold aggsff in XX. unfold contentsff in XX.
         rewrite F in XX. clear XX0. simpl in XX.
@@ -803,7 +812,7 @@ Section mFold.
   Proof.
     unfold aggCycle.
     pose proof aggEnQ_contentsQ. pose proof aggDQ_contentsQ.
-    Reconstr.scrush.
+    scrush.
   Qed.
 
   Lemma aggCycle_aggsffInv :
@@ -830,7 +839,8 @@ Section mFold.
     induction n.
     - rewrite repeat_repeat'. simpl. destruct i.
       + auto.
-      + Reconstr.scrush.
+      + destruct i;
+	srun eauto use: finite_op_singleton unfold: lastn, app, finite_op, rev, unit, hd, fold_left, firstn inv: list.
     - intros. rewrite repeat_repeat' in *. simpl. simpl in IHn.
       destruct (PeanoNat.Nat.lt_ge_cases i (length (unit :: unit :: unzip_fst (repeat (unit, unit) n)))).
       rewrite <- lastn_tail. simpl. rewrite <- lastn_tail with (xs := (unit :: unit :: unzip_snd (repeat (unit, unit) n))). simpl. auto.
@@ -840,7 +850,8 @@ Section mFold.
       specialize (IHn (length (unit :: unzip_snd (repeat (unit, unit) n)))).
       rewrite lastn_all in IHn.
       replace ((length (unit :: unzip_snd (repeat (unit, unit) n)))) with
-          (length (unit :: unzip_fst (repeat (unit, unit) n))) in IHn by now simpl; rewrite unzip_fst_snd_length; lia. rewrite lastn_all in IHn. Reconstr.scrush.
+          (length (unit :: unzip_fst (repeat (unit, unit) n))) in IHn by now simpl; rewrite unzip_fst_snd_length; lia. rewrite lastn_all in IHn.
+      simpl in *. unfold finite_op in *. sauto.
       simpl in *. rewrite unzip_fst_snd_length. lia.
       simpl in *. lia.
   Qed.
@@ -850,7 +861,7 @@ Section mFold.
   Proof.
     intros. unfold initAggQ. unfold aggsrrInv.
     unfold aggsrr. unfold contentsrr.
-    Reconstr.scrush.
+    scrush.
   Qed.
 
   CoFixpoint mWinFoldAux {A : Type} (qq : aggQueue) (m : Moore A B) : Moore A B :=
@@ -902,7 +913,8 @@ Section mFold.
      = (unit
      :: repeat unit n ++
         (tl (gCollect m xs) ++ [mOut (gNext (gNext m xs) [x])])) ++
-                                                                 [mOut (gNext (gNext m (xs ++ [x])) [x0])]      ) by Reconstr.scrush.
+                                                                 [mOut (gNext (gNext m (xs ++ [x])) [x0])]      ) by
+          scongruence use: app_assoc, app_comm_cons, @gNext_app, @tl_app, @gCollect_nonempty, @gCollect_last unfold: gFinal, unit, mOut, tl.
       rewrite H. rewrite lastn_app. simpl.
       replace (n - 0) with n by lia.
       rewrite lastn_all2 with (n0 := S n).
@@ -958,7 +970,7 @@ Section mFold.
     - rewrite mWinFold_final1 by assumption.
       now rewrite lastn_all2
           by now rewrite tl_length; rewrite gCollect_length; rewrite app_length; simpl; lia.
-    - Reconstr.reasy (@mFold.mWinFold_final2) (@Coq.Init.Peano.ge).
+    - srun eauto use: @mWinFold_final2 unfold: ge.
   Qed.
 
   Lemma aggOut_initAggQ :

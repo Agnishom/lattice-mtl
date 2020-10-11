@@ -12,7 +12,7 @@ Lemma list_length_ind {A : Type}: forall (P : list A -> Prop),
     -> forall xs, P xs.
 Proof.
   intros P H.
-  assert (forall xs l: list A, length l <= length xs -> P l) as H_ind.
+  assert (forall (xs : list A) (l : list A), length l <= length xs -> P l) as H_ind.
   {
     induction xs; intros l Hlen; apply H; intros l0 H0.
     - inversion Hlen. omega.
@@ -96,7 +96,7 @@ Lemma skipn_nonempty {A : Type} : forall (n : nat) (xs : list A),
     skipn n xs <> [] -> length xs >= n.
 Proof.
   intros.
-  destruct (skipn n xs) eqn:E; [Reconstr.scrush|].
+  destruct (skipn n xs) eqn:E; [	qauto use: skipn_all2, Nat.le_ge_cases unfold: ge |].
   clear H.
   destruct PeanoNat.Nat.le_gt_cases with (n := n) (m := length xs).
   - auto.
@@ -126,7 +126,7 @@ Qed.
 Lemma tl_app {A : Type} (xs ys : list A) :
   xs <> [] -> tail (xs ++ ys) = tail xs ++ ys.
 Proof.
-  intros. destruct xs; Reconstr.scrush.
+  intros. destruct xs; sauto.
 Qed.
 
 (* Taking the last n elements of a list *)
@@ -174,7 +174,7 @@ Qed.
 Lemma lastn_nil {A : Type} (n : nat) :
   (@lastn A) n [] = [].
 Proof.
-  Reconstr.scrush.
+  sauto. 
 Qed.
 
 Lemma lastn_length {A : Type} (n : nat) (xs : list A) :
@@ -188,14 +188,15 @@ Lemma lastn_app {A : Type} (n : nat) (l1 l2 : list A) :
   lastn n (l1 ++ l2) = (lastn (n - length l2) l1) ++ (lastn n l2).
 Proof.
   unfold lastn at 1. rewrite rev_app_distr. rewrite firstn_app.
-  rewrite rev_app_distr. Reconstr.scrush.
+  rewrite rev_app_distr. scongruence use: rev_length unfold: lastn.
 Qed.
 
 Lemma lastn_app_2 {A : Type} (n : nat) (l1 l2 : list A) :
   lastn (length l2 + n) (l1 ++ l2) = (lastn n l1) ++ l2.
 Proof.
   unfold lastn at 1. rewrite rev_app_distr. rewrite <- rev_length.
-  rewrite firstn_app_2. rewrite rev_app_distr. Reconstr.scrush.
+  rewrite firstn_app_2. rewrite rev_app_distr.
+  scongruence use: rev_involutive unfold: lastn.
 Qed.
 
 Lemma lastn_all2 {A : Type} (n : nat) (xs : list A) :
@@ -262,8 +263,10 @@ Proof.
   - inversion H.
   - replace (a :: xs) with ([a] ++ xs) in H by auto.
     rewrite existsb_app in H. apply Bool.orb_prop in H as [].
-    + exists 0. Reconstr.scrush.
-    + apply IHxs in H as []. exists (S x). Reconstr.scrush.
+    + exists 0.
+      hauto brefl: on use: firstn_cons, app_inj_tail, firstn_O, elt_eq_unit, app_nil_r unfold: last, existsb, orb, firstn inv: bool.
+    + apply IHxs in H as []. exists (S x).
+      hauto lq: on use: firstn_cons unfold: last.
 Qed.
 
 Lemma existsb_exists2'' {A : Type} (xs : list A) (f : A -> bool):
@@ -273,7 +276,7 @@ Proof.
   intros. destruct xs. inversion H.
   apply existsb_exists2' in H as [n'].
   destruct (Nat.lt_ge_cases n' (length (a :: xs))).
-  - Reconstr.scrush.
+  - srun eauto. 
   - exists (length xs). split. simpl; lia.
     replace (S (length xs)) with (Init.Nat.min (S n') (length (a :: xs))).
     rewrite <- firstn_firstn. rewrite firstn_all. auto. simpl in *. lia.
@@ -285,7 +288,7 @@ Lemma existsb_exists2 {A : Type} (xs : list A) (x : A) (f : A -> bool):
 Proof.
   pose proof existsb_exists2' (xs ++ [x]).
   intros. apply H in H0.
-  Reconstr.scrush.
+  strivial.
 Qed.
 
 Lemma exists2_existsb {A : Type} (xs : list A) (x : A) (f : A -> bool):
@@ -293,13 +296,17 @@ Lemma exists2_existsb {A : Type} (xs : list A) (x : A) (f : A -> bool):
                       -> existsb f (xs ++ [x]) = true.
 Proof.
   generalize dependent x. induction xs.
-  - intros x [n]. simpl in H. Reconstr.ryelles4 Reconstr.Empty Reconstr.Empty.
+  - intros x [n]. simpl in H.
+    rewrite app_nil_l. simpl existsb.
+    destruct n;[sauto|].
+    hauto lq: on use: Bool.orb_true_intro, firstn_cons, firstn_nil unfold: last, firstn.
   - intros x [m]. destruct m.
     + simpl in H. rewrite existsb_app. simpl. rewrite H. simpl. rewrite Bool.orb_true_r. auto.
     + destruct m.
       ++ simpl in *. rewrite H. auto.
       ++ simpl app. simpl existsb. rewrite IHxs. now rewrite Bool.orb_true_r.
-         exists (S m). Reconstr.scrush.
+         exists (S m).
+         hauto lq: on use: app_cons_not_nil unfold: last, app, firstn.
 Qed.
 
 (* Similar theorems for forallb *)
@@ -308,12 +315,16 @@ Lemma forallb_forall2' {A : Type} (xs : list A) (x : A) (f : A -> bool):
   -> forall n, f (last (firstn (S n) (xs ++ [x])) x) = true.
 Proof.
   intros. generalize dependent x. generalize dependent n. induction xs.
-  - simpl app in *. destruct n. Reconstr.scrush. simpl. Reconstr.scrush.
+  - simpl app in *. destruct n.
+    hauto use: firstn_O, firstn_cons, app_inj_tail unfold: forallb, andb, last inv: bool.
+    simpl.
+    hauto use: Bool.andb_true_eq.
   - simpl app. intros. replace (a :: (xs ++ [x])) with ([a] ++ (xs ++ [x])) in * by auto.
     rewrite forallb_app in H. rewrite Bool.andb_true_iff in H. destruct H.
     destruct n.
-    + Reconstr.scrush.
-    + apply IHxs with (n := n) in H0. Reconstr.scrush.
+    + qauto use: firstn_O, app_nil_r, app_eq_nil, elt_eq_unit unfold: firstn, forallb, andb, last, app inv: bool.
+    + apply IHxs with (n := n) in H0.
+      hauto lq: on use: app_cons_not_nil, app_nil_l unfold: firstn, last, app.
 Qed.
 
 Lemma forall2_forallb {A : Type} (xs : list A) (x : A) (f : A -> bool):
@@ -322,12 +333,13 @@ Lemma forall2_forallb {A : Type} (xs : list A) (x : A) (f : A -> bool):
 Proof.
   intros. generalize dependent x.
   induction xs.
-  - simpl app. intros. specialize (H 0). Reconstr.scrush.
+  - simpl app. intros. specialize (H 0). scrush.
   - intros. simpl app in *.
     replace (a :: (xs ++ [x])) with ([a] ++ (xs ++ [x])) in * by auto.
     rewrite forallb_app. rewrite Bool.andb_true_iff. split.
-    + specialize (H 0). Reconstr.scrush.
-    + apply IHxs. intros. specialize (H (S n)). Reconstr.scrush.
+    + specialize (H 0). scrush.
+    + apply IHxs. intros. specialize (H (S n)).
+      hauto lq: on use: app_cons_not_nil, app_eq_nil, app_nil_l unfold: app, last, firstn.
 Qed.
 
 Lemma forall2_forallb' {A : Type} (xs : list A) (x : A) (f : A -> bool):
@@ -425,7 +437,7 @@ Lemma scan_left_last {A B : Type} (op : A -> B -> A) (xs : list B) (init : A) :
   forall d, last (scan_left op xs init) d = fold_left op xs init.
 Proof.
   induction xs using list_r_ind.
-  - Reconstr.scrush.
+  - scrush.
   - intros. rewrite scan_left_app_last. simpl.
     rewrite last_nonempty. now rewrite fold_left_app.
 Qed.
@@ -442,7 +454,7 @@ Proof.
     assert ((S n) = length (scan_left op (firstn n xs) init)).
     { rewrite scan_left_length.
       pose proof (skipn_nonempty n xs).
-      specialize (H ltac:(Reconstr.scrush)).
+      specialize (H ltac:(scrush)).
       rewrite firstn_length.
       rewrite PeanoNat.Nat.min_l by lia. auto.
     }
@@ -457,7 +469,7 @@ Lemma scan_left_firstn_last {A B : Type} (op : A -> B -> A) (xs : list B) (init 
 Proof.
   pose proof (@scan_left_firstn A B).
   pose proof (@scan_left_last A B).
-  Reconstr.scrush.
+  hauto lq: on. 
 Qed.
 
 Definition prefixes {A : Type} (xs : list A) : list (list A) :=
@@ -546,25 +558,25 @@ Definition unzip_snd {A B : Type} (l : list (A * B)) : list B := map snd l.
 Lemma unzip_fst_length {A B : Type}:
   forall (l : list (A * B)), length (unzip_fst l) = length l.
 Proof.
-  pose proof map_length. Reconstr.scrush.
+  pose proof map_length. scrush.
 Qed.
 
 Lemma unzip_snd_length {A B : Type}:
   forall (l : list (A * B)), length (unzip_snd l) = length l.
 Proof.
-  pose proof map_length. Reconstr.scrush.
+  pose proof map_length. scrush.
 Qed.
 
 Lemma unzip_fst_snd_length {A B : Type}:
   forall (l : list (A * B)), length (unzip_snd l) = length (unzip_fst l).
 Proof.
-  Reconstr.reasy (@unzip_fst_length, @unzip_snd_length) Reconstr.Empty.
+ scongruence use: @unzip_fst_length, @unzip_snd_length.
 Qed.
 
 Lemma repeat_map {A B : Type} :
   forall (f : A -> B) (a : A) (n : nat), map f (repeat a n) = (repeat (f a) n).
 Proof.
-  intros. induction n; Reconstr.scrush.
+  intros. induction n; scrush.
 Qed.
 
 Lemma unzip_fst_repeat {A B : Type} :
@@ -656,7 +668,7 @@ Qed.
 Lemma repeat_snoc_cons {A : Type} (x : A) (n : nat) :
   repeat x n ++ [x] = x :: repeat x n.
 Proof.
-  induction n; Reconstr.scrush.
+  induction n; scrush.
 Qed.
 
 Fixpoint repeatAux {A : Type} (x : A) (n : nat) (acc : list A) :=
@@ -671,15 +683,17 @@ Definition repeat' {A : Type} (x : A) (n : nat) :=
 Lemma repeatAux_correctness {A : Type} (x : A) (xs : list A) (n : nat) :
   repeatAux x n xs = (repeat x n) ++ xs.
 Proof.
-  generalize dependent xs. induction n; [Reconstr.scrush | ].
+  generalize dependent xs. induction n; [scrush | ].
   intros. simpl repeat. simpl repeatAux. rewrite IHn.
-  rewrite <- repeat_snoc_cons. Reconstr.scrush.
+  rewrite <- repeat_snoc_cons.
+  hauto use: app_assoc, app_nil_l, app_comm_cons.
 Qed.
 
 Lemma repeat_repeat' {A : Type} (x : A) (n : nat) :
   repeat' x n = (repeat x n).
 Proof.
-  unfold repeat'. sauto using (@repeatAux_correctness A).
+  unfold repeat'. rewrite repeatAux_correctness.
+	srun eauto use: app_nil_end.
 Qed.
 
 Lemma tl_map :

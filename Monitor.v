@@ -39,9 +39,10 @@ Lemma monLift_correctness {A : Type} (f : A -> Val):
 Proof.
   unfold monLift. unfold implements.
   intros. remember l. destruct l using list_r_ind.
-  + unfold gFinal. Reconstr.scrush.
+  + unfold gFinal. scrush.
   + clear IHl. rewrite Heql0. rewrite mLift_correctness_final.
-    simpl robustness. destruct (l ++ [x]) eqn:E. Reconstr.scrush.
+    simpl robustness. destruct (l ++ [x]) eqn:E.
+    destruct l; sauto.
     rewrite <- E. now rewrite last_nonempty.
 Qed.
 
@@ -152,7 +153,7 @@ Lemma mAnd_correctness {A : Type} (m1 m2 : Monitor A) (f1 f2 : Formula):
   -> implements (mAnd m1 m2) (FAnd Val f1 f2).
 Proof.
   unfold implements. unfold mAnd. intros. rewrite mBinOp_final.
-  Reconstr.scrush.
+  scrush.
 Qed.
 
 Lemma mOr_correctness {A : Type} (m1 m2 : Monitor A) (f1 f2 : Formula):
@@ -161,7 +162,7 @@ Lemma mOr_correctness {A : Type} (m1 m2 : Monitor A) (f1 f2 : Formula):
   -> implements (mOr m1 m2) (FOr Val f1 f2).
 Proof.
   unfold implements. unfold mOr. intros. rewrite mBinOp_final.
-  Reconstr.scrush.
+  scrush.
 Qed.
 
 (* Sometime and Always *)
@@ -210,16 +211,16 @@ Lemma since_state {A : Type} (m1 m2 : Monitor A) (xs : list A) (x : A) :
            (gFinal m2 (xs ++ [x]) ⊔ ((gFinal m1 (xs ++ [x])) ⊓ (gFinal (since m1 m2) xs))).
 Proof.
   generalize dependent x. induction xs using list_r_ind.
-  + simpl. Reconstr.scrush.
+  + simpl. scrush.
   + intros. rewrite gNext_app. rewrite IHxs. unfold gFinal. rewrite IHxs.
     unfold mNextOut. unfold gFinal. repeat rewrite gNext_app.
-    simpl. Reconstr.scrush.
+    simpl. scrush.
 Qed.
 
 Lemma since_final {A : Type} (m1 m2 : Monitor A) (xs : list A) (x : A) :
   gFinal (since m1 m2) (xs ++ [x]) = (gFinal m2 (xs ++ [x]) ⊔ ((gFinal m1 (xs ++ [x])) ⊓ (gFinal (since m1 m2) xs))).
 Proof.
-  pose proof (@since_state A m1 m2 xs x). unfold gFinal. Reconstr.scrush.
+  pose proof (@since_state A m1 m2 xs x). unfold gFinal. scrush.
 Qed.
 
 Lemma since_correctness {A : Type} (f1 f2 : Formula) (m1 m2 : Monitor A):
@@ -250,16 +251,16 @@ Lemma sinceDual_state {A : Type} (m1 m2 : Monitor A) (xs : list A) (x : A) :
            (gFinal m2 (xs ++ [x]) ⊓ ((gFinal m1 (xs ++ [x])) ⊔ (gFinal (sinceDual m1 m2) xs))).
 Proof.
   generalize dependent x. induction xs using list_r_ind.
-  + simpl. Reconstr.scrush.
+  + simpl. scrush.
   + intros. rewrite gNext_app. rewrite IHxs. unfold gFinal. rewrite IHxs.
     unfold mNextOut. unfold gFinal. repeat rewrite gNext_app.
-    simpl. Reconstr.scrush.
+    simpl. scrush.
 Qed.
 
 Lemma sinceDual_final {A : Type} (m1 m2 : Monitor A) (xs : list A) (x : A) :
   gFinal (sinceDual m1 m2) (xs ++ [x]) = (gFinal m2 (xs ++ [x]) ⊓ ((gFinal m1 (xs ++ [x])) ⊔ (gFinal (sinceDual m1 m2) xs))).
 Proof.
-  pose proof (@sinceDual_state A m1 m2 xs x). unfold gFinal. Reconstr.scrush.
+  pose proof (@sinceDual_state A m1 m2 xs x). unfold gFinal. scrush.
 Qed.
 
 Lemma sinceDual_correctness {A : Type} (f1 f2 : Formula) (m1 m2 : Monitor A):
@@ -339,5 +340,5 @@ Proof.
   pose proof (@mOr_correctness A).
   pose proof (@mSometimeWithin_correctness A).
   pose proof (@mAlwaysWithin_correctness A).
-  induction f; Reconstr.scrush.
+  induction f; scrush.
 Qed.
