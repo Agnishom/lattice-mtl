@@ -76,13 +76,22 @@ let fSinceWithin hi _UU03d5_ _UU03c8_ =
 (** val fSinceBounded : int -> int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceBounded lo len _UU03d5_ _UU03c8_ =
-  FAnd ((FAlwaysWithin (lo, _UU03d5_)), (FDelay ((Pervasives.succ lo),
-    (fSinceWithin len _UU03d5_ _UU03c8_))))
+  FAnd ((FAlwaysWithin (lo, _UU03d5_)), (FDelay (lo, (fSinceWithin len _UU03d5_ _UU03c8_))))
 
 (** val fSinceAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceAfter lo _UU03d5_ _UU03c8_ =
   FDelay (lo, (FSince (_UU03d5_, _UU03c8_)))
+
+(** val fSometimeAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fSometimeAfter lo _UU03d5_ =
+  FDelay (lo, (FSometime _UU03d5_))
+
+(** val fAlwaysAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fAlwaysAfter lo _UU03d5_ =
+  FDelayDual (lo, (FAlways _UU03d5_))
 
 (** val fSinceWithinDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
@@ -93,8 +102,7 @@ let fSinceWithinDual hi _UU03d5_ _UU03c8_ =
     int -> int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceBoundedDual lo len _UU03d5_ _UU03c8_ =
-  FOr ((FSometimeWithin (lo, _UU03d5_)), (FDelayDual ((Pervasives.succ lo),
-    (fSinceWithin len _UU03d5_ _UU03c8_))))
+  FOr ((FSometimeWithin (lo, _UU03d5_)), (FDelayDual (lo, (fSinceWithin len _UU03d5_ _UU03c8_))))
 
 (** val fSinceAfterDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 

@@ -95,18 +95,25 @@ Definition FAlwaysBounded {A : Type} (lo len : nat) (ϕ : @Formula A) :=
 Definition FSinceWithin {A : Type} (hi : nat) (ϕ ψ: @Formula A) :=
   FAnd (FDelay hi ψ) (FSince ϕ ψ).
 
-(* This represents Since_[lo+2, lo + len + 3] *)
+(* This represents Since_[lo+1, lo + len + 2] *)
 Definition FSinceBounded {A : Type} (lo len : nat) (ϕ ψ : @Formula A) :=
-  FAnd (FAlwaysWithin lo ϕ) (FDelay (S lo) (FSinceWithin len ϕ ψ)).
+  FAnd (FAlwaysWithin lo ϕ) (FDelay lo (FSinceWithin len ϕ ψ)).
 
 (* This represents Since_[lo + 1, ∞) *)
 Definition FSinceAfter {A : Type} (lo : nat) (ϕ ψ : @Formula A) :=
   FDelay lo (FSince ϕ ψ).
 
+Definition FSometimeAfter {A : Type} (lo : nat) (ϕ : @Formula A) :=
+  FDelay lo (FSometime ϕ).
+
+Definition FAlwaysAfter {A : Type} (lo : nat) (ϕ : @Formula A) :=
+  FDelayDual lo (FAlways ϕ).
+
+
 Definition FSinceWithinDual {A : Type} (hi : nat) (ϕ ψ: @Formula A) :=
   FOr (FDelayDual hi ψ) (FSinceDual ϕ ψ).
 Definition FSinceBoundedDual {A : Type} (lo len : nat) (ϕ ψ : @Formula A) :=
-  FOr (FSometimeWithin lo ϕ) (FDelayDual (S lo) (FSinceWithin len ϕ ψ)).
+  FOr (FSometimeWithin lo ϕ) (FDelayDual lo (FSinceWithin len ϕ ψ)).
 Definition FSinceAfterDual {A : Type} (lo : nat) (ϕ ψ : @Formula A) :=
   FDelayDual lo (FSinceDual ϕ ψ).
 
