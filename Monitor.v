@@ -1,11 +1,13 @@
 Require Import Coq.Lists.List.
 
+Require Import Monoid.
 Require Import Lattice.
 Require Import Formula.
 Require Import Robustness.
 Require Import InfRobustness.
 Require Import NonEmptyList.
 Require Import Mealy.
+Require Import Lemmas.
 
 Require Import Lia.
 
@@ -196,7 +198,7 @@ Proof.
 Qed.
 
 Definition monSometimeBounded (n : nat) (m : Monitor) : Monitor :=
-  @mFoldWin _ joinMonoid _ n m.
+  @mFoldWin _ joinMonoid _ (S n) m.
 
 Lemma monSometimeBounded_correctness m n ϕ :
   implements m ϕ
@@ -204,8 +206,78 @@ Lemma monSometimeBounded_correctness m n ϕ :
 Proof.
   unfold implements. intros.
   unfold monSometimeBounded. rewrite mWinFold_result.
-  unfold robustness. simpl.
-Admitted.
+  revert n. induction σ.
+  - unfold robustness. simpl. unfold join_b. unfold Monoid.op_b. unfold Monoid.op_i.
+    simpl. intros. rewrite lastn_all2. repeat rewrite Monoid.finite_op_singleton.
+    specialize (H (singleton a)). simpl in H. rewrite H. auto.
+    simpl. lia.
+  - simpl gCollect. simpl toList. simpl rev. intros.
+    rewrite lastn_last. rewrite <- finite_op_app. rewrite finite_op_singleton.
+    specialize (H (snocNE σ a)). simpl in H.
+    rewrite H.
+    destruct n.
+    + rewrite lastn_0. simpl. unfold finite_op. simpl.
+      rewrite join_bottom_l.
+      unfold robustness.
+      replace (FSometime 0 0 ϕ) with (FDelay 0 ϕ) by auto. rewrite fdelay_correctness.
+      simpl. now rewrite <- Minus.minus_n_O.
+    + rewrite IHσ. unfold robustness.
+      simpl pred at 3. pose proof (length_toList1 σ).
+      remember (length (toList σ)). destruct n0.  lia.
+      rewrite sometimeBounded_incremental. simpl pred.
+      rewrite <- Heqn0.
+      enough ((infRobustness (FSometime 0 n ϕ) (extend σ) n0)
+              = (infRobustness (FSometime 0 n ϕ) (extend (snocNE σ a)) n0)).
+      now rewrite H1.
+      apply extends_infRobustness with (σ := σ). apply extend_extends.
+      unfold extends. unfold extend. intros. simpl.
+      rewrite app_nth1. rewrite nth_error_nth' with (d := a).
+      auto.
+      rewrite rev_length. auto.
+      rewrite rev_length. auto.
+      lia.
+Qed.
+
+Definition monAlwaysBounded (n : nat) (m : Monitor) : Monitor :=
+  @mFoldWin _ meetMonoid _ (S n) m.
+
+Lemma monAlwaysBounded_correctness m n ϕ :
+  implements m ϕ
+  -> implements (monAlwaysBounded n m) (FAlways 0 n ϕ).
+Proof.
+  unfold implements. intros.
+  unfold monAlwaysBounded. rewrite mWinFold_result.
+  revert n. induction σ.
+  - unfold robustness. simpl. unfold meet_b. unfold Monoid.op_b. unfold Monoid.op_i.
+    simpl. intros. rewrite lastn_all2. repeat rewrite Monoid.finite_op_singleton.
+    specialize (H (singleton a)). simpl in H. rewrite H. auto.
+    simpl. lia.
+  - simpl gCollect. simpl toList. simpl rev. intros.
+    rewrite lastn_last. rewrite <- finite_op_app. rewrite finite_op_singleton.
+    specialize (H (snocNE σ a)). simpl in H.
+    rewrite H.
+    destruct n.
+    + rewrite lastn_0. simpl. unfold finite_op. simpl.
+      rewrite meet_top_l.
+      unfold robustness.
+      replace (FAlways 0 0 ϕ) with (FDelayDual 0 ϕ) by auto. rewrite fdelayDual_correctness.
+      simpl. now rewrite <- Minus.minus_n_O.
+    + rewrite IHσ. unfold robustness.
+      simpl pred at 3. pose proof (length_toList1 σ).
+      remember (length (toList σ)). destruct n0.  lia.
+      rewrite alwaysBounded_incremental. simpl pred.
+      rewrite <- Heqn0.
+      enough ((infRobustness (FAlways 0 n ϕ) (extend σ) n0)
+              = (infRobustness (FAlways 0 n ϕ) (extend (snocNE σ a)) n0)).
+      now rewrite H1.
+      apply extends_infRobustness with (σ := σ). apply extend_extends.
+      unfold extends. unfold extend. intros. simpl.
+      rewrite app_nth1. rewrite nth_error_nth' with (d := a).
+      auto.
+      rewrite rev_length. auto.
+      rewrite rev_length. auto.
+      lia.
+Qed.
 
 End Monitor.
 

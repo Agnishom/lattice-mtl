@@ -775,6 +775,44 @@ Proof.
   auto.
 Qed.
 
+Lemma sometimeBounded_incremental :
+  forall (ϕ : Formula A) τ n i,
+    infRobustness (FSometime 0 (S n) ϕ) τ (S i)
+    = ((infRobustness (FSometime 0 n ϕ) τ i) ⊔ infRobustness ϕ τ (S i)).
+Proof.
+  intros.
+  replace (infRobustness (FSometime 0 (S n) ϕ) τ (S i))
+    with (join_b 0 (S (min i n)) (fun j : nat => infRobustness ϕ τ (S i - j))) by auto.
+  simpl infRobustness at 2.
+  unfold join_b at 1. rewrite -> op_b_app with (hi1 := 0) by lia.
+  unfold op_b at 1. replace (1 - 0) with 1 by auto.
+  unfold op_i. simpl List.map. rewrite finite_op_singleton.
+  rewrite join_comm.
+  replace 1 with (0 + 1) by lia. replace (S (min i n)) with (min i n + 1) by lia.
+  rewrite <- op_b_shift_ext with (h := 1) (g := (fun j : nat => infRobustness ϕ τ ( i - j))).
+  auto.
+  intros. f_equal. lia.
+Qed.
+
+Lemma alwaysBounded_incremental :
+  forall (ϕ : Formula A) τ n i,
+    infRobustness (FAlways 0 (S n) ϕ) τ (S i)
+    = ((infRobustness (FAlways 0 n ϕ) τ i) ⊓ infRobustness ϕ τ (S i)).
+Proof.
+  intros.
+  replace (infRobustness (FAlways 0 (S n) ϕ) τ (S i))
+    with (meet_b 0 (S (min i n)) (fun j : nat => infRobustness ϕ τ (S i - j))) by auto.
+  simpl infRobustness at 2.
+  unfold meet_b at 1. rewrite -> op_b_app with (hi1 := 0) by lia.
+  unfold op_b at 1. replace (1 - 0) with 1 by auto.
+  unfold op_i. simpl List.map. rewrite finite_op_singleton.
+  rewrite meet_comm.
+  replace 1 with (0 + 1) by lia. replace (S (min i n)) with (min i n + 1) by lia.
+  rewrite <- op_b_shift_ext with (h := 1) (g := (fun j : nat => infRobustness ϕ τ ( i - j))).
+  auto.
+  intros. f_equal. lia.
+Qed.
+
 
 End InfRobustness.
 
