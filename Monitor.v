@@ -134,8 +134,9 @@ Qed.
 
 Lemma nth_gCollect m n ϕ :
   implements m ϕ
-  -> forall σ, n < length (toList σ)
-  -> forall d, nth n (toList (gCollect m σ)) d = infRobustness ϕ (extend σ) (pred (length (toList σ)) - n).
+  -> forall σ, n < (length (toList σ))
+         -> forall d, nth n (toList (gCollect m σ)) d
+                            = infRobustness ϕ (extend σ) ((Nat.pred (length (toList σ))) - n).
 Proof.
   intros.
   generalize dependent σ. generalize dependent n. induction n.
@@ -278,6 +279,93 @@ Proof.
       rewrite rev_length. auto.
       lia.
 Qed.
+
+CoFixpoint sinceAux (m1 m2 : Monitor) (pre : Val) : Monitor :=
+  {| mOut (a : A) :=  (mOut m2 a) ⊔ (pre ⊓ (mOut m1 a));
+     mNext (a : A) := sinceAux (mNext m1 a) (mNext m2 a) ( (mOut m2 a) ⊔ (pre ⊓ (mOut m1 a)))
+  |}.
+
+Definition monSince (m1 m2 : Monitor) : Monitor :=
+  sinceAux m1 m2 bottom.
+
+Lemma monSince_state (m n : Monitor) (σ : nonEmpty A) :
+  gNext (monSince m n) σ
+  = sinceAux (gNext m σ) (gNext n σ)
+             (gOut (monSince m n) σ).
+Proof.
+  induction σ.
+  - auto.
+  - simpl. rewrite IHσ. auto.
+Qed.
+
+Lemma monSince_correctness (m n : Monitor) (ϕ ψ : Formula A) :
+  implements m ϕ
+  -> implements n ψ
+  -> implements (monSince m n) (FSinceUnbounded 0 ϕ ψ).
+Proof.
+  unfold implements. intros. induction σ.
+  - simpl. rewrite meet_bottom_l. rewrite join_bottom_r.
+    unfold robustness. simpl. unfold join_b. unfold op_b. simpl.
+    unfold op_i. simpl. rewrite finite_op_singleton.
+    unfold meet_i. unfold op_i. simpl. unfold finite_op. simpl.
+    rewrite meet_top_r. unfold extend. simpl.
+    specialize (H0 (singleton a)). simpl in H0.
+    rewrite H0. auto.
+  - simpl. rewrite monSince_state. simpl. rewrite IHσ.
+    specialize (H (snocNE σ a)). specialize (H0 (snocNE σ a)).
+    simpl in H, H0. rewrite H, H0. unfold robustness.
+    simpl pred. remember (length (toList σ)). pose proof (length_toList1 σ).
+    destruct n0. lia.
+    simpl pred. rewrite since_incremental by assumption.
+    f_equal. f_equal. apply infRobustness_prefix. intros. unfold extend.
+    simpl. rewrite app_nth1. apply nth_indep.
+    rewrite rev_length. lia.
+    rewrite rev_length. lia.
+Qed.
+
+CoFixpoint sinceDualAux (m1 m2 : Monitor) (pre : Val) : Monitor :=
+  {| mOut (a : A) :=  (mOut m2 a) ⊓ (pre ⊔ (mOut m1 a));
+     mNext (a : A) := sinceDualAux (mNext m1 a) (mNext m2 a) ( (mOut m2 a) ⊓ (pre ⊔ (mOut m1 a)))
+  |}.
+
+Definition monSinceDual (m1 m2 : Monitor) : Monitor :=
+  sinceDualAux m1 m2 top.
+
+Lemma monSinceDual_state (m n : Monitor) (σ : nonEmpty A) :
+  gNext (monSinceDual m n) σ
+  = sinceDualAux (gNext m σ) (gNext n σ)
+             (gOut (monSinceDual m n) σ).
+Proof.
+  induction σ.
+  - auto.
+  - simpl. rewrite IHσ. auto.
+Qed.
+
+Lemma monSinceDual_correctness (m n : Monitor) (ϕ ψ : Formula A) :
+  implements m ϕ
+  -> implements n ψ
+  -> implements (monSinceDual m n) (FSinceDualUnbounded 0 ϕ ψ).
+Proof.
+  unfold implements. intros. induction σ.
+  - simpl. rewrite join_top_l. rewrite meet_top_r.
+    unfold robustness. simpl. unfold meet_b. unfold op_b. simpl.
+    unfold op_i. simpl. rewrite finite_op_singleton.
+    unfold join_i. unfold op_i. simpl. unfold finite_op. simpl.
+    rewrite join_bottom_r. unfold extend. simpl.
+    specialize (H0 (singleton a)). simpl in H0.
+    rewrite H0. auto.
+  - simpl. rewrite monSinceDual_state. simpl. rewrite IHσ.
+    specialize (H (snocNE σ a)). specialize (H0 (snocNE σ a)).
+    simpl in H, H0. rewrite H, H0. unfold robustness.
+    simpl pred. remember (length (toList σ)). pose proof (length_toList1 σ).
+    destruct n0. lia.
+    simpl pred. rewrite sinceDual_incremental by assumption.
+    f_equal. f_equal. apply infRobustness_prefix. intros. unfold extend.
+    simpl. rewrite app_nth1. apply nth_indep.
+    rewrite rev_length. lia.
+    rewrite rev_length. lia.
+Qed.
+
 
 End Monitor.
 
