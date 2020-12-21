@@ -50,6 +50,14 @@ Qed.
 Definition robustness (ϕ : Formula A) (σ : nonEmpty A) : Val :=
   infRobustness ϕ (extend σ) (pred (length (toList σ))).
 
+Lemma robustness_eq (ϕ ψ : Formula A) (σ : nonEmpty A) :
+  (forall τ i, infRobustness ϕ τ i = infRobustness ψ τ i)
+  -> robustness ϕ σ = robustness ψ σ.
+Proof.
+  intros. unfold robustness.
+  apply H.
+Qed.
+
 End Robustness.
 
 Arguments robustness {Val A lattice_val boundedLattice_val}.

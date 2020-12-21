@@ -367,7 +367,7 @@ Proof.
     rewrite <- Nat.leb_gt in H. intros. now rewrite H.
 Qed.
 
-Lemma since_always_bounded :
+Lemma since_always_bounded1 :
   forall (ϕ ψ : Formula A) τ a b i,
     a < b ->
     a < i ->
@@ -433,7 +433,24 @@ Proof.
   auto.
 Qed.
 
-Lemma sinceDual_sometime_bounded :
+Lemma since_always_bounded :
+  forall (ϕ ψ : Formula A) τ a b i,
+    a < b ->
+    infRobustness (FSince (S a) b ϕ ψ) τ i
+    = infRobustness (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+Proof.
+  intros.
+  destruct (Compare_dec.dec_lt a i).
+    + now apply since_always_bounded1.
+    + assert (S a > i) by lia.
+      rewrite fSince_i_lo. apply H1.
+      replace (infRobustness (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)) τ i)
+        with ((infRobustness (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) τ i) ⊓ (infRobustness (FAlways 0 a ϕ) τ i)) by auto.
+      rewrite fdelay_correctness. rewrite -> Compare_dec.leb_correct_conv by lia.
+      now rewrite meet_bottom_l.
+Qed.
+
+Lemma sinceDual_sometime_bounded1 :
   forall (ϕ ψ : Formula A) τ a b i,
     a < b ->
     a < i ->
@@ -499,7 +516,24 @@ Proof.
   auto.
 Qed.
 
-Lemma since_always_unbounded :
+Lemma sinceDual_sometime_bounded :
+  forall (ϕ ψ : Formula A) τ a b i,
+    a < b ->
+    infRobustness (FSinceDual (S a) b ϕ ψ) τ i
+    = infRobustness (FOr (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) (FSometime 0 a ϕ)) τ i.
+Proof.
+  intros.
+  destruct (Compare_dec.dec_lt a i).
+    + now apply sinceDual_sometime_bounded1.
+    + assert (S a > i) by lia.
+      rewrite fSinceDual_i_lo. apply H1.
+      replace (infRobustness (FOr (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) (FSometime 0 a ϕ)) τ i)
+        with ((infRobustness (FDelayDual (S a) (FSinceDual 0 (b - S a) ϕ ψ)) τ i) ⊔ (infRobustness (FSometime 0 a ϕ) τ i)) by auto.
+      rewrite fdelayDual_correctness. rewrite -> Compare_dec.leb_correct_conv by lia.
+      now rewrite join_top_l.
+Qed.
+
+Lemma since_always_unbounded1 :
   forall (ϕ ψ : Formula A) τ a i,
     a < i ->
     infRobustness (FSinceUnbounded (S a) ϕ ψ) τ i
@@ -564,7 +598,23 @@ Proof.
   auto.
 Qed.
 
-Lemma sinceDual_sometime_unbounded :
+Lemma since_always_unbounded :
+  forall (ϕ ψ : Formula A) τ a i,
+    infRobustness (FSinceUnbounded (S a) ϕ ψ) τ i
+    = infRobustness (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+Proof.
+  intros.
+  destruct (Compare_dec.dec_lt a i).
+  - now apply since_always_unbounded1.
+  - assert (S a > i) by lia.
+    rewrite fSinceUnbounded_i_lo. apply H0.
+    replace (infRobustness (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)) τ i)
+      with ((infRobustness (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) τ i) ⊓ (infRobustness (FAlways 0 a ϕ) τ i)) by auto.
+    rewrite fdelay_correctness. rewrite -> Compare_dec.leb_correct_conv by lia.
+    now rewrite meet_bottom_l.
+Qed.
+
+Lemma sinceDual_sometime_unbounded1 :
   forall (ϕ ψ : Formula A) τ a i,
     a < i ->
     infRobustness (FSinceDualUnbounded (S a) ϕ ψ) τ i
@@ -628,6 +678,23 @@ Proof.
   assert (S a <= i) by lia. rewrite <-Nat.leb_le in H0. rewrite H0. clear H0.
   auto.
 Qed.
+
+Lemma sinceDual_sometime_unbounded :
+  forall (ϕ ψ : Formula A) τ a i,
+    infRobustness (FSinceDualUnbounded (S a) ϕ ψ) τ i
+    = infRobustness (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)) τ i.
+Proof.
+  intros.
+  destruct (Compare_dec.dec_lt a i).
+  - now apply sinceDual_sometime_unbounded1.
+  - assert (S a > i) by lia.
+    rewrite fSinceDualUnbounded_i_lo. apply H0.
+    replace (infRobustness (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)) τ i)
+      with ((infRobustness (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) τ i) ⊔ (infRobustness (FSometime 0 a ϕ) τ i)) by auto.
+    rewrite fdelayDual_correctness. rewrite -> Compare_dec.leb_correct_conv by lia.
+    now rewrite join_top_l.
+Qed.
+
 
 Lemma since_incremental :
   forall (ϕ ψ : Formula A) τ i,
@@ -813,8 +880,347 @@ Proof.
   intros. f_equal. lia.
 Qed.
 
+Lemma since_sometime_bounded :
+  forall (ϕ ψ : Formula A) τ n i,
+    infRobustness (FSince 0 n ϕ ψ) τ i
+    = infRobustness (FAnd (FSinceUnbounded 0 ϕ ψ) (FSometime 0 n ψ)) τ i.
+Admitted.
+
+Lemma sinceDual_always_bounded :
+  forall (ϕ ψ : Formula A) τ n i,
+    infRobustness (FSinceDual 0 n ϕ ψ) τ i
+    = infRobustness (FOr (FSinceDualUnbounded 0 ϕ ψ) (FAlways 0 n ψ)) τ i.
+Admitted.
+
+Inductive isNormal : @Formula Val A -> Prop :=
+| NAtomic : forall f, isNormal (FAtomic f)
+| NOr : forall α β, isNormal α -> isNormal β -> isNormal (FOr α β)
+| NAnd : forall α β, isNormal α -> isNormal β -> isNormal (FAnd α β)
+| NDelay : forall α i, isNormal α -> isNormal (FDelay i α)
+| NDelayDual : forall α i, isNormal α -> isNormal (FDelayDual i α)
+| NSometimeBounded : forall α i, isNormal α -> isNormal (FSometime 0 (S i) α)
+| NAlwaysBounded : forall α i, isNormal α -> isNormal (FAlways 0 (S i) α)
+| NSometimeUnbounded : forall α, isNormal α -> isNormal (FSometimeUnbounded 0 α)
+| NAlwaysUnbounded : forall α, isNormal α -> isNormal (FAlwaysUnbounded 0 α)
+| NSinceUnbounded : forall α β, isNormal α ->  isNormal β -> isNormal (FSinceUnbounded 0 α β)
+| NSinceDualUnbounded : forall α β, isNormal α -> isNormal β -> isNormal (FSinceDualUnbounded 0 α β)
+.
+
+
+Fixpoint normalize (ϕ : @Formula Val A) :=
+  match ϕ with
+  | FAtomic f => FAtomic f
+  | FAnd α β => FAnd (normalize α) (normalize β)
+  | FOr α β => FOr (normalize α) (normalize β)
+
+  | FSometime 0 i α => FSometime 0 i (normalize α)
+  | FAlways 0 i α => FAlways 0 i (normalize α)
+  | FSometimeUnbounded 0 α => FSometimeUnbounded 0 (normalize α)
+  | FAlwaysUnbounded 0 α => FAlwaysUnbounded 0 (normalize α)
+  | FSinceUnbounded 0 α β => FSinceUnbounded 0 (normalize α) (normalize β)
+  | FSinceDualUnbounded 0 α β => FSinceDualUnbounded 0 (normalize α) (normalize β)
+  | FSometime ((S i') as i) j α =>
+    match (i =? j) with
+    | true => FSometime i j (normalize α)
+    | false => match (i <? j) with
+              | false => FAtomic (fun _ => bottom)
+              | true => FDelay i (FSometime 0 (j - i) (normalize α))
+              end
+    end
+  | FAlways ((S i') as i) j α =>
+    match (i =? j) with
+    | true => FAlways i j (normalize α)
+    | false => match (i <? j) with
+              | false => FAtomic (fun _ => top)
+              | true => FDelayDual i (FAlways 0 (j - i) (normalize α))
+              end
+    end
+  | FSometimeUnbounded ((S i') as i) α => FDelay i (FSometimeUnbounded 0 (normalize α))
+  | FAlwaysUnbounded ((S i') as i) α => FDelayDual i (FAlwaysUnbounded 0 (normalize α))
+  | FSinceUnbounded ((S i') as i) α β =>
+    FAnd (FDelay i (FSinceUnbounded 0 (normalize α) (normalize β))) (FAlways 0 i' (normalize α))
+  | FSinceDualUnbounded  ((S i') as i) α β =>
+    FOr (FDelayDual i (FSinceDualUnbounded 0 (normalize α) (normalize β))) (FSometime 0 i' (normalize α))
+  | FSince 0 i α β => FAnd (FSinceUnbounded 0 (normalize α) (normalize β)) (FSometime 0 i (normalize β))
+  | FSinceDual 0 i α β => FOr (FSinceDualUnbounded 0 (normalize α) (normalize β)) (FAlways 0 i (normalize β))
+  | FSince ((S i') as i) j α β =>
+    match (i' <? j) with
+    | false => FAtomic (fun _ => bottom)
+    | true => FAnd (FDelay i (FAnd (FSinceUnbounded 0 (normalize α) (normalize β)) (FSometime 0 (j - i) (normalize β)))) (FAlways 0 i' (normalize α))
+    end
+  | FSinceDual ((S i') as i) j α β =>
+    match (i' <? j) with
+    | false => FAtomic (fun _ => top)
+    | true => FOr (FDelayDual i (FOr (FSinceDualUnbounded 0 (normalize α) (normalize β)) (FAlways 0 (j - i) (normalize β)))) (FSometime 0 i' (normalize α))
+    end
+  end.
+
+Lemma isNormal_normalize :
+  forall ϕ, isNormal (normalize ϕ).
+Proof.
+  induction ϕ.
+  - apply NAtomic.
+  - simpl. now apply NAnd.
+  - simpl. now apply NOr.
+  - simpl. destruct n.
+    + destruct n0.
+      ++ now apply NDelay.
+      ++ now apply NSometimeBounded.
+    + destruct (S n =? n0) eqn:E.
+      ++ apply EqNat.beq_nat_true in E. rewrite E.
+         now apply NDelay.
+      ++ destruct (S n <? n0) eqn:EE.
+         +++ apply Nat.ltb_lt in EE.
+         destruct (n0 - S n) eqn:F. lia.
+         apply NDelay. now apply NSometimeBounded.
+         +++ apply NAtomic.
+  - simpl. destruct n.
+    + destruct n0.
+      ++ now apply NDelayDual.
+      ++ now apply NAlwaysBounded.
+    + destruct (S n =? n0) eqn:E.
+      ++ apply EqNat.beq_nat_true in E. rewrite E.
+         now apply NDelayDual.
+      ++ destruct (S n <? n0) eqn:EE.
+         +++ apply Nat.ltb_lt in EE.
+         destruct (n0 - S n) eqn:F. lia.
+         apply NDelayDual. now apply NAlwaysBounded.
+         +++ apply NAtomic.
+  - simpl. destruct n.
+    + now apply NSometimeUnbounded.
+    + apply NDelay. now apply NSometimeUnbounded.
+  - simpl. destruct n.
+    + now apply NAlwaysUnbounded.
+    + apply NDelayDual. now apply NAlwaysUnbounded.
+  - simpl. destruct n.
+    + apply NAnd.
+      now apply NSinceUnbounded.
+      destruct n0.
+      ++ now apply NDelay.
+      ++ now apply NSometimeBounded.
+    + destruct (n <? n0) eqn:E.
+      ++ rewrite -> Nat.ltb_lt in E.
+         apply NAnd. apply NDelay.
+         apply NAnd. now apply NSinceUnbounded.
+         destruct (n0 - S n) eqn:EE.
+         +++ now apply NDelay.
+         +++ now apply NSometimeBounded.
+         +++ destruct n.
+             ++++ now apply NDelayDual.
+             ++++ now apply NAlwaysBounded.
+      ++ apply NAtomic.
+  - simpl. destruct n.
+    + apply NOr.
+      now apply NSinceDualUnbounded.
+      destruct n0.
+      ++ now apply NDelayDual.
+      ++ now apply NAlwaysBounded.
+    + destruct (n <? n0) eqn:E.
+      ++ rewrite -> Nat.ltb_lt in E.
+         apply NOr. apply NDelayDual.
+         apply NOr. now apply NSinceDualUnbounded.
+         destruct (n0 - S n) eqn:EE.
+         +++ now apply NDelayDual.
+         +++ now apply NAlwaysBounded.
+         +++ destruct n.
+             ++++ now apply NDelay.
+             ++++ now apply NSometimeBounded.
+      ++ apply NAtomic.
+  - simpl. destruct n.
+    + now apply NSinceUnbounded.
+    + apply NAnd. apply NDelay.
+      now apply NSinceUnbounded.
+      destruct n.
+      ++ now apply NDelayDual.
+      ++ now apply NAlwaysBounded.
+  - simpl. destruct n.
+    + now apply NSinceDualUnbounded.
+    + apply NOr. apply NDelayDual.
+      now apply NSinceDualUnbounded.
+      destruct n.
+      ++ now apply NDelay.
+      ++ now apply NSometimeBounded.
+Qed.
+
+Lemma normalize_correctness :
+  forall (ϕ : Formula A) τ i,
+    infRobustness ϕ τ i = infRobustness (normalize ϕ) τ i.
+Proof.
+  induction ϕ; intros.
+  - auto.
+  - simpl. congruence.
+  - simpl. congruence.
+  - simpl normalize. destruct n eqn:En.
+    + simpl. unfold join_b.
+      under op_b_ext_in => j.
+      rewrite IHϕ. over. auto.
+    + destruct (S n1 =? n0) eqn:En0.
+      * simpl. unfold join_b.
+        under op_b_ext_in => j.
+        rewrite IHϕ. over. auto.
+      * destruct (S n1 <? n0) eqn:En1.
+        -- rewrite -> Nat.ltb_lt in En1.
+           rewrite sometime_delay_bounded. lia.
+           simpl. unfold join_b at 1.
+           under op_b_ext_in => j. intros.
+           unfold join_b at 1. under op_b_ext_in => k. rewrite IHϕ.
+           over. over. auto.
+        -- rewrite -> Nat.ltb_ge in En1.
+           rewrite -> Nat.eqb_neq in En0.
+           rewrite fSometime_hi_lo. lia. auto.
+   - simpl normalize. destruct n eqn:En.
+    + simpl. unfold meet_b.
+      under op_b_ext_in => j.
+      rewrite IHϕ. over. auto.
+    + destruct (S n1 =? n0) eqn:En0.
+      * simpl. unfold meet_b.
+        under op_b_ext_in => j.
+        rewrite IHϕ. over. auto.
+      * destruct (S n1 <? n0) eqn:En1.
+        -- rewrite -> Nat.ltb_lt in En1.
+           rewrite always_delay_bounded. lia.
+           simpl. unfold meet_b at 1.
+           under op_b_ext_in => j. intros.
+           unfold meet_b at 1. under op_b_ext_in => k. rewrite IHϕ.
+           over. over. auto.
+        -- rewrite -> Nat.ltb_ge in En1.
+           rewrite -> Nat.eqb_neq in En0.
+           rewrite fAlways_hi_lo. lia. auto.
+   - destruct n.
+     + simpl normalize.
+       simpl. unfold join_b.
+       under op_b_ext_in => j. rewrite IHϕ. over.
+       auto.
+     + simpl normalize.
+       rewrite sometime_delay_unbounded.
+       repeat rewrite fdelay_correctness.
+       destruct (S n <=? i).
+       simpl. unfold join_b.
+       under op_b_ext_in => j.
+       rewrite IHϕ. over. auto. auto.
+   - destruct n.
+     + simpl normalize.
+       simpl. unfold meet_b.
+       under op_b_ext_in => j. rewrite IHϕ. over.
+       auto.
+     + simpl normalize.
+       rewrite always_delay_unbounded.
+       repeat rewrite fdelayDual_correctness.
+       destruct (S n <=? i).
+       simpl. unfold meet_b.
+       under op_b_ext_in => j.
+       rewrite IHϕ. over. auto. auto.
+   - simpl normalize. destruct n.
+     + rewrite since_sometime_bounded.
+       simpl.
+       unfold join_b at 1.
+       under join_b_ext_in => j. rewrite IHϕ2. over.
+       unfold meet_i at 1.
+       under op_b_ext_in => j. rewrite IHϕ2.
+       under op_i_ext_in => k. rewrite IHϕ1. over.
+       over. auto.
+     + destruct (n <? n0) eqn:En.
+       * rewrite -> Nat.ltb_lt in En.
+         rewrite since_always_bounded.
+         assumption.
+         remember (FDelay _ _) as f. remember (FAlways _ _ _) as g.
+         simpl infRobustness at 1.
+         remember (FDelay (S n) (FAnd _ _)) as f'.
+         remember (FAlways 0 n (normalize _)) as g'.
+         simpl infRobustness at 3. rewrite Heqg. rewrite Heqg'.
+         f_equal.
+         -- subst. repeat rewrite fdelay_correctness.
+            destruct (S n <=? i).
+            ** rewrite since_sometime_bounded.
+               simpl. under join_b_ext_in => j.
+               rewrite IHϕ2. under meet_i_ext_in => k.
+               rewrite IHϕ1. over. over.
+               f_equal. under join_b_ext_in => j.
+               rewrite IHϕ2. over. auto.
+            ** auto.
+         -- simpl. under meet_b_ext_in => j.
+            rewrite IHϕ1. over. auto.
+       * rewrite -> Nat.ltb_ge in En.
+         rewrite -> fSince_hi_lo by lia.
+         auto.
+   - simpl normalize. destruct n.
+     + rewrite sinceDual_always_bounded.
+       simpl.
+       unfold meet_b at 1.
+       under meet_b_ext_in => j. rewrite IHϕ2. over.
+       unfold join_i at 1.
+       under op_b_ext_in => j. rewrite IHϕ2.
+       under op_i_ext_in => k. rewrite IHϕ1. over.
+       over. auto.
+     + destruct (n <? n0) eqn:En.
+       * rewrite -> Nat.ltb_lt in En.
+         rewrite sinceDual_sometime_bounded.
+         assumption.
+         remember (FDelayDual _ _) as f. remember (FSometime _ _ _) as g.
+         simpl infRobustness at 1.
+         remember (FDelayDual (S n) (FOr _ _)) as f'.
+         remember (FSometime 0 n (normalize _)) as g'.
+         simpl infRobustness at 3. rewrite Heqg. rewrite Heqg'.
+         f_equal.
+         -- subst. repeat rewrite fdelayDual_correctness.
+            destruct (S n <=? i).
+            ** rewrite sinceDual_always_bounded.
+               simpl. under meet_b_ext_in => j.
+               rewrite IHϕ2. under join_i_ext_in => k.
+               rewrite IHϕ1. over. over.
+               f_equal. under meet_b_ext_in => j.
+               rewrite IHϕ2. over. auto.
+            ** auto.
+         -- simpl. under join_b_ext_in => j.
+            rewrite IHϕ1. over. auto.
+       * rewrite -> Nat.ltb_ge in En.
+         rewrite -> fSinceDual_hi_lo by lia.
+         auto.
+   - simpl normalize. destruct n.
+     + simpl. under join_b_ext_in => j.
+       rewrite IHϕ2. under meet_i_ext_in => k.
+       rewrite IHϕ1. over. over.
+       auto.
+     + rewrite since_always_unbounded.
+       remember (FDelay _ _) as f. remember (FAlways _ _ _) as g.
+       simpl infRobustness at 1.
+       remember (FDelay (S n) (FSinceUnbounded 0 (normalize ϕ1) _)) as f'.
+       remember (FAlways 0 n (normalize _)) as g'.
+       simpl infRobustness at 3. rewrite Heqg. rewrite Heqg'.
+       f_equal.
+       * subst. repeat rewrite fdelay_correctness.
+         destruct (S n <=? i).
+         ++ simpl. under join_b_ext_in => j.
+            rewrite IHϕ2. under meet_i_ext_in => k.
+            rewrite IHϕ1. over. over. auto.
+         ++ auto.
+       * simpl. under meet_b_ext_in => j. rewrite IHϕ1. over.
+         auto.
+   - simpl normalize. destruct n.
+     + simpl. under meet_b_ext_in => j.
+       rewrite IHϕ2. under join_i_ext_in => k.
+       rewrite IHϕ1. over. over.
+       auto.
+     + rewrite sinceDual_sometime_unbounded.
+       remember (FDelayDual _ _) as f. remember (FSometime _ _ _) as g.
+       simpl infRobustness at 1.
+       remember (FDelayDual (S n) (FSinceDualUnbounded 0 (normalize ϕ1) _)) as f'.
+       remember (FSometime 0 n (normalize _)) as g'.
+       simpl infRobustness at 3. rewrite Heqg. rewrite Heqg'.
+       f_equal.
+       * subst. repeat rewrite fdelayDual_correctness.
+         destruct (S n <=? i).
+         ++ simpl. under meet_b_ext_in => j.
+            rewrite IHϕ2. under join_i_ext_in => k.
+            rewrite IHϕ1. over. over. auto.
+         ++ auto.
+       * simpl. under join_b_ext_in => j. rewrite IHϕ1. over.
+         auto.
+Qed.
 
 End InfRobustness.
 
 Arguments infRobustness {Val A lattice_val boundedLattice_val}.
+Arguments isNormal {Val A}.
+Arguments normalize {Val A lattice_val boundedLattice_val}.
 

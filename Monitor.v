@@ -10,6 +10,7 @@ Require Import Mealy.
 Require Import Lemmas.
 
 Require Import Lia.
+Require Import Coq.Arith.PeanoNat.
 
 Section Monitor.
 
@@ -364,6 +365,66 @@ Proof.
     simpl. rewrite app_nth1. apply nth_indep.
     rewrite rev_length. lia.
     rewrite rev_length. lia.
+Qed.
+
+Fixpoint toMonitorAux (ϕ : Formula A) : Monitor :=
+  match ϕ with
+  | FAtomic f => monAtomic f
+  | FAnd α β => monAnd (toMonitorAux α) (toMonitorAux β)
+  | FOr α β => monOr (toMonitorAux α) (toMonitorAux β)
+  | FSometime 0 0 α => monDelay 0 (toMonitorAux α)
+  | FSometime 0 ((S i') as i) α => monSometimeBounded i (toMonitorAux α)
+  | FSometime i j α => match (i =? j) with
+                      | true => monDelay i (toMonitorAux α)
+                      | false => monAtomic (fun _ => bottom) (* should not happen*)
+                      end
+  | FSometimeUnbounded 0 α => monSometimeUnbounded (toMonitorAux α)
+  | FAlways 0 0 α => monDelayDual 0 (toMonitorAux α)
+  | FAlways 0 ((S i') as i) α => monAlwaysBounded i (toMonitorAux α)
+  | FAlways i j α => match (i =? j) with
+                      | true => monDelayDual i (toMonitorAux α)
+                      | false => monAtomic (fun _ => bottom) (* should not happen*)
+                      end
+  | FAlwaysUnbounded 0 α => monAlwaysUnbounded (toMonitorAux α)
+  | FSinceUnbounded 0 α β => monSince (toMonitorAux α) (toMonitorAux β)
+  | FSinceDualUnbounded 0 α β => monSinceDual (toMonitorAux α) (toMonitorAux β)
+  | _ => monAtomic (fun _ => bottom) (* should not happen *)
+  end.
+
+Lemma toMonitorAux_correctness (ϕ : Formula A) :
+  isNormal ϕ -> implements (toMonitorAux ϕ) ϕ.
+Proof.
+  intros. induction H.
+  - apply monAtomic_correctness.
+  - now apply monOr_correctness.
+  - now apply monAnd_correctness.
+  - destruct i.
+    + now apply monDelay_correctness.
+    + simpl. rewrite Nat.eqb_refl.
+      now apply monDelay_correctness.
+  - destruct i.
+    + now apply monDelayDual_correctness.
+    + simpl. rewrite Nat.eqb_refl.
+      now apply monDelayDual_correctness.
+  - now apply monSometimeBounded_correctness.
+  - now apply monAlwaysBounded_correctness.
+  - now apply monSometimeUnbounded_correctness.
+  - now apply monAlwaysUnbounded_correctness.
+  - now apply monSince_correctness.
+  - now apply monSinceDual_correctness.
+Qed.
+
+Definition toMonitor (ϕ : Formula A) : Monitor :=
+  toMonitorAux (normalize ϕ).
+
+Theorem toMonitor_correctness (ϕ : Formula A) :
+  implements (toMonitor ϕ) ϕ.
+Proof.
+  unfold implements. intros.
+  unfold toMonitor.
+  rewrite robustness_eq with (ψ := normalize ϕ)
+    by now apply normalize_correctness.
+  apply toMonitorAux_correctness. apply isNormal_normalize.
 Qed.
 
 
