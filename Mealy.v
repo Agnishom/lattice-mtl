@@ -380,7 +380,7 @@ Section mQueue.
   |}.
 
   Definition delay (n : nat) (m : Mealy A B) :=
-    delayWith (Build_Queue (repeat init n) []) m.
+    delayWith (Build_Queue (repeat' init n) []) m.
 
 
   Lemma delayWith_state (q : Queue) (m : Mealy A B) (l : nonEmpty A) :
@@ -534,7 +534,7 @@ Section mQueue.
     destruct l.
     - destruct n eqn:En.
       + auto.
-      + simpl. destruct n0; auto.
+      + simpl. rewrite repeat_repeat'. destruct n0; auto.
     - unfold delay. simpl gOut.
     remember ({| front := repeat init n; back := [] |}).
     pose (initSeg := (back q) ++ rev (front q)).
@@ -542,11 +542,12 @@ Section mQueue.
     pose (stream := (toList (gCollect m l) ++ initSeg)).
     pose (lastSeg := firstn k stream).
     specialize (delayWith_state q m l initSeg eq_refl k eq_refl stream eq_refl lastSeg eq_refl).
+    rewrite <- repeat_repeat' in Heqq.
     intros [newFront [newBack [H1 [H2 H3]]]].
     assert (k = n).
     { unfold k. unfold initSeg. rewrite Heqq.
-      simpl. rewrite rev_length. rewrite repeat_length. auto. }
-    subst k. rewrite H3.
+      simpl. rewrite rev_length. rewrite repeat_repeat'. rewrite repeat_length. auto. }
+    subst k. rewrite <- Heqq. rewrite H3.
     simpl mOut. simpl gCollect.
     rewrite queueHead_queueContents. unfold queueContents.
     simpl front. simpl back.
@@ -554,6 +555,7 @@ Section mQueue.
     destruct n; [auto | ].
     simpl toList. unfold stream. unfold initSeg. rewrite Heqq.
     simpl back. simpl front. rewrite app_nil_l.
+    rewrite repeat_repeat'.
     simpl rev at 2. rewrite <- repeat_rev. rewrite repeat_snoc_cons.
     replace (init :: repeat init n) with (repeat init (S n)) by auto.
     rewrite firstn_app. rewrite rev_app_distr.
