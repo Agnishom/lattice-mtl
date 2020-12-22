@@ -6,6 +6,8 @@ Require Import Setoid.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
 
+Require Import Relation_Definitions.
+
 Import ListNotations.
 
 Class Lattice A :=
@@ -416,3 +418,80 @@ Instance boolDistributiveLattice : DistributiveLattice bool :=
   {
   meet_distr := andb_orb_distrib_r;
   }.
+
+Instance lattice_le_refl {A : Type} `{Lattice A} : Reflexive lattice_le.
+Proof.
+  intros x. unfold lattice_le. auto using meet_idempotent.
+Qed.
+
+Instance lattice_le_trans {A : Type} `{Lattice A} : Transitive lattice_le.
+Proof.
+  intros x y z Hxy Hyz.
+  unfold lattice_le in *.
+  rewrite <- Hxy. rewrite meet_assoc.
+  now rewrite -> Hyz.
+Qed.
+
+Instance lattice_le_antisym {A : Type} `{Lattice A}: Antisymmetric A eq lattice_le.
+Proof.
+  intros x y Hxy Hyx.
+  unfold lattice_le in *.
+  rewrite <- Hxy. rewrite <- Hyx at 2.
+  now apply meet_comm.
+Qed.
+
+Instance lattice_le_preorder {A : Type} `{Lattice A} : PreOrder lattice_le.
+Proof.
+  split. apply lattice_le_refl. apply lattice_le_trans.
+Qed.
+
+Instance lattice_le_partialOrder {A : Type} `{Lattice A} : PartialOrder (@eq A) lattice_le.
+Proof.
+  intros x y. split.
+  - intros. split.
+    + rewrite H0. reflexivity.
+    + rewrite H0. reflexivity.
+  - intros. destruct H0.
+    apply lattice_le_antisym; auto.
+Qed.
+
+Lemma lattice_ge_alternate {A : Type} `{Lattice A} : forall a b, a ⊑ b <-> (a ⊔ b) = b.
+Proof.
+  unfold lattice_le. split; intros.
+  + rewrite <- H0. rewrite join_comm. rewrite meet_comm.
+    now rewrite absorb1.
+  + rewrite <- H0. now rewrite absorb2.
+Qed.
+
+Lemma join_le {A : Type} `{Lattice A} : forall a b, a ⊑ (a ⊔ b).
+Proof.
+  unfold lattice_le.
+  intros. now rewrite absorb2.
+Qed.
+
+Lemma meet_ge {A : Type} `{Lattice A} : forall a b, (a ⊓ b) ⊑ a.
+Proof.
+  unfold lattice_le.
+  intros. rewrite meet_comm.
+  rewrite <- meet_assoc. now rewrite <- meet_idempotent.
+Qed.
+
+Lemma join_sup {A : Type} `{Lattice A} :
+  forall a b c,
+    a ⊑ c
+    -> b ⊑ c
+    -> (a ⊔ b) ⊑ c.
+Proof.
+  intros a b c. repeat rewrite lattice_ge_alternate.
+  intros. rewrite join_assoc. now rewrite H1.
+Qed.
+
+Lemma meet_inf {A : Type} `{Lattice A} :
+  forall a b c,
+    c ⊑ a
+    -> c ⊑ b
+    -> c ⊑ (a ⊓ b).
+Proof.
+  intros a b c. unfold lattice_le. intros.
+  rewrite <- meet_assoc. now rewrite H0.
+Qed.
