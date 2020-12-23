@@ -667,3 +667,81 @@ Proof.
   apply meet_i_inf. intros. apply H1. lia. lia.
 Qed.
 
+Lemma join_preserves_le {A : Type} `{Lattice A} :
+  forall (a b c d : A), a ⊑ b -> c ⊑ d -> (a ⊔ c) ⊑ (b ⊔ d).
+Proof.
+  intros. apply join_sup.
+  transitivity b. assumption.
+  apply join_le. transitivity d.
+  assumption. rewrite join_comm. apply join_le.
+Qed.
+
+Lemma meet_preserves_ge {A : Type} `{Lattice A} :
+  forall (a b c d : A), a ⊑ b -> c ⊑ d -> (a ⊓ c) ⊑ (b ⊓ d).
+Proof.
+  intros. apply meet_inf.
+  transitivity a. apply meet_ge.
+  assumption. transitivity c.
+  rewrite meet_comm. rewrite meet_ge.
+  reflexivity. assumption.
+Qed.
+
+
+Lemma join_i_preserves_le {A : Type} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a < start + length -> f a ⊑ g a)
+         -> join_i start length f ⊑ join_i start length g.
+Proof.
+  revert start. induction length.
+  - intros. unfold join_i. unfold op_i.
+    simpl. reflexivity.
+  - intros. unfold join_i.
+    repeat replace (S length) with (1 + length) by lia.
+    repeat rewrite op_i_app.
+    simpl. apply join_preserves_le.
+    + unfold op_i. simpl. repeat rewrite finite_op_singleton.
+      apply H1. lia. lia.
+    + apply IHlength. intros. apply H1. lia. lia.
+Qed.
+
+
+Lemma meet_i_preserves_ge {A : Type} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a < start + length -> f a ⊑ g a)
+         -> meet_i start length f ⊑ meet_i start length g.
+Proof.
+  revert start. induction length.
+  - intros. unfold meet_i. unfold op_i.
+    simpl. reflexivity.
+  - intros. unfold meet_i.
+    repeat replace (S length) with (1 + length) by lia.
+    repeat rewrite op_i_app.
+    simpl. apply meet_preserves_ge.
+    + unfold op_i. simpl. repeat rewrite finite_op_singleton.
+      apply H1. lia. lia.
+    + apply IHlength. intros. apply H1. lia. lia.
+Qed.
+
+Lemma join_b_preserves_le {A : Type} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a ⊑ g a)
+    -> join_b lo hi f ⊑ join_b lo hi g.
+Proof.
+  intros. unfold join_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (join_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g)
+    with (join_i lo (S hi - lo) g) by auto.
+  apply join_i_preserves_le. intros. apply H1.
+  lia. lia.
+Qed.
+
+Lemma meet_b_preserves_ge {A : Type} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a ⊑ g a)
+    -> meet_b lo hi f ⊑ meet_b lo hi g.
+Proof.
+  intros. unfold meet_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (meet_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g)
+    with (meet_i lo (S hi - lo) g) by auto.
+  apply meet_i_preserves_ge. intros. apply H1.
+  lia. lia.
+Qed.
