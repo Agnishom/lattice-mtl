@@ -881,9 +881,48 @@ Proof.
 Qed.
 
 Lemma since_sometime_bounded :
-  forall (ϕ ψ : Formula A) τ n i,
-    infRobustness (FSince 0 n ϕ ψ) τ i
-    = infRobustness (FAnd (FSinceUnbounded 0 ϕ ψ) (FSometime 0 n ψ)) τ i.
+  forall (ϕ ψ : Formula A) τ a i,
+    infRobustness (FSince 0 a ϕ ψ) τ i
+    = infRobustness (FAnd (FSinceUnbounded 0 ϕ ψ) (FSometime 0 a ψ)) τ i.
+Proof.
+  intros. simpl.
+  remember (min i a) as K.
+  pose (t := fun j => infRobustness ψ τ (i - j)).
+  pose (s := fun j => infRobustness ϕ τ (i - j)).
+  fold s. fold t. under join_b_ext => j.
+  replace (infRobustness _ _ _) with (t j) by auto.
+  over. under [in RHS]join_b_ext => j.
+  replace (infRobustness _ _ _) with (t j) by auto.
+  over.
+  remember (join_b 0 K (fun j : nat => t j ⊓ meet_i 0 j s)) as L.
+  remember (join_b 0 K t) as Q.
+  remember (join_b 0 i (fun j : nat => t j ⊓ meet_i 0 j s)) as R.
+  destruct (Compare_dec.dec_le i a).
+  { replace (min i a) with i in HeqK by lia. subst K.
+    rewrite <- HeqL in HeqR. subst R. apply lattice_le_antisym.
+    apply meet_inf. reflexivity.
+    subst L Q. apply join_b_preserves_le. intros.
+    apply meet_ge.
+    apply meet_ge.
+  }
+  { unfold join_b in HeqR. rewrite -> op_b_app with (hi1 := K) in HeqR by lia.
+    fold join_b in HeqR. rewrite <- HeqL in HeqR by lia.
+    replace op with join in HeqR by auto.
+    apply lattice_le_antisym.
+    apply meet_inf.
+    rewrite HeqR. apply join_le.
+    subst L Q. apply join_b_preserves_le. intros.
+    apply meet_ge.
+    rewrite HeqR. rewrite meet_comm.
+    rewrite meet_distr.
+    apply join_sup. rewrite meet_comm. apply meet_ge.
+    rewrite <- meet_comm.
+    rewrite <- join_b_distr_ext with (f := fun j => (t j ⊓ meet_i 0 j s) ⊓ Q).
+    rewrite HeqQ.
+    admit.
+    auto.
+    lia.
+  }
 Admitted.
 
 Lemma sinceDual_always_bounded :
