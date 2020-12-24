@@ -5,7 +5,6 @@ Require Import Coq.Lists.List.
 Import NonEmptyNotations.
 Import ListNotations.
 
-From Hammer Require Import Hammer.
 Require Import Lia.
 Require Import Lemmas.
 Require Import Recdef.

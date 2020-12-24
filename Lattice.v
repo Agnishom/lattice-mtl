@@ -1,5 +1,5 @@
 Require Import Monoid.
-Require Import MTLTactics.
+Require Import Lemmas.
 
 Require Import Lia.
 Require Import Setoid.
@@ -512,7 +512,7 @@ Lemma finite_join_le {A : Type} `{BoundedLattice A} :
   forall (a : A) l, In a l -> a ⊑ finite_join l.
 Proof.
   induction l.
-  - intuition.
+  - simpl. intuition.
   - intros. simpl in H1.
     destruct H1.
     + subst. replace (a :: l) with ([a] ++ l) by auto.
@@ -532,7 +532,7 @@ Lemma finite_meet_ge {A : Type} `{BoundedLattice A} :
   forall (a : A) l, In a l -> finite_meet l ⊑ a.
 Proof.
   induction l.
-  - intuition.
+  - simpl. intuition.
   - intros. simpl in H1.
     destruct H1.
     + subst. replace (a :: l) with ([a] ++ l) by auto.
