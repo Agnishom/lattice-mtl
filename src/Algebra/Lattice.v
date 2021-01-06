@@ -1,10 +1,12 @@
 Require Import Monoid.
-Require Import MTLTactics.
+From Lemmas Require Import Lemmas.
 
 Require Import Lia.
 Require Import Setoid.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
+
+Require Import Relation_Definitions.
 
 Import ListNotations.
 
@@ -416,3 +418,330 @@ Instance boolDistributiveLattice : DistributiveLattice bool :=
   {
   meet_distr := andb_orb_distrib_r;
   }.
+
+Instance lattice_le_refl {A : Type} `{Lattice A} : Reflexive lattice_le.
+Proof.
+  intros x. unfold lattice_le. auto using meet_idempotent.
+Qed.
+
+Instance lattice_le_trans {A : Type} `{Lattice A} : Transitive lattice_le.
+Proof.
+  intros x y z Hxy Hyz.
+  unfold lattice_le in *.
+  rewrite <- Hxy. rewrite meet_assoc.
+  now rewrite -> Hyz.
+Qed.
+
+Instance lattice_le_antisym {A : Type} `{Lattice A}: Antisymmetric A eq lattice_le.
+Proof.
+  intros x y Hxy Hyx.
+  unfold lattice_le in *.
+  rewrite <- Hxy. rewrite <- Hyx at 2.
+  now apply meet_comm.
+Qed.
+
+Instance lattice_le_preorder {A : Type} `{Lattice A} : PreOrder lattice_le.
+Proof.
+  split. apply lattice_le_refl. apply lattice_le_trans.
+Qed.
+
+Instance lattice_le_partialOrder {A : Type} `{Lattice A} : PartialOrder (@eq A) lattice_le.
+Proof.
+  intros x y. split.
+  - intros. split.
+    + rewrite H0. reflexivity.
+    + rewrite H0. reflexivity.
+  - intros. destruct H0.
+    apply lattice_le_antisym; auto.
+Qed.
+
+Lemma lattice_ge_alternate {A : Type} `{Lattice A} : forall a b, a ⊑ b <-> (a ⊔ b) = b.
+Proof.
+  unfold lattice_le. split; intros.
+  + rewrite <- H0. rewrite join_comm. rewrite meet_comm.
+    now rewrite absorb1.
+  + rewrite <- H0. now rewrite absorb2.
+Qed.
+
+Lemma bottom_le {A : Type} `{BoundedLattice A} :
+  forall (x : A), bottom ⊑ x.
+Proof.
+  unfold lattice_le. apply meet_bottom_l.
+Qed.
+
+Lemma top_ge {A : Type} `{BoundedLattice A} :
+  forall (x : A), x ⊑ top.
+Proof.
+  unfold lattice_le. apply meet_top_r.
+Qed.
+
+Lemma join_le {A : Type} `{Lattice A} : forall a b, a ⊑ (a ⊔ b).
+Proof.
+  unfold lattice_le.
+  intros. now rewrite absorb2.
+Qed.
+
+Lemma meet_ge {A : Type} `{Lattice A} : forall a b, (a ⊓ b) ⊑ a.
+Proof.
+  unfold lattice_le.
+  intros. rewrite meet_comm.
+  rewrite <- meet_assoc. now rewrite <- meet_idempotent.
+Qed.
+
+Lemma join_sup {A : Type} `{Lattice A} :
+  forall a b c,
+    a ⊑ c
+    -> b ⊑ c
+    -> (a ⊔ b) ⊑ c.
+Proof.
+  intros a b c. repeat rewrite lattice_ge_alternate.
+  intros. rewrite join_assoc. now rewrite H1.
+Qed.
+
+Lemma meet_inf {A : Type} `{Lattice A} :
+  forall a b c,
+    c ⊑ a
+    -> c ⊑ b
+    -> c ⊑ (a ⊓ b).
+Proof.
+  intros a b c. unfold lattice_le. intros.
+  rewrite <- meet_assoc. now rewrite H0.
+Qed.
+
+Lemma finite_join_le {A : Type} `{BoundedLattice A} :
+  forall (a : A) l, In a l -> a ⊑ finite_join l.
+Proof.
+  induction l.
+  - simpl. intuition.
+  - intros. simpl in H1.
+    destruct H1.
+    + subst. replace (a :: l) with ([a] ++ l) by auto.
+      rewrite finite_join_app.
+      unfold finite_join at 1. simpl.
+      rewrite join_bottom_l. apply join_le.
+    + replace (a0 :: l) with ([a0] ++ l) by auto.
+      rewrite finite_join_app.
+      unfold finite_join at 1. simpl.
+      rewrite join_bottom_l. apply IHl in H1.
+      transitivity (finite_join l). apply H1.
+      rewrite join_comm. apply join_le.
+Qed.
+
+
+Lemma finite_meet_ge {A : Type} `{BoundedLattice A} :
+  forall (a : A) l, In a l -> finite_meet l ⊑ a.
+Proof.
+  induction l.
+  - simpl. intuition.
+  - intros. simpl in H1.
+    destruct H1.
+    + subst. replace (a :: l) with ([a] ++ l) by auto.
+      rewrite finite_meet_app.
+      unfold finite_meet at 1. simpl.
+      rewrite meet_top_l. apply meet_ge.
+    + replace (a0 :: l) with ([a0] ++ l) by auto.
+      rewrite finite_meet_app.
+      unfold finite_meet at 1. simpl.
+      rewrite meet_top_l. apply IHl in H1.
+      transitivity (finite_meet l).
+      rewrite meet_comm. apply meet_ge.
+      apply H1.
+Qed.
+
+Lemma join_i_le {A : Type} `{BoundedLattice A} (start length : nat) (f : nat -> A)
+  : forall a, start <= a -> a < start + length -> f a ⊑ join_i start length f.
+Proof.
+  intros. unfold join_i. unfold op_i.
+  replace (finite_op A (map f (seq start length)))
+    with (finite_join (map f (seq start length))) by auto.
+  apply finite_join_le. apply in_map.
+  apply in_seq. split. lia. lia.
+Qed.
+
+Lemma meet_i_ge {A : Type} `{BoundedLattice A} (start length : nat) (f : nat -> A)
+  : forall a, start <= a -> a < start + length -> meet_i start length f ⊑ f a.
+Proof.
+  intros. unfold meet_i. unfold op_i.
+  replace (finite_op A (map f (seq start length)))
+    with (finite_meet (map f (seq start length))) by auto.
+  apply finite_meet_ge. apply in_map.
+  apply in_seq. split. lia. lia.
+Qed.
+
+Lemma join_b_le {A : Type} `{BoundedLattice A} (lo hi : nat) (f : nat -> A)
+  : forall a, lo <= a -> a <= hi -> f a ⊑ join_b lo hi f.
+Proof.
+  intros. unfold join_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (join_i lo (S hi - lo) f) by auto.
+  apply join_i_le. assumption. lia.
+Qed.
+
+Lemma meet_b_ge {A : Type} `{BoundedLattice A} (lo hi : nat) (f : nat -> A)
+  : forall a, lo <= a -> a <= hi -> meet_b lo hi f ⊑ f a.
+Proof.
+  intros. unfold meet_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (meet_i lo (S hi - lo) f) by auto.
+  apply meet_i_ge. assumption. lia.
+Qed.
+
+Lemma finite_join_sup {A : Type} `{BoundedLattice A} :
+  forall (x : A) l,
+    (forall a, In a l -> a ⊑ x)
+    -> finite_join l ⊑ x.
+Proof.
+  induction l.
+  - unfold finite_join. simpl. intros. apply bottom_le.
+  - intros. replace (a :: l) with ([a] ++ l) by auto.
+      rewrite finite_join_app.
+      unfold finite_join at 1.
+      simpl. rewrite join_bottom_l.
+      simpl in H1. apply join_sup.
+    + specialize (H1 a).
+      auto.
+    + apply IHl. auto.
+Qed.
+
+Lemma finite_meet_inf {A : Type} `{BoundedLattice A} :
+  forall (x : A) l,
+    (forall a, In a l -> x ⊑ a)
+    -> x ⊑ finite_meet l.
+Proof.
+  induction l.
+  - unfold finite_meet. simpl. intros. apply top_ge.
+  - intros. replace (a :: l) with ([a] ++ l) by auto.
+      rewrite finite_meet_app.
+      unfold finite_meet at 1.
+      simpl. rewrite meet_top_l.
+      simpl in H1. apply meet_inf.
+    + specialize (H1 a).
+      auto.
+    + apply IHl. auto.
+Qed.
+
+Lemma join_i_sup {A : Type} `{BoundedLattice A} (start length : nat) (f : nat -> A)
+  : forall x, (forall a, start <= a -> a < start + length -> f a ⊑ x)
+         -> join_i start length f ⊑ x.
+Proof.
+  intros. unfold join_i. unfold op_i.
+  replace (finite_op A (map f (seq start length)))
+    with (finite_join (map f (seq start length))) by auto.
+  apply finite_join_sup.
+  intros y Hy. apply in_map_iff in Hy.
+  destruct Hy as [a [Ha1 Ha2]].
+  apply in_seq in Ha2. subst. apply H1. lia. lia.
+Qed.
+
+Lemma meet_i_inf {A : Type} `{BoundedLattice A} (start length : nat) (f : nat -> A)
+  : forall x, (forall a, start <= a -> a < start + length -> x ⊑ f a)
+         -> x ⊑ meet_i start length f.
+Proof.
+  intros. unfold meet_i. unfold op_i.
+  replace (finite_op A (map f (seq start length)))
+    with (finite_meet (map f (seq start length))) by auto.
+  apply finite_meet_inf.
+  intros y Hy. apply in_map_iff in Hy.
+  destruct Hy as [a [Ha1 Ha2]].
+  apply in_seq in Ha2. subst. apply H1. lia. lia.
+Qed.
+
+
+Lemma join_b_sup {A : Type} `{BoundedLattice A} (lo hi : nat) (f : nat -> A)
+  : forall x, (forall a, lo <= a -> a <= hi -> f a ⊑ x)
+         -> join_b lo hi f ⊑ x.
+Proof.
+  intros. unfold join_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (join_i lo (S hi - lo) f) by auto.
+  apply join_i_sup. intros. apply H1. lia. lia.
+Qed.
+
+Lemma meet_b_inf {A : Type} `{BoundedLattice A} (lo hi : nat) (f : nat -> A)
+  : forall x, (forall a, lo <= a -> a <= hi -> x ⊑ f a)
+         -> x ⊑ meet_b lo hi f.
+Proof.
+  intros. unfold meet_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (meet_i lo (S hi - lo) f) by auto.
+  apply meet_i_inf. intros. apply H1. lia. lia.
+Qed.
+
+Lemma join_preserves_le {A : Type} `{Lattice A} :
+  forall (a b c d : A), a ⊑ b -> c ⊑ d -> (a ⊔ c) ⊑ (b ⊔ d).
+Proof.
+  intros. apply join_sup.
+  transitivity b. assumption.
+  apply join_le. transitivity d.
+  assumption. rewrite join_comm. apply join_le.
+Qed.
+
+Lemma meet_preserves_ge {A : Type} `{Lattice A} :
+  forall (a b c d : A), a ⊑ b -> c ⊑ d -> (a ⊓ c) ⊑ (b ⊓ d).
+Proof.
+  intros. apply meet_inf.
+  transitivity a. apply meet_ge.
+  assumption. transitivity c.
+  rewrite meet_comm. rewrite meet_ge.
+  reflexivity. assumption.
+Qed.
+
+
+Lemma join_i_preserves_le {A : Type} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a < start + length -> f a ⊑ g a)
+         -> join_i start length f ⊑ join_i start length g.
+Proof.
+  revert start. induction length.
+  - intros. unfold join_i. unfold op_i.
+    simpl. reflexivity.
+  - intros. unfold join_i.
+    repeat replace (S length) with (1 + length) by lia.
+    repeat rewrite op_i_app.
+    simpl. apply join_preserves_le.
+    + unfold op_i. simpl. repeat rewrite finite_op_singleton.
+      apply H1. lia. lia.
+    + apply IHlength. intros. apply H1. lia. lia.
+Qed.
+
+
+Lemma meet_i_preserves_ge {A : Type} `{BoundedLattice A} (start length : nat) (f g : nat -> A)
+  : (forall a, start <= a -> a < start + length -> f a ⊑ g a)
+         -> meet_i start length f ⊑ meet_i start length g.
+Proof.
+  revert start. induction length.
+  - intros. unfold meet_i. unfold op_i.
+    simpl. reflexivity.
+  - intros. unfold meet_i.
+    repeat replace (S length) with (1 + length) by lia.
+    repeat rewrite op_i_app.
+    simpl. apply meet_preserves_ge.
+    + unfold op_i. simpl. repeat rewrite finite_op_singleton.
+      apply H1. lia. lia.
+    + apply IHlength. intros. apply H1. lia. lia.
+Qed.
+
+Lemma join_b_preserves_le {A : Type} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a ⊑ g a)
+    -> join_b lo hi f ⊑ join_b lo hi g.
+Proof.
+  intros. unfold join_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (join_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g)
+    with (join_i lo (S hi - lo) g) by auto.
+  apply join_i_preserves_le. intros. apply H1.
+  lia. lia.
+Qed.
+
+Lemma meet_b_preserves_ge {A : Type} `{BoundedLattice A} (lo hi : nat) (f g : nat -> A)
+  : (forall a, lo <= a -> a <= hi -> f a ⊑ g a)
+    -> meet_b lo hi f ⊑ meet_b lo hi g.
+Proof.
+  intros. unfold meet_b. unfold op_b.
+  replace (op_i A lo (S hi - lo) f)
+    with (meet_i lo (S hi - lo) f) by auto.
+  replace (op_i A lo (S hi - lo) g)
+    with (meet_i lo (S hi - lo) g) by auto.
+  apply meet_i_preserves_ge. intros. apply H1.
+  lia. lia.
+Qed.

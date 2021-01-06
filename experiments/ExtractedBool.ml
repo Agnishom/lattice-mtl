@@ -76,13 +76,22 @@ let fSinceWithin hi _UU03d5_ _UU03c8_ =
 (** val fSinceBounded : int -> int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceBounded lo len _UU03d5_ _UU03c8_ =
-  FAnd ((FAlwaysWithin (lo, _UU03d5_)), (FDelay ((Pervasives.succ lo),
-    (fSinceWithin len _UU03d5_ _UU03c8_))))
+  FAnd ((FAlwaysWithin (lo, _UU03d5_)), (FDelay (lo, (fSinceWithin len _UU03d5_ _UU03c8_))))
 
 (** val fSinceAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceAfter lo _UU03d5_ _UU03c8_ =
   FDelay (lo, (FSince (_UU03d5_, _UU03c8_)))
+
+(** val fSometimeAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fSometimeAfter lo _UU03d5_ =
+  FDelay (lo, (FSometime _UU03d5_))
+
+(** val fAlwaysAfter : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fAlwaysAfter lo _UU03d5_ =
+  FDelayDual (lo, (FAlways _UU03d5_))
 
 (** val fSinceWithinDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
@@ -93,8 +102,7 @@ let fSinceWithinDual hi _UU03d5_ _UU03c8_ =
     int -> int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
 let fSinceBoundedDual lo len _UU03d5_ _UU03c8_ =
-  FOr ((FSometimeWithin (lo, _UU03d5_)), (FDelayDual ((Pervasives.succ lo),
-    (fSinceWithin len _UU03d5_ _UU03c8_))))
+  FOr ((FSometimeWithin (lo, _UU03d5_)), (FDelayDual (lo, (fSinceWithin len _UU03d5_ _UU03c8_))))
 
 (** val fSinceAfterDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
 
@@ -142,15 +150,10 @@ let rec delayyWith init front back m =
 let rec mBinOp op0 m1 m2 =
   lazy (Build_Moore ((op0 (mOut m1) (mOut m2)), (fun a -> mBinOp op0 (mNext m1 a) (mNext m2 a))))
 
-(** val mFoldAux : 'a1 monoid -> ('a2, 'a1) moore -> 'a1 -> ('a2, 'a1) moore **)
+(** val mFoldAux : ('a2 -> 'a2 -> 'a2) -> ('a1, 'a2) moore -> 'a2 -> ('a1, 'a2) moore **)
 
-let rec mFoldAux monoid_B m st =
-  lazy (Build_Moore (st, (fun a -> mFoldAux monoid_B (mNext m a) (monoid_B.op st (mNextOut m a)))))
-
-(** val mFold : 'a1 monoid -> ('a2, 'a1) moore -> ('a2, 'a1) moore **)
-
-let mFold monoid_B m =
-  mFoldAux monoid_B m (mOut m)
+let rec mFoldAux op0 m st =
+  lazy (Build_Moore (st, (fun a -> mFoldAux op0 (mNext m a) (op0 st (mNextOut m a)))))
 
 type 'b aggQueue = { ff : ('b * 'b) list; rr : ('b * 'b) list }
 
@@ -216,23 +219,23 @@ let initAggQ monoid_B n =
 (** val mWinFoldAux : 'a1 monoid -> 'a1 aggQueue -> ('a2, 'a1) moore -> ('a2, 'a1) moore **)
 
 let rec mWinFoldAux monoid_B qq m =
-  lazy (Build_Moore ((monoid_B.op (aggOut monoid_B qq) (mOut m)), (fun a ->
-    mWinFoldAux monoid_B (aggCycle monoid_B (mOut m) qq) (mNext m a))))
+  lazy (Build_Moore ((aggOut monoid_B qq), (fun a ->
+    mWinFoldAux monoid_B (aggCycle monoid_B (mNextOut m a) qq) (mNext m a))))
 
 (** val mWinFold : 'a1 monoid -> ('a2, 'a1) moore -> int -> ('a2, 'a1) moore **)
 
 let mWinFold monoid_B m n =
   mWinFoldAux monoid_B (initAggQ monoid_B n) m
 
-type val0 = float
+type val0 = bool
 
 (** val lattice_val : val0 lattice **)
 
-let lattice_val = {join = (max); meet = (min); }
+let lattice_val = {join = (||); meet = (&&); }
 
 (** val boundedLattice_val : val0 boundedLattice **)
 
-let boundedLattice_val = {top = infinity; bottom = neg_infinity; }
+let boundedLattice_val = {top = true; bottom = false; }
 
 type 'a monitor = ('a, val0) moore
 
@@ -264,12 +267,12 @@ let mOr m1 m2 =
 (** val mSometime : 'a1 monitor -> 'a1 monitor **)
 
 let mSometime m =
-  mFold (joinMonoid lattice_val lattice_val boundedLattice_val) m
+  mFoldAux lattice_val.join m boundedLattice_val.bottom
 
 (** val mAlways : 'a1 monitor -> 'a1 monitor **)
 
 let mAlways m =
-  mFold (meetMonoid lattice_val lattice_val boundedLattice_val) m
+  mFoldAux lattice_val.meet m boundedLattice_val.top
 
 (** val sinceAux : 'a1 monitor -> 'a1 monitor -> val0 -> 'a1 monitor **)
 

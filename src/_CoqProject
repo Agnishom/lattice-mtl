@@ -1,0 +1,36 @@
+-R Lemmas/ Lemmas
+Lemmas/Induction.v
+Lemmas/Last.v
+Lemmas/Nth.v
+Lemmas/Lastn.v
+Lemmas/Repeat.v
+Lemmas/Lemmas.v
+
+-R Algebra/ Algebra
+Algebra/Monoid.v
+Algebra/Lattice.v
+
+-R Syntax/ Syntax
+Syntax/Formula.v
+Syntax/Normal.v
+
+-R Semantics/ Semantics
+Semantics/InfRobustness.v
+Semantics/Robustness.v
+Semantics/Equivalences.v
+Semantics/Incremental.v
+Semantics/LemmaThirteen.v
+Semantics/NormalizeCorrect.v
+Semantics/SimpleProperties.v
+
+-R NonEmptyList/ NonEmptyList
+NonEmptyList/NonEmptyList.v
+
+-R Monitor/ Monitor
+Monitor/Mealy.v
+Monitor/Queue.v
+Monitor/AggQueue.v
+Monitor/Monitor.v
+
+-R Extract/ Extract
+Extract/Extract.v

@@ -2,7 +2,7 @@ Require Import Coq.Lists.List.
 Require Import Lia.
 Require Import ssreflect.
 
-Require Import MTLTactics.
+From Lemmas Require Import Lemmas.
 
 Import ListNotations.
 
