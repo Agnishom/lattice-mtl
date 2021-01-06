@@ -51,6 +51,13 @@ Proof.
   now rewrite rev_length.
 Qed.
 
+(** Given any finite, non-empty trace σ, we can consider an extension of
+    σ which is obtained by repeating the latest element of σ infinitely
+    many times. We use this to define the robustness of σ itself.
+
+    This definition is sound because of the facts captured in the Lemmas
+    `extend_extends` and `extends_infRobustness` above **)
+
 Definition robustness (ϕ : Formula A) (σ : nonEmpty A) : Val :=
   infRobustness ϕ (extend σ) (pred (length (toList σ))).
 

@@ -18,6 +18,11 @@ Context {distributiveLattice_val : DistributiveLattice Val}.
 
 Definition Trace := nat -> A.
 
+(** `join_b lo hi f` stands for $\bigsqcup_{i=lo}^{hi} f(i)$ **)
+(** `join_i start length f` stands for $\bot$ when `length` = 0,
+otherwise it stands for $\bigsqcup_{i=start}^{start + length - 1} f(i)$ **)
+(** similar convetions for meet **)
+
 Fixpoint infRobustness (ϕ : Formula A) (τ : Trace) (i : nat): Val :=
   match ϕ with
   | FAtomic f => f (τ i)

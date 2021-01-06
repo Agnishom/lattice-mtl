@@ -88,6 +88,9 @@ Proof.
   intros. rewrite meet_comm. now rewrite meet_bottom_l.
 Qed.
 
+(** `finite_join l` stands for $\bigsqcup_{i \in l} i$ **)
+(** `finite_meet l` stands for $\bigsqcap_{i \in l} i$ **)
+
 Definition finite_meet {A : Type} `{Lattice A} `{BoundedLattice A} : list A -> A :=
   fun l => fold_left meet l top.
 
@@ -191,6 +194,11 @@ Instance meetMonoid {A : Type} `{Lattice A} `{BoundedLattice A} : Monoid A :=
   op_unit_l := meet_top_l;
   op_assoc := ltac:(intros; now rewrite meet_assoc);
   }.
+
+(** `join_b lo hi f` stands for $\bigsqcup_{i=lo}^{hi} f(i)$ **)
+(** `join_i start length f` stands for $\bot$ when `length` = 0,
+otherwise it stands for $\bigsqcup_{i=start}^{start + length - 1} f(i)$ **)
+(** similar convetions for meet **)
 
 Definition join_i {A : Type} `{Lattice A} `{BoundedLattice A} : nat -> nat -> (nat -> A) -> A
   := (@op_i A joinMonoid ).

@@ -22,6 +22,8 @@ Section monoid_Sum.
 
   Generalizable All Variables.
 
+
+  (** finite_op [x1, x2, ... xn] = x1 `op` x2 `op` ... `op` xn **)
   Definition finite_op (xs : list Val) :=
     fold_left op xs unit.
 
@@ -41,9 +43,11 @@ Section monoid_Sum.
       rewrite op_assoc. now rewrite IHys.
   Qed.
 
+  (** (f start) `op` (f (start + 1)) `op` ... `op` (f (start + length - 1)) **)
   Definition op_i (start : nat) (length : nat) (f : nat -> Val) :=
     finite_op (map f (seq start length)).
 
+  (** (f lo) `op` (f (lo + 1)) ... `op` (f hi) **)
   Definition op_b (lo : nat) (hi : nat) :=
     op_i lo (S hi - lo).
 
