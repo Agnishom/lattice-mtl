@@ -3,7 +3,7 @@ A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics
 
 ## Extraction
 
-The Extracted Code can be found in [`extracted/LatticeMtl.ml`] with some examples of usage in [`extracted/Examples.ml`]. To re-run the extraction (and verification) process:
+The Extracted Code can be found in `extracted/LatticeMtl.ml` with some examples of usage in `extracted/Examples.ml`. To re-run the extraction (and verification) process:
 
 ```
 cd src/
