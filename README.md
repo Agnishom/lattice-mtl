@@ -15,11 +15,11 @@ The current version of the proof was checked using Coq 8.12.1.
 
 ## Organization of the Proof
 
-The `toMonitor : Formula -> Monitor` is defined in [`Monitor/Monitor.v`](https://github.com/Agnishom/lattice-mtl/blob/mealy/src/Monitor/Monitor.v#L419). The semantics of the formulae are available in [`Semantics/InfRobustness.v`](https://github.com/Agnishom/lattice-mtl/blob/mealy/src/Semantics/InfRobustness.v#L21) and the main theorem, `toMonitor_correctness` can be found in [`Monitor/Monitor.v`](https://github.com/Agnishom/lattice-mtl/blob/mealy/src/Monitor/Monitor.v#L422).
+The `toMonitor : Formula -> Monitor` is defined in [`Monitor/Monitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/Monitor.v#L419). The semantics of the formulae are available in [`Semantics/InfRobustness.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Semantics/InfRobustness.v#L21) and the main theorem, `toMonitor_correctness` can be found in [`Monitor/Monitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/Monitor.v#L422).
 
 Below is a brief discussion of the organization of the proof:
 
-* `Lemma/`: Various useful auxilary functions. Relevant lemmas.
+* `Lemmas/`: Various useful auxilary functions. Relevant lemmas.
 * `NonEmptyList/`: Type of non-empty lists.
 * `Algebra/`:
   - `Algebra/Monoid.v`:  Definition of Monoids. Extending monoid operations to finite lists.
