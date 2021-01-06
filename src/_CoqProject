@@ -28,4 +28,6 @@ NonEmptyList/NonEmptyList.v
 
 -R Monitor/ Monitor
 Monitor/Mealy.v
+Monitor/Queue.v
+Monitor/AggQueue.v
 Monitor/Monitor.v

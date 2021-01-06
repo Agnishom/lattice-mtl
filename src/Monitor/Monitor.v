@@ -7,6 +7,8 @@ From Semantics Require Import Robustness.
 From Semantics Require Import InfRobustness.
 From NonEmptyList Require Import NonEmptyList.
 Require Import Mealy.
+Require Import Queue.
+Require Import AggQueue.
 From Lemmas Require Import Lemmas.
 
 Require Import Lia.
