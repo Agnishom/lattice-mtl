@@ -1,6 +1,17 @@
 # lattice-mtl
 A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics
 
+## Extraction
+
+The Extracted Code can be found in [`extracted/LatticeMtl.ml`] with some examples of usage in [`extracted/Examples.ml`]. To re-run the extraction (and verification) process:
+
+```
+cd src/
+make Makefile.coq
+make
+```
+
+The current version of the proof was checked using Coq 8.12.1.
 
 ## Organization of the Proof
 
@@ -29,3 +40,4 @@ Below is a brief discussion of the organization of the proof:
   - `Monitor/Queue.v`: Queue. Implementation of `Sometime_[n,n]`
   - `Monitor/AggQueue.v`: Sliding window aggregation. Implementation of `Sometime_[0,n]`.
   - `Monitor/Monitor.v`: Definition of Monitors. `implements` relation. Translating Formulas to Monitors. Proof of Correctness.
+* `Extract/`: Extraction to OCaml.
