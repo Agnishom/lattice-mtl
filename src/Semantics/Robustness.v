@@ -1,9 +1,13 @@
 Require Import Coq.Lists.List.
 
-Require Import Lattice.
-Require Import InfRobustness.
-Require Import NonEmptyList.
-Require Import Formula.
+From Algebra Require Import Lattice.
+Require Export InfRobustness.
+From NonEmptyList Require Import NonEmptyList.
+From Syntax Require Import Formula.
+From Syntax Require Export Normal.
+Require Export NormalizeCorrect.
+Require Export Incremental.
+Require Export SimpleProperties.
 
 Require Import Lia.
 

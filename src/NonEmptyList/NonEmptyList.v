@@ -163,7 +163,7 @@ Section NonEmptyFunctions.
   Proof.
     destruct l; auto.
   Qed.
-  
+
   Lemma neMap_neLength {A B} (f : A -> B) (l : nonEmpty A) :
     neLength (neMap f l) = neLength l.
   Proof.
@@ -210,5 +210,3 @@ Section NonEmptyFunctions.
     end.
 
 End NonEmptyFunctions.
-
-

@@ -1,5 +1,5 @@
 Require Import Monoid.
-Require Import Lemmas.
+From Lemmas Require Import Lemmas.
 
 Require Import Lia.
 Require Import Setoid.

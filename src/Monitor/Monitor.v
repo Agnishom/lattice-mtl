@@ -1,13 +1,13 @@
 Require Import Coq.Lists.List.
 
-Require Import Monoid.
-Require Import Lattice.
-Require Import Formula.
-Require Import Robustness.
-Require Import InfRobustness.
-Require Import NonEmptyList.
+From Algebra Require Import Monoid.
+From Algebra Require Import Lattice.
+From Syntax Require Import Formula.
+From Semantics Require Import Robustness.
+From Semantics Require Import InfRobustness.
+From NonEmptyList Require Import NonEmptyList.
 Require Import Mealy.
-Require Import Lemmas.
+From Lemmas Require Import Lemmas.
 
 Require Import Lia.
 Require Import Coq.Arith.PeanoNat.
@@ -88,7 +88,7 @@ Proof.
   - simpl. rewrite join_bottom_l.
     specialize (H (singleton a)). simpl in H. rewrite H.
     unfold robustness. simpl. unfold join_b. unfold Monoid.op_b.
-    unfold Monoid.op_i. simpl. now rewrite Monoid.finite_op_singleton. 
+    unfold Monoid.op_i. simpl. now rewrite Monoid.finite_op_singleton.
   - simpl gCollect. simpl toList. simpl rev.
     rewrite fold_left_app. rewrite IHσ.
     simpl fold_left.
@@ -117,7 +117,7 @@ Proof.
   - simpl. rewrite meet_top_l.
     specialize (H (singleton a)). simpl in H. rewrite H.
     unfold robustness. simpl. unfold meet_b. unfold Monoid.op_b.
-    unfold Monoid.op_i. simpl. now rewrite Monoid.finite_op_singleton. 
+    unfold Monoid.op_i. simpl. now rewrite Monoid.finite_op_singleton.
   - simpl gCollect. simpl toList. simpl rev.
     rewrite fold_left_app. rewrite IHσ.
     simpl fold_left.
@@ -429,5 +429,3 @@ Qed.
 
 
 End Monitor.
-
-

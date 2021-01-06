@@ -1,12 +1,12 @@
-Require Import NonEmptyList.
-Require Import Monoid.
+From NonEmptyList Require Import NonEmptyList.
+From Algebra Require Import Monoid.
 Require Import Coq.Lists.List.
 
 Import NonEmptyNotations.
 Import ListNotations.
 
 Require Import Lia.
-Require Import Lemmas.
+From Lemmas Require Import Lemmas.
 Require Import Recdef.
 Require Import FunInd.
 
@@ -329,7 +329,7 @@ Section mQueue.
   Proof.
     unfold queueContents; unfold queueHead.
     destruct q. simpl. destruct front0 eqn:E; destruct back0 eqn:F; auto.
-    - simpl. simpl_list. auto. 
+    - simpl. simpl_list. auto.
     - simpl. simpl_list. auto.
     - simpl. simpl_list. repeat rewrite rev_app_distr. rewrite rev_involutive.
       simpl. auto.
@@ -340,7 +340,7 @@ Section mQueue.
   Proof.
     destruct q; destruct front0; destruct back0; simpl; simpl_list; auto.
     - unfold dequeue. simpl. destruct (rev back0 ++ [b]) eqn:E.
-      + symmetry in E. apply app_cons_not_nil in E. intuition. 
+      + symmetry in E. apply app_cons_not_nil in E. intuition.
       + unfold queueContents. simpl. rewrite rev_length.
         eapply f_equal in E. rewrite app_length in E.
         simpl in E. rewrite rev_length in E.
@@ -790,7 +790,7 @@ Section aggQueue.
   Proof.
     unfold newAgg_inv. destruct q eqn:Eq. destruct new0.
     - auto.
-    - intros. rewrite <- Eq. 
+    - intros. rewrite <- Eq.
       rewrite aggFlip_new_empty. simpl.
       replace (finite_op B []) with unit by auto.
       apply aggFlip_newAgg_unit. rewrite Eq. discriminate.
@@ -858,7 +858,7 @@ Section aggQueue.
     - intros.
       unfold aggDequeue. simpl. rewrite <- Eq.
       destruct (oldAggs (aggFlip q)) eqn:E.
-      + apply aggFlip_newAgg_inv. now rewrite <- Eq in H. 
+      + apply aggFlip_newAgg_inv. now rewrite <- Eq in H.
       + rewrite <- Eq in H. apply aggFlip_newAgg_inv in H.
         unfold newAgg_inv in *. auto.
     - auto.

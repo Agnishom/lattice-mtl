@@ -1,5 +1,5 @@
-Require Import Lattice.
-Require Import Monoid.
+From Algebra Require Import Lattice.
+From Algebra Require Import Monoid.
 
 Section Formula.
 

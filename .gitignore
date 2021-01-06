@@ -3,3 +3,5 @@
 *.vo
 *.vok
 *.glob
+*.aux
+*.cache
