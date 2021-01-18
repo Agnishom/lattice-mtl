@@ -116,7 +116,7 @@ pub fn measure<Q:Query<Float64,Float64>>(q: Q, strmlen : u32, desc: String){
 	let mut snk = SLastCount::default();
 	let mut eval = q.start(&mut snk);
 
-    for iii in 0..(strmlen-1){
+    for iii in 0..strmlen{
         eval.next(Float64::new(buff[(iii as usize)%10]), &mut snk);
     }
 

@@ -56,16 +56,8 @@ int main(int argc, char* argv[]){
   if (argc != 4){
     std::cerr << "Please use this program the following way:" << '\n'
               << "bin [form] [strmlen] [b1]" << '\n'
-              << "form should be 0 - 7" << '\n'
+              << "form should be 0 - 9" << '\n'
               << "strmlen, b1 are natural numbers" << '\n'
-              << "fff == 0 means P_[0,b1]" << '\n'
-              << "fff == 1 means P_[b1,b1]" << '\n'
-              << "fff == 2 means P_[b1,2*b1]" << '\n'
-              << "fff == 3 means P_[b1,inf]" << '\n'
-              << "fff == 4 means S_[0,b1]" << '\n'
-              << "fff == 5 means S_[b1,b1]" << '\n'
-              << "fff == 6 means S_[b1,2*b1]" << '\n'
-              << "fff == 7 means S_[b1,inf]" << '\n'
               << std::endl;
     return 0;
   }
@@ -75,39 +67,47 @@ int main(int argc, char* argv[]){
   int bound = std::stoi(argv[3]);
 
   if (form == 0){
-    measure("once[0:" + std::to_string(bound) + "] {x > 0.5}",
+    measure("((once[:"+ std::to_string(bound) + "]{x > 0.00}) -> ((not {x > 0.5}) since {x > 0.00}))",
             strmlen);
 
   }
   else if (form == 1){
-    measure("once[" + std::to_string(bound) + ":" + std::to_string(bound) + "] {x > 0.5}",
+    measure("({x > 0.25} -> (historically[:" + std::to_string(bound) +  "](not {x > 0.5})))",
             strmlen);
   }
   else if (form == 2){
-    measure("once[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.5}",
+    measure("({x > 0.25} && !{x > 0.0} && once {x > 0.0} ) -> ((not {x > 0.5}) since[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.0})",
             strmlen);
   }
   else if (form == 3){
-    measure("once[" + std::to_string(bound) + ":] {x > 0.5}",
+    measure("((once[:" + std::to_string(bound) + "]({x > 0.0})) -> ({x > 0.5} since {x > 0.0}))",
             strmlen);
   }
   else if (form == 4){
-    measure("{x > 0.0} since[0:" + std::to_string(bound) + "] {x > 0.5}",
+    measure("({x > 0.25} -> (historically[:" + std::to_string(bound) + "]{x > 0.5}))",
             strmlen);
-
   }
   else if (form == 5){
-    measure("{x > 0.0} since[" + std::to_string(bound) + ":" + std::to_string(bound) + "] {x > 0.5}",
+    measure("(({x > 0.25} && !{x > 0.0} && once {x > 0.0}) -> ({x > 0.5} since[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.0}))",
             strmlen);
   }
   else if (form == 6){
-    measure("{x > 0.0} since[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.5}",
+    measure("(once[:" + std::to_string(bound) + "]{x > 0.5})",
             strmlen);
   }
   else if (form == 7){
-    measure("{x > 0.0} since[" + std::to_string(bound) + ":] {x > 0.5}",
+    measure("(({x > 0.25} && !{x > 0.0} && once {x > 0.0}) -> ((once[:" + std::to_string(bound) + "]({x > 0.5} or {x > 0.0})) since {x > 0.0}))",
             strmlen);
   }
-
+  else if (form == 8){
+    measure("(({x > 0.75} -> once[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.5}) and not( not({x > 0.75}) since[" + std::to_string(bound) + ":] {x > 0.5}))",
+            strmlen);
+  }
+  else if (form == 9){
+    measure("({x > 0.25} && !{x > 0.0} && once {x > 0.0}) -> ((({x > 0.75} -> once[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.5}) and not( not({x > 0.75}) since[" + std::to_string(bound) + ":] {x > 0.5})) since {x > 0.0})",
+            strmlen);
+  }
+  else
+    std::cout << "Need Formula within 0-9" << std::endl;
 
 }
