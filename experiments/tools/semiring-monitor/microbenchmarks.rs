@@ -26,6 +26,7 @@ use signal_monitor::sink::*;
 use signal_monitor::qmtl::*;
 
 use std::env;
+use std::process::exit;
 
 fn main() {
 
@@ -46,9 +47,9 @@ fn main() {
     let form7 = |b| past::since_lo(b, f_half.clone(), f_zero.clone());
 
     let args: Vec<String> = env::args().collect();
-    let mut formarg : i32 = 0;
-    let mut bound : u32 = 0;
-    let mut strmlen : u32 = 0;
+    let formarg : i32;
+    let bound : u32;
+    let strmlen : u32;
 
     let describer = |f, b| {
         match f {
@@ -72,18 +73,18 @@ fn main() {
         4 =>{
             match args[1].parse(){
                 Ok(f) => formarg = f,
-                _ => println!("couldn't parse formarg"),
+                _ => { println!("couldn't parse formarg"); exit(1); },
             }
             match args[2].parse(){
                 Ok(s) => strmlen = s,
-                _ => println!("couldn't parse strmlen"),
+                _ => { println!("couldn't parse strmlen"); exit(1); },
             }
             match args[3].parse(){
                 Ok(b) => bound = b,
-                _ => println!("couldn't parse bound"),
+                _ => { println!("couldn't parse bound"); exit(1); },
             }
         }
-        _ => println!("Please check top of source code for usage instructions")
+        _ => { println!("Please check top of source code for usage instructions"); exit(1); }
     }
 
     match formarg{

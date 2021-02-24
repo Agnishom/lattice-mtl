@@ -98,9 +98,9 @@ fn main() {
                                           , prop::not(past::since_lo(b, prop::not(s.clone()), p.clone()))));
 
     let args: Vec<String> = env::args().collect();
-    let mut formarg : i32 = 0;
-    let mut bound : u32 = 0;
-    let mut strmlen : u32 = 0;
+    let formarg : i32;
+    let bound : u32;
+    let strmlen : u32;
 
     let describer = |f, b| {
         match f {
