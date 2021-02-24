@@ -22,7 +22,7 @@ const int size = 10;
 void measure(std::string formula, int strmlen){
   std::cout << "Tool=" << "Reelay" << std::endl;
   std::cout << "Formula=" << formula << std::endl;
-  std::cout << "StremLength=" << strmlen << std::endl;
+  std::cout << "StreamLength=" << strmlen << std::endl;
   int cnt = 0;
   auto net1 = reelay::discrete_timed_robustness_network<time_type, value_t, input_t>::make(formula);
   auto start = std::chrono::high_resolution_clock::now();

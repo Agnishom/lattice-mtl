@@ -67,8 +67,8 @@ let measure form strmlen desc =
       monbox := mNext (!monbox) inp;
   done;
   let now = Unix.gettimeofday () in
-  print_endline ("TimeUnit = ms");
-  print_endline ("TimeElapsed = " ^ string_of_float ((now -. thenn) *. 1000.0));
+  print_endline ("TimeUnit=ms");
+  print_endline ("TimeElapsed=" ^ string_of_float ((now -. thenn) *. 1000.0));
   print_endline (string_of_int !cntbox)
 
 let formarg = ref 0
