@@ -35,13 +35,29 @@ def strmlen(expname, tool, formula, bound):
                 return (500000 if bound < 8000 else bound*4)
             else:
                 return 5000000 # 5 million
+    elif expname == 'timescales':
+        if tool == 'semiring-monitor':
+            return 100000000 # 100 million
+        elif tool == 'lattice-mtl':
+            return 5000000 # 5 million
+        elif tool == 'reelay':
+            return 5000000 # 5 million
 
 nMICROFORMULA = 8
 nTIMESCALEFORMULA = 10
-uB = 16
+uB = 20
 nTRIALS = 10
 
-def runMicro(uB = uB):
+def runMicro1(uB = uB):
+    for _ in range(nTRIALS):
+        for bbb in range(4, uB):
+            for fff in range(nMICROFORMULA):
+                for tool in tools:
+                    if not (tool == 'reelay' and (fff == 1 or fff == 5)):
+                        bound = 2 ** bbb
+                        runExperiment('micro', tool, fff, strmlen('micro', tool, fff, bound), bound)
+
+def runMicro2(uB = 16):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
             for fff in range(nMICROFORMULA):
@@ -58,5 +74,6 @@ def runTimescales(uB = uB):
                     bound = 2 ** bbb
                     runExperiment('timescales', tool, fff, strmlen('timescales', tool, fff, bound), bound)
 
-runMicro()
-# runTimescales()
+#runMicro1()
+#runMicro2()
+runTimescales()
