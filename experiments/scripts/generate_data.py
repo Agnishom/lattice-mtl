@@ -25,16 +25,20 @@ def runExperiment(expname, tool, formula, strmlen, bound):
     f.close()
 
 def strmlen(expname, tool, formula, bound):
-    if tool == 'semiring-monitor':
-        return 1000000000 # 10 billion
-    elif tool == 'lattice-mtl':
-        return 10000000 # 10 million
-    elif tool == 'reelay':
-        return 10000000 # 10 million
+    if expname == 'micro':
+        if tool == 'semiring-monitor':
+            return 300000000 # 300 million
+        elif tool == 'lattice-mtl':
+            return 10000000 # 10 million
+        elif tool == 'reelay':
+            if formula in [1, 5]:
+                return (500000 if bound < 8000 else bound*4)
+            else:
+                return 5000000 # 5 million
 
 nMICROFORMULA = 8
 nTIMESCALEFORMULA = 10
-uB = 20
+uB = 16
 nTRIALS = 10
 
 def runMicro(uB = uB):
@@ -42,7 +46,7 @@ def runMicro(uB = uB):
         for bbb in range(4, uB):
             for fff in range(nMICROFORMULA):
                 for tool in tools:
-                    if not (tool == 'reelay' and (fff == 1 or fff == 5)):
+                    if (tool == 'reelay' and (fff == 1 or fff == 5)):
                         bound = 2 ** bbb
                         runExperiment('micro', tool, fff, strmlen('micro', tool, fff, bound), bound)
 
