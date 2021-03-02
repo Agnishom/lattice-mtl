@@ -11,8 +11,8 @@ def getDataFromRawFile(filename):
     for line in f.readlines():
         chunks = line.split('=')
         if len(chunks) != 2:
-            return datum
-        if chunks[0] in ['Bound', 'StreamLength', 'TimeElapsed', 'FormulaNumber']:
+            continue
+        if chunks[0] in ['Bound', 'StreamLength', 'TimeElapsed', 'FormulaNumber', 'Memory']:
             datum[chunks[0]] = float(chunks[1].strip())
         elif chunks[0] in ['Experiment', 'Tool', 'Formula', 'TimeUnit']:
             datum[chunks[0]] = chunks[1].strip()
