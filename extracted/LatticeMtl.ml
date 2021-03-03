@@ -1,11 +1,4 @@
 
-(** val app : 'a1 list -> 'a1 list -> 'a1 list **)
-
-let rec app l m =
-  match l with
-  | [] -> m
-  | a :: l1 -> a :: (app l1 m)
-
 (** val sub : int -> int -> int **)
 
 let rec sub = fun n m -> Pervasives.max 0 (n-m)
@@ -24,11 +17,17 @@ let hd default = function
 | [] -> default
 | x :: _ -> x
 
-(** val rev : 'a1 list -> 'a1 list **)
+(** val rev_append : 'a1 list -> 'a1 list -> 'a1 list **)
 
-let rec rev = function
-| [] -> []
-| x :: l' -> app (rev l') (x :: [])
+let rec rev_append l l' =
+  match l with
+  | [] -> l'
+  | a :: l0 -> rev_append l0 (a :: l')
+
+(** val rev' : 'a1 list -> 'a1 list **)
+
+let rev' l =
+  rev_append l []
 
 (** val repeatAux : 'a1 -> int -> 'a1 list -> 'a1 list **)
 
@@ -49,12 +48,14 @@ type 'a lattice = { join : ('a -> 'a -> 'a); meet : ('a -> 'a -> 'a) }
 
 type 'a boundedLattice = { bottom : 'a; top : 'a }
 
-(** val joinMonoid : 'a1 lattice -> 'a1 lattice -> 'a1 boundedLattice -> 'a1 monoid **)
+(** val joinMonoid :
+    'a1 lattice -> 'a1 lattice -> 'a1 boundedLattice -> 'a1 monoid **)
 
 let joinMonoid _ h0 h1 =
   { op = h0.join; unit0 = h1.bottom }
 
-(** val meetMonoid : 'a1 lattice -> 'a1 lattice -> 'a1 boundedLattice -> 'a1 monoid **)
+(** val meetMonoid :
+    'a1 lattice -> 'a1 lattice -> 'a1 boundedLattice -> 'a1 monoid **)
 
 let meetMonoid _ h0 h1 =
   { op = h0.meet; unit0 = h1.top }
@@ -82,7 +83,9 @@ let fDelay i _UU03d5_ =
 let fDelayDual i _UU03d5_ =
   FAlways (i, i, _UU03d5_)
 
-(** val normalize : 'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+(** val normalize :
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
+    formula **)
 
 let rec normalize lattice_val boundedLattice_val = function
 | FAtomic f -> FAtomic f
@@ -94,17 +97,21 @@ let rec normalize lattice_val boundedLattice_val = function
     (normalize lattice_val boundedLattice_val _UU03b2_))
 | FSometime (i, j, _UU03b1_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSometime (0, j, (normalize lattice_val boundedLattice_val _UU03b1_)))
+     (fun _ -> FSometime (0, j,
+     (normalize lattice_val boundedLattice_val _UU03b1_)))
      (fun _ ->
      if (=) i j
-     then FSometime (i, j, (normalize lattice_val boundedLattice_val _UU03b1_))
+     then FSometime (i, j,
+            (normalize lattice_val boundedLattice_val _UU03b1_))
      else if Nat.ltb i j
-          then fDelay i (FSometime (0, (sub j i), (normalize lattice_val boundedLattice_val _UU03b1_)))
+          then fDelay i (FSometime (0, (sub j i),
+                 (normalize lattice_val boundedLattice_val _UU03b1_)))
           else FAtomic (fun _ -> boundedLattice_val.bottom))
      i)
 | FAlways (i, j, _UU03b1_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAlways (0, j, (normalize lattice_val boundedLattice_val _UU03b1_)))
+     (fun _ -> FAlways (0, j,
+     (normalize lattice_val boundedLattice_val _UU03b1_)))
      (fun _ ->
      if (=) i j
      then FAlways (i, j, (normalize lattice_val boundedLattice_val _UU03b1_))
@@ -115,32 +122,42 @@ let rec normalize lattice_val boundedLattice_val = function
      i)
 | FSometimeUnbounded (i, _UU03b1_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSometimeUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_)))
-     (fun _ -> fDelay i (FSometimeUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_))))
+     (fun _ -> FSometimeUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_)))
+     (fun _ ->
+     fDelay i (FSometimeUnbounded (0,
+       (normalize lattice_val boundedLattice_val _UU03b1_))))
      i)
 | FAlwaysUnbounded (i, _UU03b1_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAlwaysUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_)))
+     (fun _ -> FAlwaysUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_)))
      (fun _ ->
-     fDelayDual i (FAlwaysUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_))))
+     fDelayDual i (FAlwaysUnbounded (0,
+       (normalize lattice_val boundedLattice_val _UU03b1_))))
      i)
 | FSince (i, j, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAnd ((FSinceUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
+     (fun _ -> FAnd ((FSinceUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_),
      (normalize lattice_val boundedLattice_val _UU03b2_))), (FSometime (0, j,
      (normalize lattice_val boundedLattice_val _UU03b2_)))))
      (fun i' ->
      if Nat.ltb i' j
      then FAnd
-            ((fDelay i (FAnd ((FSinceUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
-               (normalize lattice_val boundedLattice_val _UU03b2_))), (FSometime (0, (sub j i),
-               (normalize lattice_val boundedLattice_val _UU03b2_)))))), (FAlways (0, i',
+            ((fDelay i (FAnd ((FSinceUnbounded (0,
+               (normalize lattice_val boundedLattice_val _UU03b1_),
+               (normalize lattice_val boundedLattice_val _UU03b2_))),
+               (FSometime (0, (sub j i),
+               (normalize lattice_val boundedLattice_val _UU03b2_)))))),
+            (FAlways (0, i',
             (normalize lattice_val boundedLattice_val _UU03b1_))))
      else FAtomic (fun _ -> boundedLattice_val.bottom))
      i)
 | FSinceDual (i, j, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FOr ((FSinceDualUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
+     (fun _ -> FOr ((FSinceDualUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_),
      (normalize lattice_val boundedLattice_val _UU03b2_))), (FAlways (0, j,
      (normalize lattice_val boundedLattice_val _UU03b2_)))))
      (fun i' ->
@@ -148,28 +165,34 @@ let rec normalize lattice_val boundedLattice_val = function
      then FOr
             ((fDelayDual i (FOr ((FSinceDualUnbounded (0,
                (normalize lattice_val boundedLattice_val _UU03b1_),
-               (normalize lattice_val boundedLattice_val _UU03b2_))), (FAlways (0, (sub j i),
-               (normalize lattice_val boundedLattice_val _UU03b2_)))))), (FSometime (0, i',
+               (normalize lattice_val boundedLattice_val _UU03b2_))),
+               (FAlways (0, (sub j i),
+               (normalize lattice_val boundedLattice_val _UU03b2_)))))),
+            (FSometime (0, i',
             (normalize lattice_val boundedLattice_val _UU03b1_))))
      else FAtomic (fun _ -> boundedLattice_val.top))
      i)
 | FSinceUnbounded (i, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSinceUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
+     (fun _ -> FSinceUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_),
      (normalize lattice_val boundedLattice_val _UU03b2_)))
      (fun i' -> FAnd
-     ((fDelay i (FSinceUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
-        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FAlways (0, i',
-     (normalize lattice_val boundedLattice_val _UU03b1_)))))
+     ((fDelay i (FSinceUnbounded (0,
+        (normalize lattice_val boundedLattice_val _UU03b1_),
+        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FAlways (0,
+     i', (normalize lattice_val boundedLattice_val _UU03b1_)))))
      i)
 | FSinceDualUnbounded (i, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSinceDualUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
+     (fun _ -> FSinceDualUnbounded (0,
+     (normalize lattice_val boundedLattice_val _UU03b1_),
      (normalize lattice_val boundedLattice_val _UU03b2_)))
      (fun i' -> FOr
-     ((fDelayDual i (FSinceDualUnbounded (0, (normalize lattice_val boundedLattice_val _UU03b1_),
-        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FSometime (0, i',
-     (normalize lattice_val boundedLattice_val _UU03b1_)))))
+     ((fDelayDual i (FSinceDualUnbounded (0,
+        (normalize lattice_val boundedLattice_val _UU03b1_),
+        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FSometime
+     (0, i', (normalize lattice_val boundedLattice_val _UU03b1_)))))
      i)
 
 type ('a, 'b) mealy = ('a, 'b) __mealy Lazy.t
@@ -191,13 +214,16 @@ let mNext m =
 let rec mLift f =
   lazy (Build_Mealy (f, (fun _ -> mLift f)))
 
-(** val mBinOp : ('a2 -> 'a3 -> 'a4) -> ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a4) mealy **)
+(** val mBinOp :
+    ('a2 -> 'a3 -> 'a4) -> ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a4)
+    mealy **)
 
 let rec mBinOp op0 m n =
   lazy (Build_Mealy ((fun a -> op0 (mOut m a) (mOut n a)), (fun a ->
     mBinOp op0 (mNext m a) (mNext n a))))
 
-(** val mFold : ('a2 -> 'a2 -> 'a2) -> ('a1, 'a2) mealy -> 'a2 -> ('a1, 'a2) mealy **)
+(** val mFold :
+    ('a2 -> 'a2 -> 'a2) -> ('a1, 'a2) mealy -> 'a2 -> ('a1, 'a2) mealy **)
 
 let rec mFold op0 m init =
   lazy (Build_Mealy ((fun a -> op0 init (mOut m a)), (fun a ->
@@ -214,16 +240,17 @@ let enqueue new1 q =
 
 let dequeue q =
   match q.front with
-  | [] -> (match rev q.back with
-           | [] -> { front = []; back = [] }
-           | _ :: ys -> { front = ys; back = [] })
+  | [] ->
+    (match rev' q.back with
+     | [] -> { front = []; back = [] }
+     | _ :: ys -> { front = ys; back = [] })
   | _ :: xs -> { front = xs; back = q.back }
 
 (** val queueHead : 'a1 queue -> 'a1 option **)
 
 let queueHead q =
   match q.front with
-  | [] -> (match rev q.back with
+  | [] -> (match rev' q.back with
            | [] -> None
            | y :: _ -> Some y)
   | x :: _ -> Some x
@@ -236,9 +263,10 @@ let cycle new1 q =
 (** val delayWith : 'a2 queue -> ('a1, 'a2) mealy -> ('a1, 'a2) mealy **)
 
 let rec delayWith q m =
-  lazy (Build_Mealy ((fun a -> match queueHead q with
-                               | Some x -> x
-                               | None -> mOut m a), (fun a ->
+  lazy (Build_Mealy ((fun a ->
+    match queueHead q with
+    | Some x -> x
+    | None -> mOut m a), (fun a ->
     delayWith (cycle (mOut m a) q) (mNext m a))))
 
 (** val delay : 'a2 -> int -> ('a1, 'a2) mealy -> ('a1, 'a2) mealy **)
@@ -258,7 +286,8 @@ let agg monoid_B q =
 (** val aggEnqueue : 'a1 monoid -> 'a1 -> 'a1 aggQueue -> 'a1 aggQueue **)
 
 let aggEnqueue monoid_B n q =
-  { new0 = (n :: q.new0); newAgg = (monoid_B.op q.newAgg n); oldAggs = q.oldAggs }
+  { new0 = (n :: q.new0); newAgg = (monoid_B.op q.newAgg n); oldAggs =
+    q.oldAggs }
 
 (** val aggStep : 'a1 monoid -> 'a1 aggQueue -> 'a1 aggQueue **)
 
@@ -292,10 +321,12 @@ let aggDequeue monoid_B q =
 let aggCycle monoid_B n q =
   aggDequeue monoid_B (aggEnqueue monoid_B n q)
 
-(** val mFoldAux : 'a1 monoid -> 'a1 aggQueue -> ('a2, 'a1) mealy -> ('a2, 'a1) mealy **)
+(** val mFoldAux :
+    'a1 monoid -> 'a1 aggQueue -> ('a2, 'a1) mealy -> ('a2, 'a1) mealy **)
 
 let rec mFoldAux monoid_B q m =
-  lazy (Build_Mealy ((fun a -> agg monoid_B (aggCycle monoid_B (mOut m a) q)), (fun a ->
+  lazy (Build_Mealy ((fun a ->
+    agg monoid_B (aggCycle monoid_B (mOut m a) q)), (fun a ->
     mFoldAux monoid_B (aggCycle monoid_B (mOut m a) q) (mNext m a))))
 
 (** val unitQueue : 'a1 monoid -> int -> 'a1 aggQueue **)
@@ -303,7 +334,8 @@ let rec mFoldAux monoid_B q m =
 let unitQueue monoid_B n =
   { new0 = []; newAgg = monoid_B.unit0; oldAggs = (repeat' monoid_B.unit0 n) }
 
-(** val mFoldWin : 'a1 monoid -> int -> ('a2, 'a1) mealy -> ('a2, 'a1) mealy **)
+(** val mFoldWin :
+    'a1 monoid -> int -> ('a2, 'a1) mealy -> ('a2, 'a1) mealy **)
 
 let mFoldWin monoid_B n m =
   mFoldAux monoid_B (unitQueue monoid_B n) m
@@ -315,83 +347,103 @@ type ('val0, 'a) monitor = ('a, 'val0) mealy
 let monAtomic =
   mLift
 
-(** val monAnd : 'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+(** val monAnd :
+    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor **)
 
 let monAnd lattice_val m n =
   mBinOp lattice_val.meet m n
 
-(** val monOr : 'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+(** val monOr :
+    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor **)
 
 let monOr lattice_val m n =
   mBinOp lattice_val.join m n
 
 (** val monSometimeUnbounded :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor **)
 
 let monSometimeUnbounded lattice_val boundedLattice_val m =
   mFold lattice_val.join m boundedLattice_val.bottom
 
 (** val monAlwaysUnbounded :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor **)
 
 let monAlwaysUnbounded lattice_val boundedLattice_val m =
   mFold lattice_val.meet m boundedLattice_val.top
 
 (** val monDelay :
-    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1,
+    'a2) monitor **)
 
 let monDelay _ boundedLattice_val n m =
   delay boundedLattice_val.bottom n m
 
 (** val monDelayDual :
-    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1,
+    'a2) monitor **)
 
 let monDelayDual _ boundedLattice_val n m =
   delay boundedLattice_val.top n m
 
 (** val monSometimeBounded :
-    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1,
+    'a2) monitor **)
 
 let monSometimeBounded lattice_val boundedLattice_val n m =
-  mFoldWin (joinMonoid lattice_val lattice_val boundedLattice_val) (Pervasives.succ n) m
+  mFoldWin (joinMonoid lattice_val lattice_val boundedLattice_val)
+    (Pervasives.succ n) m
 
 (** val monAlwaysBounded :
-    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a2) monitor -> ('a1,
+    'a2) monitor **)
 
 let monAlwaysBounded lattice_val boundedLattice_val n m =
-  mFoldWin (meetMonoid lattice_val lattice_val boundedLattice_val) (Pervasives.succ n) m
+  mFoldWin (meetMonoid lattice_val lattice_val boundedLattice_val)
+    (Pervasives.succ n) m
 
 (** val sinceAux :
-    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> 'a1 -> ('a1, 'a2) monitor **)
+    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> 'a1 -> ('a1,
+    'a2) monitor **)
 
 let rec sinceAux lattice_val m1 m2 pre =
-  lazy (Build_Mealy ((fun a -> lattice_val.join (mOut m2 a) (lattice_val.meet pre (mOut m1 a))),
+  lazy (Build_Mealy ((fun a ->
+    lattice_val.join (mOut m2 a) (lattice_val.meet pre (mOut m1 a))),
     (fun a ->
     sinceAux lattice_val (mNext m1 a) (mNext m2 a)
       (lattice_val.join (mOut m2 a) (lattice_val.meet pre (mOut m1 a))))))
 
 (** val monSince :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor -> ('a1, 'a2) monitor **)
 
 let monSince lattice_val boundedLattice_val m1 m2 =
   sinceAux lattice_val m1 m2 boundedLattice_val.bottom
 
 (** val sinceDualAux :
-    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> 'a1 -> ('a1, 'a2) monitor **)
+    'a1 lattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> 'a1 -> ('a1,
+    'a2) monitor **)
 
 let rec sinceDualAux lattice_val m1 m2 pre =
-  lazy (Build_Mealy ((fun a -> lattice_val.meet (mOut m2 a) (lattice_val.join pre (mOut m1 a))),
+  lazy (Build_Mealy ((fun a ->
+    lattice_val.meet (mOut m2 a) (lattice_val.join pre (mOut m1 a))),
     (fun a ->
     sinceDualAux lattice_val (mNext m1 a) (mNext m2 a)
       (lattice_val.meet (mOut m2 a) (lattice_val.join pre (mOut m1 a))))))
 
 (** val monSinceDual :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor -> ('a1, 'a2) monitor **)
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2)
+    monitor -> ('a1, 'a2) monitor **)
 
 let monSinceDual lattice_val boundedLattice_val m1 m2 =
   sinceDualAux lattice_val m1 m2 boundedLattice_val.top
 
-(** val toMonitorAux : 'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2) monitor **)
+(** val toMonitorAux :
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
+    monitor **)
 
 let rec toMonitorAux lattice_val boundedLattice_val = function
 | FAtomic f -> monAtomic f
@@ -406,7 +458,8 @@ let rec toMonitorAux lattice_val boundedLattice_val = function
      (fun _ ->
      (fun fO fS n -> if n=0 then fO () else fS (n-1))
        (fun _ ->
-       monDelay lattice_val boundedLattice_val 0 (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
+       monDelay lattice_val boundedLattice_val 0
+         (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
        (fun _ ->
        monSometimeBounded lattice_val boundedLattice_val j
          (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
@@ -451,20 +504,25 @@ let rec toMonitorAux lattice_val boundedLattice_val = function
 | FSinceUnbounded (n, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
      (fun _ ->
-     monSince lattice_val boundedLattice_val (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
+     monSince lattice_val boundedLattice_val
+       (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
        (toMonitorAux lattice_val boundedLattice_val _UU03b2_))
      (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
      n)
 | FSinceDualUnbounded (n, _UU03b1_, _UU03b2_) ->
   ((fun fO fS n -> if n=0 then fO () else fS (n-1))
      (fun _ ->
-     monSinceDual lattice_val boundedLattice_val (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
+     monSinceDual lattice_val boundedLattice_val
+       (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
        (toMonitorAux lattice_val boundedLattice_val _UU03b2_))
      (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
      n)
 | _ -> monAtomic (fun _ -> boundedLattice_val.bottom)
 
-(** val toMonitor : 'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2) monitor **)
+(** val toMonitor :
+    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
+    monitor **)
 
 let toMonitor lattice_val boundedLattice_val _UU03d5_ =
-  toMonitorAux lattice_val boundedLattice_val (normalize lattice_val boundedLattice_val _UU03d5_)
+  toMonitorAux lattice_val boundedLattice_val
+    (normalize lattice_val boundedLattice_val _UU03d5_)

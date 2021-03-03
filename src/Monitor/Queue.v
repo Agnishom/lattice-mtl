@@ -26,7 +26,7 @@ Section mQueue.
   Definition dequeue (q : Queue) : Queue :=
     match (front q) with
     | (x :: xs) => Build_Queue xs (back q)
-    | [] => match (rev (back q)) with
+    | [] => match (rev' (back q)) with
            | [] => Build_Queue [] []
            | (y :: ys) => Build_Queue ys []
            end
@@ -35,7 +35,7 @@ Section mQueue.
   Definition queueHead (q : Queue) : option B :=
     match (front q) with
     | (x :: xs) => Some x
-    | [] => match (rev (back q)) with
+    | [] => match (rev' (back q)) with
             | (y :: ys) => Some y
             | [] => None
             end
@@ -54,6 +54,7 @@ Section mQueue.
     queueHead q = head (rev (queueContents q)).
   Proof.
     unfold queueContents; unfold queueHead.
+    unfold rev'. rewrite <- rev_alt.
     destruct q. simpl. destruct front0 eqn:E; destruct back0 eqn:F; auto.
     - simpl. simpl_list. auto.
     - simpl. simpl_list. auto.
@@ -65,7 +66,9 @@ Section mQueue.
     length  (queueContents (dequeue q))  = pred (length (queueContents q)).
   Proof.
     destruct q; destruct front0; destruct back0; simpl; simpl_list; auto.
-    - unfold dequeue. simpl. destruct (rev back0 ++ [b]) eqn:E.
+    - unfold dequeue.
+      unfold rev'. rewrite <- rev_alt.
+      simpl. destruct (rev back0 ++ [b]) eqn:E.
       + symmetry in E. apply app_cons_not_nil in E. intuition.
       + unfold queueContents. simpl. rewrite rev_length.
         eapply f_equal in E. rewrite app_length in E.
@@ -127,7 +130,9 @@ Section mQueue.
       destruct front0; simpl in *.
       + split.
         { subst. simpl_list. unfold cycle. unfold enqueue. simpl.
-          unfold dequeue. simpl. destruct (rev back0) eqn:Eback.
+          unfold dequeue.
+          unfold rev'. rewrite <- rev_alt.
+          simpl. destruct (rev back0) eqn:Eback.
           - eapply f_equal in Eback. rewrite rev_involutive in Eback. simpl in Eback.
             subst. auto.
           - simpl. rewrite rev_app_distr. simpl.
@@ -189,7 +194,9 @@ Section mQueue.
           - destruct oldBack eqn:Eback.
             + simpl in IH1. subst. rewrite IH1 in IH2. simpl in IH2. lia.
             + simpl in IH1. rewrite app_nil_r in IH1.
-              unfold cycle. unfold enqueue. simpl. unfold dequeue.
+              unfold cycle. unfold enqueue.
+              simpl. unfold dequeue.
+              unfold rev'. rewrite <- rev_alt.
               simpl.
               destruct ( (rev l0 ++ [b]) ++ [mOut (gNext m l) a] ) eqn:EE.
               * eapply f_equal in EE. rewrite app_length in EE. simpl in EE. lia.
