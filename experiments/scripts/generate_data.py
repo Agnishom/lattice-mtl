@@ -80,6 +80,7 @@ nTIMESCALEFORMULA = 10
 uB = 20
 nTRIALS = 10
 
+# takes 4-5 hours
 def runMicro1(uB = uB):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
@@ -89,6 +90,7 @@ def runMicro1(uB = uB):
                         bound = 2 ** bbb
                         runExperiment('micro', tool, fff, strmlen('micro', tool, fff, bound), bound)
 
+# takes 2-3 hours
 def runMicro2(uB = 16):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
@@ -98,6 +100,7 @@ def runMicro2(uB = 16):
                         bound = 2 ** bbb
                         runExperiment('micro', tool, fff, strmlen('micro', tool, fff, bound), bound)
 
+# takes 4-5 hours
 def runTimescales(uB = uB):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
@@ -105,7 +108,7 @@ def runTimescales(uB = uB):
                 for tool in tools:
                     bound = 2 ** bbb
                     runExperiment('timescales', tool, fff, strmlen('timescales', tool, fff, bound), bound)
-
+# takes 4-5 hours
 def runMemory1(uB = uB):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
@@ -114,7 +117,7 @@ def runMemory1(uB = uB):
                     if not (tool == 'reelay' and (fff == 1 or fff == 5)):
                         bound = 2 ** bbb
                         runExperiment('memory', tool, fff, strmlen('memory', tool, fff, bound), bound)
-
+# takes 1-2 hours
 def runMemory2(uB = 14):
     for _ in range(nTRIALS):
         for bbb in range(4, uB):
@@ -128,4 +131,4 @@ def runMemory2(uB = 14):
 #runMicro2()
 #runTimescales()
 #runMemory1()
-runMemory2()
+#runMemory2()
