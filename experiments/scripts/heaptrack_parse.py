@@ -1,10 +1,12 @@
+# Heaptrack Massif Output
+
 def peek_line(f):
     pos = f.tell()
     line = f.readline()
     f.seek(pos)
     return line
 
-class MassifData(object):
+class HeaptrackData(object):
 
     """
     To use this:
@@ -21,7 +23,7 @@ class MassifData(object):
         obj.mems()
     """
 
-    def _initblock(self):
+    def _readHeaders(self):
         descLine = self.fh.readline()
         self.desc = descLine.split(':')[1][1:-1]
         cmdLine = self.fh.readline()
@@ -38,14 +40,36 @@ class MassifData(object):
         self.fh.readline()
         self.fh.readline()
         timeLine = self.fh.readline()
-        time = int(timeLine.split('=')[1])
+        time = float(timeLine.split('=')[1])
         heapBLine = self.fh.readline()
         heapB = int(heapBLine.split('=')[1])
         heapExtraBLine = self.fh.readline()
         heapExtraB = int(heapExtraBLine.split('=')[1])
         self.fh.readline() #ignoring mem_stacks_B; this is usually turned off
-        self._ignoreUntilNextSnapshot()
+        heapTreeLine = self.fh.readline()
+        #print(heapTreeLine)
+        heapTreeStatus = heapTreeLine.split('=')[1:][-1].strip()
+        if (heapTreeStatus == 'empty'):
+            pass
+        elif heapTreeStatus == 'detailed':
+            self.fh.readline()
+            self._ignoreIndentedLines()
         self.series.append((time, heapB + heapExtraB))
+        nextLine = peek_line(self.fh)
+        if nextLine and nextLine[0] == '#':
+            return #another snapshot
+        elif nextLine:
+            self._readHeaders()
+
+
+    def _ignoreIndentedLines(self):
+        #ignores until it finds the next unindented line
+        while True:
+            l = peek_line(self.fh)
+            if l and (l[0] != ' ' or l[0] != '\t'):
+                self.fh.readline()
+            else:
+                break
 
     def _ignoreUntilNextSnapshot(self):
         #ignores until it finds the next #
@@ -58,7 +82,6 @@ class MassifData(object):
 
     def __init__(self, filepath):
         self.fh = open(filepath, 'r')
-        self._initblock()
         self.series = []
         self._body()
 

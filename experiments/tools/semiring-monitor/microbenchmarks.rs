@@ -1,17 +1,22 @@
 /**
 
-<< "Please use this program the following way:" << '\n'
-      << "bin [form] [strmlen] [b1]" << '\n'
-      << "form should be 0 - 7" << '\n'
-      << "strmlen, b1 are natural numbers" << '\n'
-      << "fff == 0 means P_[0,b1]" << '\n'
-      << "fff == 1 means P_[b1,b1]" << '\n'
-      << "fff == 2 means P_[b1,2*b1]" << '\n'
-      << "fff == 3 means P_[b1,inf]" << '\n'
-      << "fff == 4 means S_[0,b1]" << '\n'
-      << "fff == 5 means S_[b1,b1]" << '\n'
-      << "fff == 6 means S_[b1,2*b1]" << '\n'
-      << "fff == 7 means S_[b1,inf]" << '\n'
+std::cerr << "Please use this program the following way:" << '\n'
+          << "bin [form] [strmlen] [b1] [inp]" << '\n'
+          << "form should be 0 - 7" << '\n'
+          << "inp should be 0 - 2" << '\n'
+          << "strmlen, b1 are natural numbers" << '\n'
+          << "fff == 0 means P_[0,b1]" << '\n'
+          << "fff == 1 means P_[b1,b1]" << '\n'
+          << "fff == 2 means P_[b1,2*b1]" << '\n'
+          << "fff == 3 means P_[b1,inf]" << '\n'
+          << "fff == 4 means S_[0,b1]" << '\n'
+          << "fff == 5 means S_[b1,b1]" << '\n'
+          << "fff == 6 means S_[b1,2*b1]" << '\n'
+          << "fff == 7 means S_[b1,inf]" << '\n'
+          << "inp == 0 means Random" << '\n'
+          << "inp == 1 means Increasing" << '\n'
+          << "inp == 2 means Decreasing" << '\n'
+          << std::endl;
 
 **/
 
@@ -50,6 +55,7 @@ fn main() {
     let formarg : i32;
     let bound : u32;
     let strmlen : u32;
+    let input_type : u32;
 
     let describer = |f, b| {
         match f {
@@ -70,7 +76,7 @@ fn main() {
     //let forms : Vec<closure()> = vec![form0, form1, form2, form3, form4, form5, form6, form7];
 
     match args.len(){
-        4 =>{
+        5 =>{
             match args[1].parse(){
                 Ok(f) => formarg = f,
                 _ => { println!("couldn't parse formarg"); exit(1); },
@@ -83,25 +89,29 @@ fn main() {
                 Ok(b) => bound = b,
                 _ => { println!("couldn't parse bound"); exit(1); },
             }
+            match args[4].parse(){
+                Ok(i) => input_type = i,
+                _ => { println!("couldn't parse input_type"); exit(1); },
+            }
         }
         _ => { println!("Please check top of source code for usage instructions"); exit(1); }
     }
 
     match formarg{
-        0 => measure(form0(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        1 => measure(form1(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        2 => measure(form2(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        3 => measure(form3(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        4 => measure(form4(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        5 => measure(form5(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        6 => measure(form6(bound).get_monitor(), strmlen, describer(formarg, bound)),
-        7 => measure(form7(bound).get_monitor(), strmlen, describer(formarg, bound)),
+        0 => measure(form0(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        1 => measure(form1(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        2 => measure(form2(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        3 => measure(form3(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        4 => measure(form4(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        5 => measure(form5(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        6 => measure(form6(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
+        7 => measure(form7(bound).get_monitor(), strmlen, describer(formarg, bound), input_type),
         _ => println!("bad formarg"),
     };
 
 }
 
-pub fn measure<Q:Query<Float64,Float64>>(q: Q, strmlen : u32, desc: String){
+pub fn measure<Q:Query<Float64,Float64>>(q: Q, strmlen : u32, desc: String, input_type: u32){
 
     let buff = [ 0.3954132773952119 , 0.7802043456276684 , 0.9056838067459964 ,
                      0.9919627616090054 , 0.3153684746871873 , 0.868398327264566 ,
@@ -112,13 +122,26 @@ pub fn measure<Q:Query<Float64,Float64>>(q: Q, strmlen : u32, desc: String){
     println!("Tool=semiring-monitor");
     println!("Formula={}",desc);
     println!("StreamLength={}",strmlen);
+    match input_type{
+        0 => println!("InputType=Random"),
+        1 => println!("InputType=Increasing"),
+        2 => println!("InputType=Decreasing"),
+        _ => { println!("Bad Input Type"); exit(1); }
+    };
+
 
     let start: Instant = Instant::now();
 	let mut snk = SLastCount::default();
 	let mut eval = q.start(&mut snk);
 
     for iii in 0..strmlen{
-        eval.next(Float64::new(buff[(iii as usize)%10]), &mut snk);
+        let inp = match input_type{
+                0 => Float64::new(buff[(iii as usize)%10]),
+                1 => Float64::new(iii as f64),
+                2 => Float64::new(-1.0 * iii as f64),
+                _ => { println!("Bad Input Type"); exit(1); }
+            };
+        eval.next(inp, &mut snk);
     }
 
     let now: Instant = Instant::now();

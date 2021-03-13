@@ -14,7 +14,7 @@ def getDataFromRawFile(filename):
             continue
         if chunks[0] in ['Bound', 'StreamLength', 'TimeElapsed', 'FormulaNumber', 'Memory']:
             datum[chunks[0]] = float(chunks[1].strip())
-        elif chunks[0] in ['Experiment', 'Tool', 'Formula', 'TimeUnit']:
+        elif chunks[0] in ['Experiment', 'Tool', 'Formula', 'TimeUnit', 'InputType']:
             datum[chunks[0]] = chunks[1].strip()
     return datum
 

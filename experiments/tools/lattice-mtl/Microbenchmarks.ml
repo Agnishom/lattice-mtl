@@ -47,15 +47,23 @@ let describer f bound =
   then "x > 0 since[" ^ string_of_int(bound) ^ ":] x > 0.5"
   else "wrong formula argument"
 
-let measure form strmlen desc =
+let measure form strmlen desc inputType =
   print_endline "Tool=lattice-monitor";
   print_endline ("Formula="^desc);
   print_endline ("StreamLength="^ (string_of_int strmlen));
+  print_endline ("InputType=" ^ (if (inputType == 0)
+                                 then "Random"
+                                 else if (inputType == 1)
+                                 then "Increasing" else "Decreasing"));
   let monbox = ref (toMonitor realL realLB form) in
   let cntbox = ref 0 in
   let thenn = Unix.gettimeofday () in
   for i = 0 to strmlen-1 do
-      let inp = (Array.get buff (i mod 10)) in
+      let inp = if (inputType == 0)
+                then (Array.get buff (i mod 10))
+                else if (inputType == 1)
+                then (float_of_int i)
+                else (float_of_int (-1 * i)) in
       if ((mOut !monbox inp) > 0.0)
       then begin cntbox := !cntbox + 1; end
       else ();
@@ -69,19 +77,21 @@ let measure form strmlen desc =
 let formarg = ref 0
 let bound = ref 0
 let streamSize = ref 0
+let inputType = ref 0
 
 let speclist = [
       ("-f", Arg.Set_int formarg, ": set formula");
       ("-b", Arg.Set_int bound, ": set bound");
       ("-l", Arg.Set_int streamSize, ": set streamSize");
+      ("-i", Arg.Set_int inputType, ": set inputType");
     ]
 
 let suite () =
-        measure ((List.nth forms !formarg) !bound) (!streamSize) (describer !formarg !bound)
+        measure ((List.nth forms !formarg) !bound) (!streamSize) (describer !formarg !bound) (!inputType)
 
 let main =
     Arg.parse
      speclist
      (fun x -> raise (Arg.Bad ("Bad argument : " ^ x)))
-     "-f [0-7] -b [bound] -l [strmlen]";
+     "-f [0-7] -b [bound] -l [strmlen] -i [0-2]";
     suite ()
