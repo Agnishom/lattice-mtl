@@ -1,6 +1,10 @@
 # lattice-mtl
 A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics
 
+## Usage as a library
+
+To use this as a library, see the instructions in `extracted/README.md`
+
 ## Extraction
 
 The Extracted Code can be found in `extracted/LatticeMtl.ml` with some examples of usage in `extracted/Examples.ml`. To re-run the extraction (and verification) process:
