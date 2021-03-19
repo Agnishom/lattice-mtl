@@ -1,3 +1,14 @@
+(**
+
+This file contains:
+
+1. (Co-Inductive) Definition of a Mealy Machine
+2. Notions of evaluation
+3. Composition, Identity, First
+4. Lifting Functions, Pointwise Operations, Unbounded Folds
+
+*)
+
 From NonEmptyList Require Import NonEmptyList.
 From Algebra Require Import Monoid.
 Require Import Coq.Lists.List.

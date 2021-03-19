@@ -1,3 +1,12 @@
+(**
+
+This file contains:
+
+1. The definition of a queue using two lists.
+2. A Mealy machine that uses a queue by repeatedly enqueing and dequeing with the effect of producing a lag in the stream.
+
+*)
+
 From NonEmptyList Require Import NonEmptyList.
 From Algebra Require Import Monoid.
 Require Import Coq.Lists.List.
@@ -16,6 +25,8 @@ Section mQueue.
 
   Variable A B : Type.
   Variable init : B.
+
+  (* Definitions: [Queue], [enqueue], [dequeue], [queueHead] *)
 
   Record Queue : Type :=
     {front : list B; back : list B}.
@@ -40,6 +51,8 @@ Section mQueue.
             | [] => None
             end
     end.
+
+  (* Claims about the contents of the queue and how they behave with respect to the operations *)
 
   Definition queueContents (q : Queue): list B :=
     back q ++ rev (front q).
@@ -79,6 +92,9 @@ Section mQueue.
     - simpl. lia.
   Qed.
 
+  (* An enqueue, followed by a dequeue.
+     This definition is useful to us since this is how the monitor produces a fixed lag.  *)
+
   Definition cycle (new : B) (q : Queue) : Queue :=
     dequeue (enqueue new q).
 
@@ -96,6 +112,9 @@ Section mQueue.
     auto.
   Qed.
 
+  (** This Mealy machine starts with a queue which contains all units in the beginning,
+      and then it repeats the [cycle] operation with every new element from the trace *)
+
   CoFixpoint delayWith (q : Queue) (m : Mealy A B) : Mealy A B :=
   {|
     mOut (a : A) :=
@@ -110,6 +129,7 @@ Section mQueue.
   Definition delay (n : nat) (m : Mealy A B) :=
     delayWith (Build_Queue (repeat' init n) []) m.
 
+  (* These are the invariants we can claim about the machine described above *)
 
   Lemma delayWith_state (q : Queue) (m : Mealy A B) (l : nonEmpty A) :
     forall initSeg, initSeg = (back q) ++ rev (front q)
@@ -258,6 +278,8 @@ Section mQueue.
           destruct q0. auto.
         }
   Qed.
+
+  (* This is the claim we are interested in. It shows that the combinator [delay n] indeed produces the nth last element in the stream *)
 
   Lemma delay_result (n : nat) (m : Mealy A B) (l : nonEmpty A) :
     gOut (delay n m) l

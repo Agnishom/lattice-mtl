@@ -1,3 +1,17 @@
+(**
+
+This file contains:
+
+1. Defintion of a Monitor
+  - a monitor is defined as a Mealy machine whose values are in some bounded distributive lattice.
+2. What it means to say that a monitor m [implements] a formula ϕ.
+3. A [toMonitor] function which translates [Formula] to [Monitor].
+  - along with a proof [toMonitor_correctness] that this monitor indeed implements said formula.
+  - [toMonitor] first converts a given formula into a normal form, and then replaces each building block in the formula with a corresponding combinator.
+  - We prove that each of the corresponding combinators are also correct.
+
+*)
+
 Require Import Coq.Lists.List.
 
 From Algebra Require Import Monoid.

@@ -1,3 +1,10 @@
+(**
+
+Like [Equivalences.v], this file also contains two equivalences of formulas which are intended to help normalize the formula.
+Given that these proofs require some additional machinery (properties about lattices) and they are somewhat longer, they have been organized in a seperate file.
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

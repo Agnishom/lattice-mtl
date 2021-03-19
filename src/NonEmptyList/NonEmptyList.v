@@ -1,3 +1,14 @@
+(**
+
+This file contains:
+
+1. The type for nonEmpty lists.
+  - with some notation for these lists.
+2. Conversions to and from nonEmpty lists.
+3. Some useful functions on these lists.
+
+ *)
+
 Require Import Coq.Lists.List.
 
 Require Import Lia.

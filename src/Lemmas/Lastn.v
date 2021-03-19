@@ -1,3 +1,5 @@
+(** Properties of the function lastn. This is the last n elements of a finite list *)
+
 Require Import Coq.Lists.List.
 Require Import Lia.
 

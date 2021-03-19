@@ -1,3 +1,14 @@
+(**
+
+This file contains:
+
+1. Definition of Monoids
+2. Some simple lemmas about monoids
+3. Several lemmas about summations of finitely many monoid elements in a list or an indexed collections
+  - See [finite_op], [op_i], [op_b]
+
+*)
+
 Require Import Coq.Lists.List.
 Require Import Lia.
 Require Import ssreflect.

@@ -1,3 +1,14 @@
+(**
+
+This file contains:
+
+1. Defintion of Robustness for non-empty (finite) lists
+  - using the defintion over infinite traces, see [robustness].
+2. Definition of an infinite trace extending a non-empty list.
+  - and some consequences of this phenomena.
+
+*)
+
 Require Import Coq.Lists.List.
 
 From Algebra Require Import Lattice.

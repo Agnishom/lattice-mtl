@@ -1,3 +1,11 @@
+(**
+
+This is the main syntactic definition for formulas in our temporal logic. See the type [Formula].
+
+The notation [Operator a b ϕ] denote the formula where the interval is [a, b] with both endpoints included. If b is supposed to be Infinity, then we denote this as [OperatorUnbounded a ϕ].
+
+*)
+
 From Algebra Require Import Lattice.
 From Algebra Require Import Monoid.
 

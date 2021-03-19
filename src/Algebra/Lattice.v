@@ -1,3 +1,19 @@
+(**
+
+This file contains:
+
+1. Definitions of Lattices.
+  - The main defintion is given using an algebraic axiomatic approach.
+  - An order relation is defined ⊑ using the lattice operations.
+2. Several basic lemmas for both the axiomatic and the order theoretic approaches are proven.
+  - In particular, we show the relationship between the binary operations and the endowed order.
+3. Definition of Distibutive and Bounded Lattices.
+4. Proof that The elements of a bounded lattice form a monoid either under ⊓ or ⊔
+5. Proof that Boolean values form a bounded distributive lattice
+6. Facts about ⊓ and ⊔ over finite lists.
+
+ *)
+
 Require Import Monoid.
 From Lemmas Require Import Lemmas.
 

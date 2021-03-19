@@ -14,6 +14,8 @@ Section Repeat.
     - simpl. now rewrite IHn.
   Qed.
 
+  (** Tail recursive version of repeat *)
+
   Fixpoint repeatAux {A : Type} (x : A) (n : nat) (acc : list A) :=
     match n with
     | O => acc

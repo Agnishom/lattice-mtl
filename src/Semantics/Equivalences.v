@@ -1,3 +1,10 @@
+(**
+
+This file contains several claims of equivalence between temporal logic formulas.
+These properties are necessary so that any formula can be converted to what we call a normal form. (See [../Syntax/Normal.v])
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

@@ -1,3 +1,5 @@
+(** Claims about the last element of finite lists *)
+
 Require Import Coq.Lists.List.
 Require Import Lia.
 

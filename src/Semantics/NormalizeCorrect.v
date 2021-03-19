@@ -1,3 +1,10 @@
+(**
+
+This file contains the proof that the normalization procedure from [../Syntax/Normal.v] also semantically makes sense.
+This makes use of all the other proofs in this directory, including [Equivalences.v], [SimpleProperties.v], [LemmaThirteen.v].
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

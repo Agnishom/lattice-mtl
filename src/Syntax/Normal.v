@@ -1,3 +1,15 @@
+(**
+
+This file contains:
+
+1. The definition [isNormal], of what it means for a formula to be in normal form.
+  - This requires the temporal operators to be of the form [Sometime i i], [Sometime 0 _], [SometimeUnbounded 0], [SinceUnbounded 0] or their dual analogues.
+2. A function [normalize] that converts a formula into a formula that satisfies [isNormal].
+  - We also provide a proof that the resulting formula is indeed normal.
+  - The equivalence of the two formulas is proven elsewhere. See [../Semantics/NormalizeCorrect.v]
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 

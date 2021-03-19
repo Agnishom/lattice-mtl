@@ -1,3 +1,10 @@
+(**
+
+This file contains several lemmas which legitimize the incremental computation of certain formulas.
+In other words, given a formula ϕ and a position i, they describe how [infRobustness ϕ i] can be used to evaluate [infRobustness ϕ (i + 1)].
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

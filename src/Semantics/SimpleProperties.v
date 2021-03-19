@@ -1,3 +1,9 @@
+(**
+
+This file contains several lemmas that allow simplifying temporal logic formulas in specific trivial/degenerate cases.
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

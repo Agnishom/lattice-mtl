@@ -1,3 +1,12 @@
+(**
+
+This file contains:
+
+1. Defintion of robustness using infinite traces.
+2. A claim that if two traces agree in their valuations until now, our formulas cannot distinguish them in terms of their traces.
+
+*)
+
 Require Import Coq.Arith.PeanoNat.
 Require Import Lia.
 Require Import ssreflect.

@@ -1,3 +1,9 @@
+(**
+
+This file contains the data structure that facilitates sliding window sums over arbitrary monoids.
+
+*)
+
 From NonEmptyList Require Import NonEmptyList.
 From Algebra Require Import Monoid.
 Require Import Coq.Lists.List.
@@ -17,6 +23,19 @@ Section aggQueue.
 
   Variable (B : Type).
   Context {monoid_B : Monoid B}.
+
+  (** We intend to think of [aggQueue] as a queue of monoid elements from [B]. We ask that this data structure support three things:
+      1. At any point, we can ask what the aggregate of all the elements in the current queue is. This is done via [agg]. This works in O(1).
+      2. We can enqueue a monoid element via [aggEnqueue]. This works in O(1).
+      3. We can dequeue an element via [aggDequeue]. This can take linear time in the worst case, but is amortized constant time.
+
+      The trick to achieving this is to maintain two stacks:
+      1. [new] which keeps track of the new elements.
+      2. [oldAggs] which keeps track of the aggregates of the old elements.
+
+      The exact mechanism is detailed below.
+
+   *)
 
   Record aggQueue : Type :=
     {
@@ -423,6 +442,8 @@ Section aggQueue.
     rewrite Eq. unfold aggDequeue. simpl. auto.
   Qed.
 
+  (* This definition is useful because we intend to compute sliding sums over our stream *)
+
   Definition aggCycle (n : B) (q : aggQueue) :=
     aggDequeue (aggEnqueue n q).
 
@@ -574,6 +595,8 @@ Section aggQueue.
                   rewrite skipn_repeat. rewrite finite_op_repeat_unit.
                   now rewrite nth_repeat2.
   Qed.
+
+  (* This is the main object of interest for our monitor. It lets us compute sliding sums over windows of length n by first initializing an aggQueue filled with n units, and then repeatedly enqueuing and dequeing through it *)
 
   Definition mFoldWin {A : Type} (n : nat) (m : Mealy A B) :=
     mFoldAux (unitQueue n) m.
