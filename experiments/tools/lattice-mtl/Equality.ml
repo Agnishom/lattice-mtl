@@ -24,11 +24,16 @@ let forms = [sometime_up; sometime_at; sometime_lo_up; sometime_lo;
 
 let interact form =
   let monbox = ref (toMonitor realL realLB form) in
-  while true do
-      let inp = read_float () in
-      print_float (mOut !monbox inp);
-      print_newline ();
-      monbox := mNext (!monbox) inp
+  let quit_loop = ref false in
+  while not !quit_loop do
+      let inl = read_line () in
+      if inl = "DONE"
+      then quit_loop := true
+      else
+        let inp = Float.of_string inl in
+        Printf.printf "%.17g" (mOut !monbox inp);
+        print_newline ();
+        monbox := mNext (!monbox) inp
   done
 
 let formarg = ref 0

@@ -17,7 +17,8 @@ pub fn interact<Q:Query<Float64,Float64>>(q: Q){
 
     loop {
         let mut inpline = String::new();
-        std::io::stdin().read_line(&mut inpline).ok();
+        std::io::stdin().read_line(&mut inpline).expect("Failed to read line");
+		if inpline.trim() == "DONE" { break; }
         let inp = inpline.trim().parse().expect("Failed to parse float");
         eval.next(Float64::new(inp), &mut snk);
     }

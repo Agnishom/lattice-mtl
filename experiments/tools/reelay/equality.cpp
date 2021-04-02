@@ -7,6 +7,8 @@
 #include "vector"
 #include <random>
 #include <sys/resource.h>
+#include <string>
+#include <limits>
 
 using time_type = int64_t;
 
@@ -19,10 +21,13 @@ std::vector<input_t> buff;
 
 void interact(std::string formula){
   auto net1 = reelay::discrete_timed_robustness_network<time_type, value_t, input_t>::make(formula);
-  float inp;
+  std::string inl;
   while (1){
-    std::cin >> inp;
-    net1.update(input_t{{"x", inp}});
+    std::cin >> inl;
+    if (inl == "DONE")
+      break;
+    net1.update(input_t{{"x", std::stof(inl)}});
+    std::cout.precision(std::numeric_limits< double >::max_digits10);
     std::cout << net1.output() << std::endl;
   }
 }
