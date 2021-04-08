@@ -68,17 +68,17 @@ int main(int argc, char* argv[]){
     interact("once[" + std::to_string(bound) + ":] {x > 0.5}");
   }
   else if (form == 4){
-    interact("{x > 0.0} since[0:" + std::to_string(bound) + "] {x > 0.5}");
+    interact("{x > 0.5} since[0:" + std::to_string(bound) + "] {x > 0.0}");
 
   }
   else if (form == 5){
-    interact("{x > 0.0} since[" + std::to_string(bound) + ":" + std::to_string(bound) + "] {x > 0.5}");
+    interact("{x > 0.5} since[" + std::to_string(bound) + ":" + std::to_string(bound) + "] {x > 0.0}");
   }
   else if (form == 6){
-    interact("{x > 0.0} since[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.5}");
+    interact("{x > 0.5} since[" + std::to_string(bound) + ":" + std::to_string(2*bound) + "] {x > 0.0}");
   }
   else if (form == 7){
-    interact("{x > 0.0} since[" + std::to_string(bound) + ":] {x > 0.5}");
+    interact("{x > 0.5} since[" + std::to_string(bound) + ":] {x > 0.0}");
   }
 
 
