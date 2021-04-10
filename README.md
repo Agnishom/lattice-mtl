@@ -36,7 +36,7 @@ Below is a brief discussion of the organization of the proof:
   - `Semantics/Robustness.v`: Semantics on non-empty lists (defined via their extension to infinite traces).
   - `Semantics/SimpleProperties.v`: Simple properties of some degenerate MTL formulas.
   - `Semantics/Incremental.v`: Incremental derivations of semantic values. Used to construct the monitors.
-  - `Semantics/LemmaThirteen.v`: Translating `S_[0,a]` to `S` and `Sometime_[0,a]`.
+  - `Semantics/SinceRewrite.v`: Translating `S_[0,a]` to `S` and `Sometime_[0,a]`.
   - `Semantics/Equivalences.v`: Other MTL identities.
   - `Semantics/NormalizeCorrect.v`: Correctness of the normal forms.
 * `Monitor/`

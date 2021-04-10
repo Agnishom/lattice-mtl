@@ -75,10 +75,10 @@ Proof.
 Qed.
 
 Lemma sometime_delay_unbounded :
-  forall (ϕ : Formula A) τ lo i,
-    infRobustness (FSometimeUnbounded lo ϕ) τ i
-    = infRobustness (FDelay lo (FSometimeUnbounded 0 ϕ)) τ i.
+  forall (ϕ : Formula A) lo,
+    equivalent (FSometimeUnbounded lo ϕ) (FDelay lo (FSometimeUnbounded 0 ϕ)).
 Proof.
+  unfold equivalent.
   intros.
   rewrite fdelay_correctness.
   destruct (PeanoNat.Nat.le_gt_cases lo i).
@@ -95,10 +95,10 @@ Proof.
 Qed.
 
 Lemma always_delay_unbounded :
-  forall (ϕ : Formula A) τ lo i,
-    infRobustness (FAlwaysUnbounded lo ϕ) τ i
-    = infRobustness (FDelayDual lo (FAlwaysUnbounded 0 ϕ)) τ i.
+  forall (ϕ : Formula A) lo,
+    equivalent (FAlwaysUnbounded lo ϕ) (FDelayDual lo (FAlwaysUnbounded 0 ϕ)).
 Proof.
+  unfold equivalent.
   intros.
   rewrite fdelayDual_correctness.
   destruct (PeanoNat.Nat.le_gt_cases lo i).
@@ -181,11 +181,12 @@ Proof.
 Qed.
 
 Lemma since_always_bounded :
-  forall (ϕ ψ : Formula A) τ a b i,
+  forall (ϕ ψ : Formula A) a b,
     a < b ->
-    infRobustness (FSince (S a) b ϕ ψ) τ i
-    = infRobustness (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+    equivalent (FSince (S a) b ϕ ψ)
+               (FAnd (FDelay (S a) (FSince 0 (b - S a) ϕ ψ)) (FAlways 0 a ϕ)).
 Proof.
+  unfold equivalent.
   intros.
   destruct (Compare_dec.dec_lt a i).
     + now apply since_always_bounded1.
@@ -346,11 +347,12 @@ Proof.
 Qed.
 
 Lemma since_always_unbounded :
-  forall (ϕ ψ : Formula A) τ a i,
-    infRobustness (FSinceUnbounded (S a) ϕ ψ) τ i
-    = infRobustness (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)) τ i.
+  forall (ϕ ψ : Formula A) a,
+    equivalent
+      (FSinceUnbounded (S a) ϕ ψ)
+      (FAnd (FDelay (S a) (FSinceUnbounded 0 ϕ ψ)) (FAlways 0 a ϕ)).
 Proof.
-  intros.
+  unfold equivalent. intros.
   destruct (Compare_dec.dec_lt a i).
   - now apply since_always_unbounded1.
   - assert (S a > i) by lia.
@@ -427,11 +429,12 @@ Proof.
 Qed.
 
 Lemma sinceDual_sometime_unbounded :
-  forall (ϕ ψ : Formula A) τ a i,
-    infRobustness (FSinceDualUnbounded (S a) ϕ ψ) τ i
-    = infRobustness (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)) τ i.
+  forall (ϕ ψ : Formula A) a,
+    equivalent
+      (FSinceDualUnbounded (S a) ϕ ψ)
+      (FOr (FDelayDual (S a) (FSinceDualUnbounded 0 ϕ ψ)) (FSometime 0 a ϕ)).
 Proof.
-  intros.
+  unfold equivalent. intros.
   destruct (Compare_dec.dec_lt a i).
   - now apply sinceDual_sometime_unbounded1.
   - assert (S a > i) by lia.

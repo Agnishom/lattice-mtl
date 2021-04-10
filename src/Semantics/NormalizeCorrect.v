@@ -1,7 +1,7 @@
 (**
 
 This file contains the proof that the normalization procedure from [../Syntax/Normal.v] also semantically makes sense.
-This makes use of all the other proofs in this directory, including [Equivalences.v], [SimpleProperties.v], [LemmaThirteen.v].
+This makes use of all the other proofs in this directory, including [Equivalences.v], [SimpleProperties.v], [SinceRewrite.v].
 
 *)
 
@@ -18,7 +18,7 @@ Require Import InfRobustness.
 Require Import SimpleProperties.
 Require Import Equivalences.
 Require Import Incremental.
-Require Import LemmaThirteen.
+Require Import SinceRewrite.
 
 Section NormalizeCorrect.
 

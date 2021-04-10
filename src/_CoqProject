@@ -19,7 +19,7 @@ Semantics/InfRobustness.v
 Semantics/Robustness.v
 Semantics/Equivalences.v
 Semantics/Incremental.v
-Semantics/LemmaThirteen.v
+Semantics/SinceRewrite.v
 Semantics/NormalizeCorrect.v
 Semantics/SimpleProperties.v
 

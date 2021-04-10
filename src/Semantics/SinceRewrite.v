@@ -18,7 +18,7 @@ Require Import SimpleProperties.
 Require Import Equivalences.
 Require Import Incremental.
 
-Section LemmaThirteen.
+Section SinceRewrite.
 
 Generalizable Variables Val lattice_val boundedLattice_val distributiveLattice_val.
 
@@ -32,10 +32,12 @@ Definition Trace := nat -> A.
 
 
 Lemma since_sometime_bounded :
-  forall (ϕ ψ : Formula A) τ a i,
-    infRobustness (FSince 0 a ϕ ψ) τ i
-    = infRobustness (FAnd (FSinceUnbounded 0 ϕ ψ) (FSometime 0 a ψ)) τ i.
+  forall (ϕ ψ : Formula A) a,
+    equivalent
+      (FSince 0 a ϕ ψ)
+      (FAnd (FSinceUnbounded 0 ϕ ψ) (FSometime 0 a ψ)).
 Proof.
+  unfold equivalent.
   intros. simpl.
   remember (min i a) as K.
   pose (t := fun j => infRobustness ψ τ (i - j)).
@@ -90,10 +92,12 @@ Proof.
 Qed.
 
 Lemma sinceDual_always_bounded :
-  forall (ϕ ψ : Formula A) τ a i,
-    infRobustness (FSinceDual 0 a ϕ ψ) τ i
-    = infRobustness (FOr (FSinceDualUnbounded 0 ϕ ψ) (FAlways 0 a ψ)) τ i.
+  forall (ϕ ψ : Formula A) a,
+    equivalent
+      (FSinceDual 0 a ϕ ψ)
+      (FOr (FSinceDualUnbounded 0 ϕ ψ) (FAlways 0 a ψ)).
 Proof.
+  unfold equivalent.
   intros. simpl.
   remember (min i a) as K.
   pose (t := fun j => infRobustness ψ τ (i - j)).
@@ -151,4 +155,4 @@ Proof.
   }
 Qed.
 
-End LemmaThirteen.
+End SinceRewrite.

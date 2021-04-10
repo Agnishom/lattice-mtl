@@ -3,7 +3,8 @@
 This file contains:
 
 1. Defintion of robustness using infinite traces.
-2. A claim that if two traces agree in their valuations until now, our formulas cannot distinguish them in terms of their traces.
+2. The defintion of equivalence of formulas
+3. A claim that if two traces agree in their valuations until now, our formulas cannot distinguish them in terms of their traces.
 
 *)
 
@@ -59,6 +60,9 @@ Fixpoint infRobustness (ϕ : Formula A) (τ : Trace) (i : nat): Val :=
                                  ⊔ join_i 0 j (fun k => infRobustness ϕ τ (i - k)))
   end.
 
+Definition equivalent (ϕ ψ : Formula A) : Prop :=
+  forall τ i, infRobustness ϕ τ i = infRobustness ψ τ i.
+
 Lemma infRobustness_prefix (ϕ : Formula A) (τ1 τ2 : Trace) (i : nat) :
   (forall j, j <= i -> τ1 j = τ2 j)
   -> infRobustness ϕ τ1 i = infRobustness ϕ τ2 i.
@@ -92,3 +96,6 @@ Qed.
 End InfRobustness.
 
 Arguments infRobustness {Val A lattice_val boundedLattice_val}.
+Arguments equivalent {Val A lattice_val boundedLattice_val}.
+
+Open Scope list_scope.
