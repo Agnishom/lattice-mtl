@@ -7,6 +7,7 @@ CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inlin
 .PHONY: lattice-mtl semiring-monitor reelay
 
 lattice-mtl:
+	cd ../../extracted && ocamlc LatticeMtl.mli
 	cd lattice-mtl && rm -f *.o *.cmx *.cmi *.mli
 	cd lattice-mtl && ocamlopt -o lattice-micro.bin -I ../../../extracted/ unix.cmxa ../../../extracted/LatticeMtl.ml Microbenchmarks.ml
 	cd lattice-mtl && rm -f *.o *.cmx *.cmi *.mli
