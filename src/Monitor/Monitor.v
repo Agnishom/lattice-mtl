@@ -445,3 +445,18 @@ Qed.
 
 
 End Monitor.
+
+
+Arguments Monitor {Val A}.
+Arguments implements {Val A lattice_val boundedLattice_val}.
+Arguments monAtomic {Val A}.
+Arguments monAnd {Val A lattice_val}.
+Arguments monOr {Val A lattice_val}.
+Arguments monSometimeUnbounded {Val A lattice_val boundedLattice_val}.
+Arguments monAlwaysUnbounded {Val A lattice_val boundedLattice_val}.
+Arguments monDelay {Val A lattice_val boundedLattice_val}.
+Arguments monDelayDual {Val A lattice_val boundedLattice_val}.
+Arguments monSometimeBounded {Val A lattice_val boundedLattice_val}.
+Arguments monAlwaysBounded {Val A lattice_val boundedLattice_val}.
+Arguments monSince {Val A lattice_val boundedLattice_val}.
+Arguments monSinceDual {Val A lattice_val boundedLattice_val}.

@@ -251,6 +251,42 @@ Proof.
       auto.
 Qed.
 
+(* Parallel *)
+CoFixpoint mPar {A B C: Type} (m : Mealy A B) (n : Mealy A C) : Mealy A (B * C) :=
+  {| mOut x  := (mOut m x, mOut n x);
+     mNext x := mPar (mNext m x) (mNext n x);
+  |}.
+
+Lemma mPar_state {A B C : Type} (m : Mealy A B) (n : Mealy A C) (l : nonEmpty A):
+  gNext (mPar m n) l = mPar (gNext m l) (gNext n l).
+Proof.
+  induction l; simpl; auto.
+  - rewrite IHl. auto.
+Qed.
+
+Lemma mPar_result {A B C : Type} (m : Mealy A B) (n : Mealy A C) (l : nonEmpty A) :
+  gOut (mPar m n) l = (gOut m l, gOut n l).
+Proof.
+  destruct l.
+  - auto.
+  - simpl. rewrite mPar_state. auto.
+Qed.
+
+Lemma mPar_results {A B C : Type} (m : Mealy A B) (n : Mealy A C) (l : nonEmpty A) :
+  gCollect (mPar m n) l = neZip (gCollect m l) (gCollect n l).
+Proof.
+  induction l; simpl; auto.
+  - rewrite IHl. f_equal.
+    rewrite mPar_state. auto.
+Qed.
+
+Lemma mPar_mCompose {A B C D : Type} (m : Mealy A B) (n : Mealy A C) (o : Mealy (B * C) D) (l : nonEmpty A) :
+  gOut ((mPar m n) >> o) l = gOut o (neZip (gCollect m l) (gCollect n l)).
+Proof.
+  rewrite mCompose_result. now rewrite mPar_results.
+Qed.
+
+
 (* Binary Operations *)
 
 CoFixpoint mBinOp {A B C D : Type} (op : B -> C -> D) (m : Mealy A B) (n : Mealy A C) : Mealy A D :=
