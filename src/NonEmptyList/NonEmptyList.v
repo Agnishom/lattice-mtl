@@ -195,6 +195,20 @@ Section NonEmptyFunctions.
     | (xs :| x), (singleton y) => singleton (x, y)
     end.
 
+  Lemma neZip_neLength {A B : Type} (l1 : nonEmpty A) (l2 : nonEmpty B):
+      neLength l1 = neLength l2
+      -> neLength (neZip l1 l2) = neLength l1.
+  Proof.
+    revert l2. induction l1.
+    - intros. destruct l2.
+      + auto.
+      + simpl in H. auto.
+    - intros. destruct l2.
+      + simpl in H. auto.
+      + simpl in *. auto.
+  Qed.
+
+
   Lemma unzip_fst_neZip {A B : Type} (l1 : nonEmpty A) (l2 : nonEmpty B) :
     neLength l1 = neLength l2 -> unzip_fst (neZip l1 l2) = l1.
   Proof.
@@ -221,3 +235,4 @@ Section NonEmptyFunctions.
     end.
 
 End NonEmptyFunctions.
+

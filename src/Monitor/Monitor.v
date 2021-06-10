@@ -173,6 +173,35 @@ Proof.
          apply nth_indep. rewrite rev_length. lia.
 Qed.
 
+Lemma extend_gCollect m n ϕ :
+  implements m ϕ
+  -> forall σ, n < (length (toList σ))
+               -> extend (gCollect m σ) n
+                 = infRobustness ϕ (extend σ) n.
+Proof.
+  intros. unfold extend at 1.
+  rewrite rev_nth.
+  {
+    rewrite nth_gCollect with (ϕ := ϕ).
+    { f_equal.
+      replace (length (toList (gCollect m σ)))
+        with (neLength (gCollect m σ)) by now rewrite length_toList.
+      rewrite gCollect_neLength. rewrite <- length_toList.
+      lia.
+    }
+    { auto. }
+   {
+    rewrite length_toList. rewrite gCollect_neLength.
+    rewrite <- length_toList. lia.
+   }
+  }
+  { rewrite length_toList. rewrite gCollect_neLength.
+    rewrite <- length_toList. auto. }
+Qed.
+
+
+
+
 Definition monDelay (n : nat) (m : Monitor) : Monitor :=
   delay bottom n m.
 

@@ -12,6 +12,7 @@ From Lemmas Require Import Lemmas.
 
 Require Import Lia.
 Require Import Coq.Arith.PeanoNat.
+Require Import ssreflect.
 
 Section NewMonitor.
 
@@ -33,7 +34,7 @@ Lemma monSinceUp_correcntess:
 Proof.
   unfold implements. intros.
   remember (FSince _ _ _ _) as f.
-  rewrite robustness_eq with (ψ := normalize f) by now apply normalize_correctness.
+  rewrite -> robustness_eq with (ψ := normalize f) by now apply normalize_correctness.
   subst. simpl. unfold monSinceUp.
   apply monAnd_correctness.
   - apply monSince_correctness. auto.
@@ -42,6 +43,21 @@ Proof.
   - apply monSometimeBounded_correctness.
     apply monAtomic_correctness.
 Qed.
+
+Lemma fst_extend_neZip {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+  neLength σ = neLength τ
+  -> forall i, fst (extend (neZip σ τ) i) = extend σ i.
+Proof.
+
+Admitted.
+
+Lemma snd_extend_neZip {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+  neLength σ = neLength τ
+  -> forall i, snd (extend (neZip σ τ) i) = extend τ i.
+Proof.
+
+Admitted.
+
 
 Lemma monSinceUp_composition (m n : Monitor) (ϕ ψ : Formula A):
   implements m ϕ
@@ -52,14 +68,29 @@ Proof.
   intros.
   rewrite mPar_mCompose.
   rewrite monSinceUp_correcntess.
-  induction σ.
-  - simpl gCollect.
-    specialize (H (singleton a0)). specialize (H0 (singleton a0)).
-    simpl in H, H0. rewrite H, H0.
-    auto.
-  - simpl.
-
-Admitted.
+  unfold robustness. simpl.
+  rewrite length_toList.
+  rewrite -> neZip_neLength
+    by now repeat rewrite gCollect_neLength; auto.
+  rewrite gCollect_neLength.
+  rewrite length_toList.
+  under join_b_ext_in => j.
+  rewrite -> snd_extend_neZip
+    by now repeat rewrite gCollect_neLength; auto.
+  intros.
+  rewrite -> (extend_gCollect Val A) with (ϕ0 := ψ).
+  under meet_i_ext_in => k.
+  intros. rewrite -> fst_extend_neZip
+    by now repeat rewrite gCollect_neLength; auto.
+  rewrite -> (extend_gCollect Val A) with (ϕ0 := ϕ).
+  over.
+  auto.
+  rewrite <- length_toList. pose proof (length_toList1 σ). lia.
+  over.
+  auto.
+  rewrite <- length_toList. pose proof (length_toList1 σ). lia.
+  auto.
+Qed.
 
 
 End NewMonitor.
