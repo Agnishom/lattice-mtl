@@ -44,20 +44,212 @@ Proof.
     apply monAtomic_correctness.
 Qed.
 
+Lemma fst_extend_neZip1 {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+      neLength σ = neLength τ
+      -> forall i, neLength σ <= i
+             -> fst (nth i (rev (toList (neZip σ τ))) (latest (neZip σ τ))) = nth i (rev (toList σ)) (latest σ).
+Proof.
+  intros.
+  rewrite nth_overflow.
+  rewrite rev_length. rewrite length_toList.
+  rewrite neZip_neLength. auto.
+  congruence.
+  rewrite nth_overflow.
+  rewrite rev_length. rewrite length_toList.
+  auto.
+  destruct τ; destruct σ; auto.
+Qed.
+
+Lemma snd_extend_neZip1 {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+      neLength σ = neLength τ
+      -> forall i, neLength τ <= i
+             -> snd (nth i (rev (toList (neZip σ τ))) (latest (neZip σ τ))) = nth i (rev (toList τ)) (latest τ).
+Proof.
+  intros.
+  rewrite nth_overflow.
+  rewrite rev_length. rewrite length_toList.
+  rewrite neZip_neLength. auto.
+  congruence.
+  rewrite nth_overflow.
+  rewrite rev_length. rewrite length_toList.
+  auto.
+  destruct τ; destruct σ; auto.
+Qed.
+
+Lemma fst_extend_neZip2 {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+      neLength σ = neLength τ
+      -> forall i, neLength σ > i
+             -> forall d1 d2, fst (nth i (rev (toList (neZip σ τ))) d1) = nth i (rev (toList σ)) d2.
+Proof.
+  intros.
+  destruct σ as [σ0 | σ σ0];
+    destruct τ as [τ0 | τ τ0].
+  {
+    simpl in *. destruct i; auto. lia.
+  }
+  {
+    simpl in H.
+    rewrite <- length_toList in H.
+    pose proof (length_toList1 τ). lia.
+  }
+  {
+    simpl in H.
+    rewrite <- length_toList in H.
+    pose proof (length_toList1 σ). lia.
+  }
+  {
+    simpl latest.
+    rewrite rev_nth.
+    {
+      simpl in *. rewrite length_toList. inversion H.
+      rewrite -> neZip_neLength by assumption.
+      lia.
+    }
+    rewrite -> rev_nth by
+        now rewrite length_toList.
+    simpl in H. inversion H. clear H.
+    simpl neZip. simpl toList. simpl length.
+    simpl in H0.
+    rewrite -> length_toList at 1.
+    rewrite -> neZip_neLength by assumption.
+    rewrite <- length_toList.
+    replace (S (length (toList σ)) - S i) with (length (toList σ) - i)
+      by now rewrite <- length_toList in H0; lia.
+    remember (length (toList σ) - i) as j.
+    remember (length (toList σ)) as nT.
+    rewrite <- length_toList in H0. rewrite <- HeqnT in H0.
+    rewrite <- (length_toList σ) in H2. rewrite <- HeqnT in H2.
+    revert σ0 τ0.
+    generalize dependent σ. generalize dependent τ.
+    generalize dependent nT. generalize dependent i.
+    induction j.
+    {
+      auto.
+    }
+    {
+      intros. simpl.
+      clear σ0 τ0.
+      destruct σ as [σ0 | σ σ0];
+        destruct τ as [τ0 | τ τ0].
+      {
+        simpl in *. destruct j; auto. lia.
+      }
+      {
+        simpl in H2, HeqnT.
+        rewrite <- length_toList in H2.
+        pose proof (length_toList1 τ). lia.
+      }
+      {
+        simpl in H2, HeqnT.
+        pose proof (length_toList1 σ). lia.
+      }
+      {
+        simpl neZip. simpl toList.
+        simpl in HeqnT. apply IHj with (nT := (length (toList σ))) (i := (length (toList σ)) - j).
+        lia. lia. simpl in *. lia. auto.
+      }
+    }
+  }
+Qed.
+
+Lemma snd_extend_neZip2 {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
+      neLength σ = neLength τ
+      -> forall i, neLength τ > i
+             -> forall d1 d2, snd (nth i (rev (toList (neZip σ τ))) d1) = nth i (rev (toList τ)) d2.
+Proof.
+  intros.
+  destruct σ as [σ0 | σ σ0];
+    destruct τ as [τ0 | τ τ0].
+  {
+    simpl in *. destruct i; auto. lia.
+  }
+  {
+    simpl in H.
+    rewrite <- length_toList in H.
+    pose proof (length_toList1 τ). lia.
+  }
+  {
+    simpl in H.
+    rewrite <- length_toList in H.
+    pose proof (length_toList1 σ). lia.
+  }
+  {
+    simpl latest.
+    rewrite rev_nth.
+    {
+      simpl in *. rewrite length_toList. inversion H.
+      rewrite -> neZip_neLength by assumption.
+      lia.
+    }
+    rewrite -> rev_nth by
+        now rewrite length_toList.
+    simpl in H. inversion H. clear H.
+    simpl neZip. simpl toList. simpl length.
+    simpl in H0.
+    rewrite -> length_toList at 1.
+    rewrite -> neZip_neLength by assumption.
+    rewrite H2. rewrite <- length_toList.
+    replace (S (length (toList τ)) - S i) with (length (toList τ) - i)
+      by now rewrite <- length_toList in H0; lia.
+    remember (length (toList τ) - i) as j.
+    remember (length (toList τ)) as nT.
+    rewrite <- length_toList in H0. rewrite <- HeqnT in H0.
+    rewrite <- (length_toList τ) in H2. rewrite <- HeqnT in H2.
+    revert σ0 τ0.
+    generalize dependent σ. generalize dependent τ.
+    generalize dependent nT. generalize dependent i.
+    induction j.
+    {
+      auto.
+    }
+    {
+      intros. simpl.
+      clear σ0 τ0.
+      destruct σ as [σ0 | σ σ0];
+        destruct τ as [τ0 | τ τ0].
+      {
+        simpl in *. destruct j; auto. lia.
+      }
+      {
+        simpl in H2, HeqnT.
+        pose proof (length_toList1 τ). lia.
+      }
+      {
+        simpl in H2, HeqnT.
+        rewrite <- length_toList in H2.
+        pose proof (length_toList1 σ). lia.
+      }
+      {
+        simpl neZip. simpl toList.
+        simpl in HeqnT. apply IHj with (nT := (length (toList τ))) (i := (length (toList τ)) - j).
+        lia. lia. auto. simpl in *. lia.
+      }
+    }
+  }
+Qed.
+
+
 Lemma fst_extend_neZip {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
   neLength σ = neLength τ
   -> forall i, fst (extend (neZip σ τ) i) = extend σ i.
 Proof.
-
-Admitted.
+  intros.
+  unfold extend.
+  destruct (Compare_dec.le_lt_dec (neLength σ) i) as [Hti | Hti].
+  + auto using fst_extend_neZip1.
+  + auto using fst_extend_neZip2.
+Qed.
 
 Lemma snd_extend_neZip {X Y : Type} (σ : nonEmpty X) (τ : nonEmpty Y):
   neLength σ = neLength τ
   -> forall i, snd (extend (neZip σ τ) i) = extend τ i.
 Proof.
-
-Admitted.
-
+  intros.
+  unfold extend.
+  destruct (Compare_dec.le_lt_dec (neLength τ) i) as [Hti | Hti].
+  + auto using snd_extend_neZip1.
+  + auto using snd_extend_neZip2.
+Qed.
 
 Lemma monSinceUp_composition (m n : Monitor) (ϕ ψ : Formula A):
   implements m ϕ
