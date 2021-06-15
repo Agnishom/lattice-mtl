@@ -19,7 +19,7 @@ The current version of the proof was checked using Coq 8.12.1.
 
 ## Organization of the Proof
 
-The `toMonitor : Formula -> Monitor` is defined in [`Monitor/ToMonitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/ToMonitor.v#L776). The semantics of the formulae are available in [`Semantics/InfRobustness.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Semantics/InfRobustness.v#L21) and the main theorem, `toMonitor_correctness` can be found in [`Monitor/Monitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/ToMonitor.v#L821).
+The `toMonitor : Formula -> Monitor` is defined in [`Monitor/ToMonitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/ToMonitor.v#L776). The semantics of the formulae are available in [`Semantics/InfRobustness.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Semantics/InfRobustness.v#L21) and the main theorem, `toMonitor_correctness` can be found in [`Monitor/ToMonitor.v`](https://github.com/Agnishom/lattice-mtl/blob/master/src/Monitor/ToMonitor.v#L821).
 
 Below is a brief discussion of the organization of the proof:
 
@@ -43,6 +43,6 @@ Below is a brief discussion of the organization of the proof:
   - `Monitor/Mealy.v`: Mealy Machines. Denotations. Composition. Unbounded Aggregation.
   - `Monitor/Queue.v`: Queue. Implementation of `Sometime_[n,n]`
   - `Monitor/AggQueue.v`: Sliding window aggregation. Implementation of `Sometime_[0,n]`.
-  - `Monitor/Monitor.v`: Definition of Monitors. `implements` relation. Translating Formulas to Monitors (for building blocks).
+  - `Monitor/Monitor.v`: Definition of Monitors. `implements` relation. Combinators for building blocks.
   - `Monitor/ToMonitor.v`: Translating Formulas to Monitors. Proof of Correctness.
 * `Extract/`: Extraction to OCaml.
