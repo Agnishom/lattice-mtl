@@ -783,7 +783,7 @@ Fixpoint toMonitorX (ϕ : Formula A) : Monitor :=
         | true => monDelayDual a (toMonitorX α)
         | false => match (a <? b) with
                   | true => ((toMonitorX α) >> (monAlwaysAB a b))
-                  | false => monAtomic (fun _ => bottom)
+                  | false => monAtomic (fun _ => top)
                   end
     end
   | FSometimeUnbounded 0 α => monSometimeUnbounded (toMonitorX α)
@@ -800,7 +800,7 @@ Fixpoint toMonitorX (ϕ : Formula A) : Monitor :=
   | FSinceDual ((S pa) as a) b α β =>
     match (pa <? b) with
     | true => ((mPar (toMonitorX α) (toMonitorX β)) >> (monSinceDualAB pa b))
-    | false => monAtomic (fun _ => bottom)
+    | false => monAtomic (fun _ => top)
     end
   | FSinceUnbounded 0 α β => monSince (toMonitorX α) (toMonitorX β)
   | FSinceDualUnbounded 0 α β => monSinceDual (toMonitorX α) (toMonitorX β)
@@ -816,28 +816,78 @@ Proof.
   - apply monAtomic_correctness.
   - now apply monAnd_correctness.
   - now apply monOr_correctness.
-  - destruct n.
+  - simpl. destruct n.
     + now apply monSometimeBounded_correctness.
     + destruct (S n =? n0) eqn:E.
       * simpl. destruct n0.
         ** symmetry in E.
            apply EqNat.beq_nat_eq in E. lia.
-        ** inversion E. rewrite H0.
-           symmetry in E. apply EqNat.beq_nat_eq in E.
-           rewrite E.  now apply monDelay_correctness.
-      * simpl. destruct n0 eqn:F.
-        ** assert (S n <? 0 = false). apply <- Nat.ltb_ge. lia.
-           rewrite H.
-           unfold implements. intros. rewrite <- robustness_eq with (ϕ := FAtomic (fun _ => bottom)).
+        ** apply Nat.eqb_eq in E. rewrite E.
+           now apply monDelay_correctness.
+      * destruct (S n <? n0) eqn:F.
+        ** apply monSometimeAB_composition. auto.
+           lia. now apply Nat.ltb_lt.
+        ** unfold implements. intros.
+           rewrite <- robustness_eq with (ϕ := FAtomic (fun _ => bottom)).
            apply monAtomic_correctness.
-           intros. simpl infRobustness at 1.
-           rewrite fSometime_hi_lo.  lia.
+           simpl infRobustness at 1. intros.
+           rewrite fSometime_hi_lo.
+           apply Nat.ltb_ge in F.
+           apply EqNat.beq_nat_false in E. lia.
            auto.
-        ** destruct (n =? n1) eqn:EE.
-        ++ apply EqNat.beq_nat_true in EE.
-Admitted.
-
-
-
+  - simpl. destruct n.
+    + now apply monAlwaysBounded_correctness.
+    + destruct (S n =? n0) eqn:E.
+      * simpl. destruct n0.
+        ** symmetry in E.
+           apply EqNat.beq_nat_eq in E. lia.
+        ** apply Nat.eqb_eq in E. rewrite E.
+           now apply monDelayDual_correctness.
+      * destruct (S n <? n0) eqn:F.
+        ** apply monAlwaysAB_composition. auto.
+           lia. now apply Nat.ltb_lt.
+        ** unfold implements. intros.
+           rewrite <- robustness_eq with (ϕ := FAtomic (fun _ => top)).
+           apply monAtomic_correctness.
+           simpl infRobustness at 1. intros.
+           rewrite fAlways_hi_lo.
+           apply Nat.ltb_ge in F.
+           apply EqNat.beq_nat_false in E. lia.
+           auto.
+  - simpl. destruct n.
+    + now apply monSometimeUnbounded_correctness.
+    + apply monSometimeLo_composition. auto. lia.
+  - simpl. destruct n.
+    + now apply monAlwaysUnbounded_correctness.
+    + apply monAlwaysLo_composition. auto. lia.
+  - simpl. destruct n.
+    + now apply monSinceUp_composition.
+    + destruct (n <? n0) eqn:E.
+      * apply Nat.ltb_lt in E.
+        now apply monSinceAB_composition.
+      * apply Nat.ltb_ge in E.
+        unfold implements. intros.
+        rewrite <- robustness_eq with (ϕ := FAtomic (fun _ => bottom)).
+        apply monAtomic_correctness.
+        simpl infRobustness at 1. intros.
+        rewrite fSince_hi_lo. lia. auto.
+  - simpl. destruct n.
+    + now apply monSinceDualUp_composition.
+    + destruct (n <? n0) eqn:E.
+      * apply Nat.ltb_lt in E.
+        now apply monSinceDualAB_composition.
+      * apply Nat.ltb_ge in E.
+        unfold implements. intros.
+        rewrite <- robustness_eq with (ϕ := FAtomic (fun _ => top)).
+        apply monAtomic_correctness.
+        simpl infRobustness at 1. intros.
+        rewrite fSinceDual_hi_lo. lia. auto.
+  - simpl. destruct n eqn:E.
+    + now apply monSince_correctness.
+    + now apply monSinceLo_composition.
+  - simpl. destruct n eqn:E.
+    + now apply monSinceDual_correctness.
+    + now apply monSinceDualLo_composition.
+Qed.
 
 End NewMonitor.
