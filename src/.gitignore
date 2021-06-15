@@ -5,3 +5,6 @@
 *.glob
 *.aux
 *.cache
+Makefile.coq
+CoqMakefile.conf
+.CoqMakefile.d

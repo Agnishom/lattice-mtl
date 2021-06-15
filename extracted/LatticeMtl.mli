@@ -47,6 +47,10 @@ type ('val0, 'a) formula =
 | FSinceUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 | FSinceDualUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 
+val fDelay : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula
+
+val fDelayDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula
+
 type ('a, 'b) mealy = ('a, 'b) __mealy Lazy.t
 and ('a, 'b) __mealy =
 | Build_Mealy of ('a -> 'b) * ('a -> ('a, 'b) mealy)

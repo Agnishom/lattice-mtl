@@ -1,3 +1,13 @@
+(**
+
+This file contains:
+
+1. A [toMonitor] function which translates [Formula] to [Monitor].
+  - along with a proof [toMonitor_correctness] that this monitor indeed implements said formula.
+  - this involves building a few complex networks using [mPar] and [mCompose]
+
+*)
+
 Require Import Coq.Lists.List.
 
 From Algebra Require Import Monoid.

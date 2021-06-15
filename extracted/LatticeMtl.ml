@@ -88,6 +88,16 @@ type ('val0, 'a) formula =
 | FSinceUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 | FSinceDualUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 
+(** val fDelay : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fDelay i _UU03d5_ =
+  FSometime (i, i, _UU03d5_)
+
+(** val fDelayDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
+
+let fDelayDual i _UU03d5_ =
+  FAlways (i, i, _UU03d5_)
+
 type ('a, 'b) mealy = ('a, 'b) __mealy Lazy.t
 and ('a, 'b) __mealy =
 | Build_Mealy of ('a -> 'b) * ('a -> ('a, 'b) mealy)
