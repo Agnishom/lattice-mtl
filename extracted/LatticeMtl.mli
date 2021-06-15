@@ -1,4 +1,10 @@
 
+val fst : ('a1 * 'a2) -> 'a1
+
+val snd : ('a1 * 'a2) -> 'a2
+
+val id : 'a1 -> 'a1
+
 val sub : int -> int -> int
 
 module Nat :
@@ -41,14 +47,6 @@ type ('val0, 'a) formula =
 | FSinceUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 | FSinceDualUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 
-val fDelay : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula
-
-val fDelayDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula
-
-val normalize :
-  'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
-  formula
-
 type ('a, 'b) mealy = ('a, 'b) __mealy Lazy.t
 and ('a, 'b) __mealy =
 | Build_Mealy of ('a -> 'b) * ('a -> ('a, 'b) mealy)
@@ -57,7 +55,11 @@ val mOut : ('a1, 'a2) mealy -> 'a1 -> 'a2
 
 val mNext : ('a1, 'a2) mealy -> 'a1 -> ('a1, 'a2) mealy
 
+val mCompose : ('a1, 'a2) mealy -> ('a2, 'a3) mealy -> ('a1, 'a3) mealy
+
 val mLift : ('a1 -> 'a2) -> ('a1, 'a2) mealy
+
+val mPar : ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a2 * 'a3) mealy
 
 val mBinOp :
   ('a2 -> 'a3 -> 'a4) -> ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a4)
@@ -152,9 +154,35 @@ val monSinceDual :
   'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) monitor -> ('a1, 'a2)
   monitor -> ('a1, 'a2) monitor
 
-val toMonitorAux :
-  'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
-  monitor
+val monSinceUp :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSinceAB :
+  'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSinceLo :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSinceDualLo :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSinceDualUp :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSinceDualAB :
+  'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1 * 'a1) monitor
+
+val monSometimeAB :
+  'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1) monitor
+
+val monAlwaysAB :
+  'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1) monitor
+
+val monSometimeLo :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1) monitor
+
+val monAlwaysLo :
+  'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1) monitor
 
 val toMonitor :
   'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)

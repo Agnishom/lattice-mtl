@@ -1,4 +1,19 @@
 
+(** val fst : ('a1 * 'a2) -> 'a1 **)
+
+let fst = function
+| (x, _) -> x
+
+(** val snd : ('a1 * 'a2) -> 'a2 **)
+
+let snd = function
+| (_, y) -> y
+
+(** val id : 'a1 -> 'a1 **)
+
+let id x =
+  x
+
 (** val sub : int -> int -> int **)
 
 let rec sub = fun n m -> Pervasives.max 0 (n-m)
@@ -73,128 +88,6 @@ type ('val0, 'a) formula =
 | FSinceUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 | FSinceDualUnbounded of int * ('val0, 'a) formula * ('val0, 'a) formula
 
-(** val fDelay : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
-
-let fDelay i _UU03d5_ =
-  FSometime (i, i, _UU03d5_)
-
-(** val fDelayDual : int -> ('a1, 'a2) formula -> ('a1, 'a2) formula **)
-
-let fDelayDual i _UU03d5_ =
-  FAlways (i, i, _UU03d5_)
-
-(** val normalize :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
-    formula **)
-
-let rec normalize lattice_val boundedLattice_val = function
-| FAtomic f -> FAtomic f
-| FAnd (_UU03b1_, _UU03b2_) ->
-  FAnd ((normalize lattice_val boundedLattice_val _UU03b1_),
-    (normalize lattice_val boundedLattice_val _UU03b2_))
-| FOr (_UU03b1_, _UU03b2_) ->
-  FOr ((normalize lattice_val boundedLattice_val _UU03b1_),
-    (normalize lattice_val boundedLattice_val _UU03b2_))
-| FSometime (i, j, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSometime (0, j,
-     (normalize lattice_val boundedLattice_val _UU03b1_)))
-     (fun _ ->
-     if (=) i j
-     then FSometime (i, j,
-            (normalize lattice_val boundedLattice_val _UU03b1_))
-     else if Nat.ltb i j
-          then fDelay i (FSometime (0, (sub j i),
-                 (normalize lattice_val boundedLattice_val _UU03b1_)))
-          else FAtomic (fun _ -> boundedLattice_val.bottom))
-     i)
-| FAlways (i, j, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAlways (0, j,
-     (normalize lattice_val boundedLattice_val _UU03b1_)))
-     (fun _ ->
-     if (=) i j
-     then FAlways (i, j, (normalize lattice_val boundedLattice_val _UU03b1_))
-     else if Nat.ltb i j
-          then fDelayDual i (FAlways (0, (sub j i),
-                 (normalize lattice_val boundedLattice_val _UU03b1_)))
-          else FAtomic (fun _ -> boundedLattice_val.top))
-     i)
-| FSometimeUnbounded (i, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSometimeUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_)))
-     (fun _ ->
-     fDelay i (FSometimeUnbounded (0,
-       (normalize lattice_val boundedLattice_val _UU03b1_))))
-     i)
-| FAlwaysUnbounded (i, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAlwaysUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_)))
-     (fun _ ->
-     fDelayDual i (FAlwaysUnbounded (0,
-       (normalize lattice_val boundedLattice_val _UU03b1_))))
-     i)
-| FSince (i, j, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FAnd ((FSinceUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_),
-     (normalize lattice_val boundedLattice_val _UU03b2_))), (FSometime (0, j,
-     (normalize lattice_val boundedLattice_val _UU03b2_)))))
-     (fun i' ->
-     if Nat.ltb i' j
-     then FAnd
-            ((fDelay i (FAnd ((FSinceUnbounded (0,
-               (normalize lattice_val boundedLattice_val _UU03b1_),
-               (normalize lattice_val boundedLattice_val _UU03b2_))),
-               (FSometime (0, (sub j i),
-               (normalize lattice_val boundedLattice_val _UU03b2_)))))),
-            (FAlways (0, i',
-            (normalize lattice_val boundedLattice_val _UU03b1_))))
-     else FAtomic (fun _ -> boundedLattice_val.bottom))
-     i)
-| FSinceDual (i, j, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FOr ((FSinceDualUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_),
-     (normalize lattice_val boundedLattice_val _UU03b2_))), (FAlways (0, j,
-     (normalize lattice_val boundedLattice_val _UU03b2_)))))
-     (fun i' ->
-     if Nat.ltb i' j
-     then FOr
-            ((fDelayDual i (FOr ((FSinceDualUnbounded (0,
-               (normalize lattice_val boundedLattice_val _UU03b1_),
-               (normalize lattice_val boundedLattice_val _UU03b2_))),
-               (FAlways (0, (sub j i),
-               (normalize lattice_val boundedLattice_val _UU03b2_)))))),
-            (FSometime (0, i',
-            (normalize lattice_val boundedLattice_val _UU03b1_))))
-     else FAtomic (fun _ -> boundedLattice_val.top))
-     i)
-| FSinceUnbounded (i, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSinceUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_),
-     (normalize lattice_val boundedLattice_val _UU03b2_)))
-     (fun i' -> FAnd
-     ((fDelay i (FSinceUnbounded (0,
-        (normalize lattice_val boundedLattice_val _UU03b1_),
-        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FAlways (0,
-     i', (normalize lattice_val boundedLattice_val _UU03b1_)))))
-     i)
-| FSinceDualUnbounded (i, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ -> FSinceDualUnbounded (0,
-     (normalize lattice_val boundedLattice_val _UU03b1_),
-     (normalize lattice_val boundedLattice_val _UU03b2_)))
-     (fun i' -> FOr
-     ((fDelayDual i (FSinceDualUnbounded (0,
-        (normalize lattice_val boundedLattice_val _UU03b1_),
-        (normalize lattice_val boundedLattice_val _UU03b2_)))), (FSometime
-     (0, i', (normalize lattice_val boundedLattice_val _UU03b1_)))))
-     i)
-
 type ('a, 'b) mealy = ('a, 'b) __mealy Lazy.t
 and ('a, 'b) __mealy =
 | Build_Mealy of ('a -> 'b) * ('a -> ('a, 'b) mealy)
@@ -209,10 +102,24 @@ let mOut m =
 let mNext m =
   let Build_Mealy (_, mNext0) = Lazy.force m in mNext0
 
+(** val mCompose :
+    ('a1, 'a2) mealy -> ('a2, 'a3) mealy -> ('a1, 'a3) mealy **)
+
+let rec mCompose m n =
+  lazy (Build_Mealy ((fun x -> mOut n (mOut m x)), (fun x ->
+    mCompose (mNext m x) (mNext n (mOut m x)))))
+
 (** val mLift : ('a1 -> 'a2) -> ('a1, 'a2) mealy **)
 
 let rec mLift f =
   lazy (Build_Mealy (f, (fun _ -> mLift f)))
+
+(** val mPar :
+    ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a2 * 'a3) mealy **)
+
+let rec mPar m n =
+  lazy (Build_Mealy ((fun x -> ((mOut m x), (mOut n x))), (fun x ->
+    mPar (mNext m x) (mNext n x))))
 
 (** val mBinOp :
     ('a2 -> 'a3 -> 'a4) -> ('a1, 'a2) mealy -> ('a1, 'a3) mealy -> ('a1, 'a4)
@@ -441,88 +348,202 @@ let rec sinceDualAux lattice_val m1 m2 pre =
 let monSinceDual lattice_val boundedLattice_val m1 m2 =
   sinceDualAux lattice_val m1 m2 boundedLattice_val.top
 
-(** val toMonitorAux :
-    'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
+(** val monSinceUp :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor **)
+
+let monSinceUp lattice_val boundedLattice_val n =
+  monAnd lattice_val
+    (monSince lattice_val boundedLattice_val (monAtomic fst) (monAtomic snd))
+    (monSometimeBounded lattice_val boundedLattice_val n (monAtomic snd))
+
+(** val monSinceAB :
+    'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1 * 'a1)
     monitor **)
 
-let rec toMonitorAux lattice_val boundedLattice_val = function
-| FAtomic f -> monAtomic f
-| FAnd (_UU03b1_, _UU03b2_) ->
-  monAnd lattice_val (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-    (toMonitorAux lattice_val boundedLattice_val _UU03b2_)
-| FOr (_UU03b1_, _UU03b2_) ->
-  monOr lattice_val (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-    (toMonitorAux lattice_val boundedLattice_val _UU03b2_)
-| FSometime (i, j, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     (fun fO fS n -> if n=0 then fO () else fS (n-1))
-       (fun _ ->
-       monDelay lattice_val boundedLattice_val 0
-         (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-       (fun _ ->
-       monSometimeBounded lattice_val boundedLattice_val j
-         (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-       j)
-     (fun _ ->
-     if (=) i j
-     then monDelay lattice_val boundedLattice_val i
-            (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-     else monAtomic (fun _ -> boundedLattice_val.bottom))
-     i)
-| FAlways (i, j, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     (fun fO fS n -> if n=0 then fO () else fS (n-1))
-       (fun _ ->
-       monDelayDual lattice_val boundedLattice_val 0
-         (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-       (fun _ ->
-       monAlwaysBounded lattice_val boundedLattice_val j
-         (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-       j)
-     (fun _ ->
-     if (=) i j
-     then monDelayDual lattice_val boundedLattice_val i
-            (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-     else monAtomic (fun _ -> boundedLattice_val.bottom))
-     i)
-| FSometimeUnbounded (n, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     monSometimeUnbounded lattice_val boundedLattice_val
-       (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-     (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
-     n)
-| FAlwaysUnbounded (n, _UU03b1_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     monAlwaysUnbounded lattice_val boundedLattice_val
-       (toMonitorAux lattice_val boundedLattice_val _UU03b1_))
-     (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
-     n)
-| FSinceUnbounded (n, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     monSince lattice_val boundedLattice_val
-       (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-       (toMonitorAux lattice_val boundedLattice_val _UU03b2_))
-     (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
-     n)
-| FSinceDualUnbounded (n, _UU03b1_, _UU03b2_) ->
-  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
-     (fun _ ->
-     monSinceDual lattice_val boundedLattice_val
-       (toMonitorAux lattice_val boundedLattice_val _UU03b1_)
-       (toMonitorAux lattice_val boundedLattice_val _UU03b2_))
-     (fun _ -> monAtomic (fun _ -> boundedLattice_val.bottom))
-     n)
-| _ -> monAtomic (fun _ -> boundedLattice_val.bottom)
+let monSinceAB lattice_val boundedLattice_val pa b =
+  monAnd lattice_val
+    (monDelay lattice_val boundedLattice_val (Pervasives.succ pa)
+      (monSinceUp lattice_val boundedLattice_val (sub b (Pervasives.succ pa))))
+    (monAlwaysBounded lattice_val boundedLattice_val pa (monAtomic fst))
+
+(** val monSinceLo :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor **)
+
+let monSinceLo lattice_val boundedLattice_val pa =
+  monAnd lattice_val
+    (monDelay lattice_val boundedLattice_val (Pervasives.succ pa)
+      (monSince lattice_val boundedLattice_val (monAtomic fst)
+        (monAtomic snd)))
+    (monAlwaysBounded lattice_val boundedLattice_val pa (monAtomic fst))
+
+(** val monSinceDualLo :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor **)
+
+let monSinceDualLo lattice_val boundedLattice_val pa =
+  monOr lattice_val
+    (monDelayDual lattice_val boundedLattice_val (Pervasives.succ pa)
+      (monSinceDual lattice_val boundedLattice_val (monAtomic fst)
+        (monAtomic snd)))
+    (monSometimeBounded lattice_val boundedLattice_val pa (monAtomic fst))
+
+(** val monSinceDualUp :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1 * 'a1) monitor **)
+
+let monSinceDualUp lattice_val boundedLattice_val n =
+  monOr lattice_val
+    (monSinceDual lattice_val boundedLattice_val (monAtomic fst)
+      (monAtomic snd))
+    (monAlwaysBounded lattice_val boundedLattice_val n (monAtomic snd))
+
+(** val monSinceDualAB :
+    'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1 * 'a1)
+    monitor **)
+
+let monSinceDualAB lattice_val boundedLattice_val pa b =
+  monOr lattice_val
+    (monDelayDual lattice_val boundedLattice_val (Pervasives.succ pa)
+      (monSinceDualUp lattice_val boundedLattice_val
+        (sub b (Pervasives.succ pa))))
+    (monSometimeBounded lattice_val boundedLattice_val pa (monAtomic fst))
+
+(** val monSometimeAB :
+    'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1) monitor **)
+
+let monSometimeAB lattice_val boundedLattice_val a b =
+  monDelay lattice_val boundedLattice_val a
+    (monSometimeBounded lattice_val boundedLattice_val (sub b a)
+      (monAtomic id))
+
+(** val monAlwaysAB :
+    'a1 lattice -> 'a1 boundedLattice -> int -> int -> ('a1, 'a1) monitor **)
+
+let monAlwaysAB lattice_val boundedLattice_val a b =
+  monDelayDual lattice_val boundedLattice_val a
+    (monAlwaysBounded lattice_val boundedLattice_val (sub b a) (monAtomic id))
+
+(** val monSometimeLo :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1) monitor **)
+
+let monSometimeLo lattice_val boundedLattice_val a =
+  monDelay lattice_val boundedLattice_val a
+    (monSometimeUnbounded lattice_val boundedLattice_val (monAtomic id))
+
+(** val monAlwaysLo :
+    'a1 lattice -> 'a1 boundedLattice -> int -> ('a1, 'a1) monitor **)
+
+let monAlwaysLo lattice_val boundedLattice_val a =
+  monDelayDual lattice_val boundedLattice_val a
+    (monAlwaysUnbounded lattice_val boundedLattice_val (monAtomic id))
 
 (** val toMonitor :
     'a1 lattice -> 'a1 boundedLattice -> ('a1, 'a2) formula -> ('a1, 'a2)
     monitor **)
 
-let toMonitor lattice_val boundedLattice_val _UU03d5_ =
-  toMonitorAux lattice_val boundedLattice_val
-    (normalize lattice_val boundedLattice_val _UU03d5_)
+let rec toMonitor lattice_val boundedLattice_val = function
+| FAtomic f -> monAtomic f
+| FAnd (_UU03b1_, _UU03b2_) ->
+  monAnd lattice_val (toMonitor lattice_val boundedLattice_val _UU03b1_)
+    (toMonitor lattice_val boundedLattice_val _UU03b2_)
+| FOr (_UU03b1_, _UU03b2_) ->
+  monOr lattice_val (toMonitor lattice_val boundedLattice_val _UU03b1_)
+    (toMonitor lattice_val boundedLattice_val _UU03b2_)
+| FSometime (a, b, _UU03b1_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monSometimeBounded lattice_val boundedLattice_val b
+       (toMonitor lattice_val boundedLattice_val _UU03b1_))
+     (fun _ ->
+     if (=) a b
+     then monDelay lattice_val boundedLattice_val a
+            (toMonitor lattice_val boundedLattice_val _UU03b1_)
+     else if Nat.ltb a b
+          then mCompose (toMonitor lattice_val boundedLattice_val _UU03b1_)
+                 (monSometimeAB lattice_val boundedLattice_val a b)
+          else monAtomic (fun _ -> boundedLattice_val.bottom))
+     a)
+| FAlways (a, b, _UU03b1_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monAlwaysBounded lattice_val boundedLattice_val b
+       (toMonitor lattice_val boundedLattice_val _UU03b1_))
+     (fun _ ->
+     if (=) a b
+     then monDelayDual lattice_val boundedLattice_val a
+            (toMonitor lattice_val boundedLattice_val _UU03b1_)
+     else if Nat.ltb a b
+          then mCompose (toMonitor lattice_val boundedLattice_val _UU03b1_)
+                 (monAlwaysAB lattice_val boundedLattice_val a b)
+          else monAtomic (fun _ -> boundedLattice_val.top))
+     a)
+| FSometimeUnbounded (a, _UU03b1_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monSometimeUnbounded lattice_val boundedLattice_val
+       (toMonitor lattice_val boundedLattice_val _UU03b1_))
+     (fun _ ->
+     mCompose (toMonitor lattice_val boundedLattice_val _UU03b1_)
+       (monSometimeLo lattice_val boundedLattice_val a))
+     a)
+| FAlwaysUnbounded (a, _UU03b1_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monAlwaysUnbounded lattice_val boundedLattice_val
+       (toMonitor lattice_val boundedLattice_val _UU03b1_))
+     (fun _ ->
+     mCompose (toMonitor lattice_val boundedLattice_val _UU03b1_)
+       (monAlwaysLo lattice_val boundedLattice_val a))
+     a)
+| FSince (a, b, _UU03b1_, _UU03b2_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     mCompose
+       (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+         (toMonitor lattice_val boundedLattice_val _UU03b2_))
+       (monSinceUp lattice_val boundedLattice_val b))
+     (fun pa ->
+     if Nat.ltb pa b
+     then mCompose
+            (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+              (toMonitor lattice_val boundedLattice_val _UU03b2_))
+            (monSinceAB lattice_val boundedLattice_val pa b)
+     else monAtomic (fun _ -> boundedLattice_val.bottom))
+     a)
+| FSinceDual (a, b, _UU03b1_, _UU03b2_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     mCompose
+       (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+         (toMonitor lattice_val boundedLattice_val _UU03b2_))
+       (monSinceDualUp lattice_val boundedLattice_val b))
+     (fun pa ->
+     if Nat.ltb pa b
+     then mCompose
+            (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+              (toMonitor lattice_val boundedLattice_val _UU03b2_))
+            (monSinceDualAB lattice_val boundedLattice_val pa b)
+     else monAtomic (fun _ -> boundedLattice_val.top))
+     a)
+| FSinceUnbounded (a, _UU03b1_, _UU03b2_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monSince lattice_val boundedLattice_val
+       (toMonitor lattice_val boundedLattice_val _UU03b1_)
+       (toMonitor lattice_val boundedLattice_val _UU03b2_))
+     (fun pa ->
+     mCompose
+       (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+         (toMonitor lattice_val boundedLattice_val _UU03b2_))
+       (monSinceLo lattice_val boundedLattice_val pa))
+     a)
+| FSinceDualUnbounded (a, _UU03b1_, _UU03b2_) ->
+  ((fun fO fS n -> if n=0 then fO () else fS (n-1))
+     (fun _ ->
+     monSinceDual lattice_val boundedLattice_val
+       (toMonitor lattice_val boundedLattice_val _UU03b1_)
+       (toMonitor lattice_val boundedLattice_val _UU03b2_))
+     (fun pa ->
+     mCompose
+       (mPar (toMonitor lattice_val boundedLattice_val _UU03b1_)
+         (toMonitor lattice_val boundedLattice_val _UU03b2_))
+       (monSinceDualLo lattice_val boundedLattice_val pa))
+     a)

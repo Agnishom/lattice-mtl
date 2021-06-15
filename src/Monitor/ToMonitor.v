@@ -14,7 +14,7 @@ Require Import Lia.
 Require Import Coq.Arith.PeanoNat.
 Require Import ssreflect.
 
-Section NewMonitor.
+Section ToMonitor.
 
 Generalizable Variables Val lattice_val boundedLattice_val distributiveLattice_val.
 
@@ -763,54 +763,54 @@ Proof.
   auto.
 Qed.
 
-Fixpoint toMonitorX (ϕ : Formula A) : Monitor :=
+Fixpoint toMonitor (ϕ : Formula A) : Monitor :=
   match ϕ with
   | FAtomic f => monAtomic f
-  | FAnd α β => monAnd (toMonitorX α) (toMonitorX β)
-  | FOr α β => monOr (toMonitorX α) (toMonitorX β)
-  | FSometime 0 n α => monSometimeBounded n (toMonitorX α)
+  | FAnd α β => monAnd (toMonitor α) (toMonitor β)
+  | FOr α β => monOr (toMonitor α) (toMonitor β)
+  | FSometime 0 n α => monSometimeBounded n (toMonitor α)
   | FSometime ((S pa) as a) b α =>
     match (a =? b) with
-        | true => monDelay a (toMonitorX α)
+        | true => monDelay a (toMonitor α)
         | false => match (a <? b) with
-                  | true => ((toMonitorX α) >> (monSometimeAB a b))
+                  | true => ((toMonitor α) >> (monSometimeAB a b))
                   | false => monAtomic (fun _ => bottom)
                   end
      end
-  | FAlways 0 n α => monAlwaysBounded n (toMonitorX α)
+  | FAlways 0 n α => monAlwaysBounded n (toMonitor α)
   | FAlways ((S pa) as a) b α =>
     match (a =? b) with
-        | true => monDelayDual a (toMonitorX α)
+        | true => monDelayDual a (toMonitor α)
         | false => match (a <? b) with
-                  | true => ((toMonitorX α) >> (monAlwaysAB a b))
+                  | true => ((toMonitor α) >> (monAlwaysAB a b))
                   | false => monAtomic (fun _ => top)
                   end
     end
-  | FSometimeUnbounded 0 α => monSometimeUnbounded (toMonitorX α)
-  | FAlwaysUnbounded 0 α => monAlwaysUnbounded (toMonitorX α)
-  | FSometimeUnbounded ((S pa) as a) α => ((toMonitorX α) >> (monSometimeLo a))
-  | FAlwaysUnbounded ((S pa) as a) α => ((toMonitorX α) >> (monAlwaysLo a))
-  | FSince 0 n α β => ((mPar (toMonitorX α) (toMonitorX β)) >> (monSinceUp n))
-  | FSinceDual 0 n α β => ((mPar (toMonitorX α) (toMonitorX β)) >> (monSinceDualUp n))
+  | FSometimeUnbounded 0 α => monSometimeUnbounded (toMonitor α)
+  | FAlwaysUnbounded 0 α => monAlwaysUnbounded (toMonitor α)
+  | FSometimeUnbounded ((S pa) as a) α => ((toMonitor α) >> (monSometimeLo a))
+  | FAlwaysUnbounded ((S pa) as a) α => ((toMonitor α) >> (monAlwaysLo a))
+  | FSince 0 n α β => ((mPar (toMonitor α) (toMonitor β)) >> (monSinceUp n))
+  | FSinceDual 0 n α β => ((mPar (toMonitor α) (toMonitor β)) >> (monSinceDualUp n))
   | FSince ((S pa) as a) b α β =>
     match (pa <? b) with
-    | true => ((mPar (toMonitorX α) (toMonitorX β)) >> (monSinceAB pa b))
+    | true => ((mPar (toMonitor α) (toMonitor β)) >> (monSinceAB pa b))
     | false => monAtomic (fun _ => bottom)
     end
   | FSinceDual ((S pa) as a) b α β =>
     match (pa <? b) with
-    | true => ((mPar (toMonitorX α) (toMonitorX β)) >> (monSinceDualAB pa b))
+    | true => ((mPar (toMonitor α) (toMonitor β)) >> (monSinceDualAB pa b))
     | false => monAtomic (fun _ => top)
     end
-  | FSinceUnbounded 0 α β => monSince (toMonitorX α) (toMonitorX β)
-  | FSinceDualUnbounded 0 α β => monSinceDual (toMonitorX α) (toMonitorX β)
-  | FSinceUnbounded ((S pa) as a) α β => ((mPar (toMonitorX α) (toMonitorX β)) >> monSinceLo pa)
-  | FSinceDualUnbounded ((S pa) as a) α β => ((mPar (toMonitorX α) (toMonitorX β)) >> monSinceDualLo pa)
+  | FSinceUnbounded 0 α β => monSince (toMonitor α) (toMonitor β)
+  | FSinceDualUnbounded 0 α β => monSinceDual (toMonitor α) (toMonitor β)
+  | FSinceUnbounded ((S pa) as a) α β => ((mPar (toMonitor α) (toMonitor β)) >> monSinceLo pa)
+  | FSinceDualUnbounded ((S pa) as a) α β => ((mPar (toMonitor α) (toMonitor β)) >> monSinceDualLo pa)
   end.
 
-Theorem toMonitorX_correctness :
+Theorem toMonitor_correctness :
   forall (φ : Formula A),
-    implements (toMonitorX φ) φ.
+    implements (toMonitor φ) φ.
 Proof.
   induction φ.
   - apply monAtomic_correctness.
@@ -890,4 +890,4 @@ Proof.
     + now apply monSinceDualLo_composition.
 Qed.
 
-End NewMonitor.
+End ToMonitor.
