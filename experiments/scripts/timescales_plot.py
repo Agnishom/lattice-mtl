@@ -17,7 +17,7 @@ def axIndex(formula):
 # timescales benchmarks
 #############################
 
-formulaLabels = ["F"+str(i)+ "(n)" for i in range(10)]
+formulaLabels = ["$F_"+str(i)+ "(n)$" for i in range(10)]
 
 tool_color = {'Reelay': 'tab:orange', 'semiring-monitor': 'tab:blue', 'lattice-monitor': 'tab:green'}
 type_lsty = {'Increasing': '-.', 'Decreasing': ':', 'Random': '-'}
