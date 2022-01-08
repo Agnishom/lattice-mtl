@@ -1,5 +1,20 @@
 # lattice-mtl
-A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics
+A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics ([Extended Version](https://mamouras.web.rice.edu/papers/monitoring-RV'20-extended.pdf))
+
+```
+@InProceedings{ChattopadhyayM20,
+  author="Chattopadhyay, Agnishom
+      and Mamouras, Konstantinos",
+  editor="Deshmukh, Jyotirmoy
+      and Ni{\v{c}}kovi{\'{c}}, Dejan",
+  title="A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics",
+  booktitle="Runtime Verification",
+  year="2020",
+  publisher="Springer International Publishing",
+  address="Cham",
+  pages="383--403",
+}
+```
 
 ## Usage as a library
 
