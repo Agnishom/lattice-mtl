@@ -1,5 +1,5 @@
 # lattice-mtl
-A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics ([Extended Version](https://mamouras.web.rice.edu/papers/monitoring-RV'20-extended.pdf))
+A Verified Online Monitor for Metric Temporal Logic with Quantitative Semantics ([Extended Version](extended-draft.pdf))
 
 ```
 @InProceedings{ChattopadhyayM20,
